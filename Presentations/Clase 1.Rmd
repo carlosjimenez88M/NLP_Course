@@ -1,0 +1,48 @@
+---
+title: "Introducción a Git"
+subtitle: "Conceptos básicos e instalación"
+author: "Daniel Jiménez"
+date: "`r format(Sys.time(), '%d -%m -%Y')`"
+institute: "Universidad Nacional de Colombia,UNAL"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "beaver"
+    incremental: true
+    slide_level: 2
+    latex_engine: xelatex
+ 
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Agenda
+
+* ¿Qué es Git?
+* ¿Para qué sirve Git?
+* ¿Cómo se instala Git?
+* Editores de texto para Git
+* Primeros comandos en Git
+* Ejemplo de uso de Git
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
