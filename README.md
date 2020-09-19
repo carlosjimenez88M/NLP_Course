@@ -1,5 +1,5 @@
 # Curso  de Git & Github
-
+\justify
 ![](https://conflictos-ambientales.net/oca_bd/img/Logo%20UN.jpg)
 
 
@@ -43,17 +43,21 @@ Dicho lo anteriro, el objetivo del curso es que cada uno de los participantes pu
 
 ## Forma de trabajo
 
-Las clases tienen dos componentes: i) La clase magistral donde el docente expone y presenta ideas y aplicaciones de Git & Github en el mundo real y ii) El trabajo colaborativo entre el grupo, por lo que se desarrollaran ejercicios que tengan que ver con Bases de datos y algo de analítica de datos. 
+Las clases tienen dos componentes: i) La clase magistral donde el docente expone y presenta ideas y aplicaciones de Git & Github en el mundo real y ii) El trabajo colaborativo entre el grupo, por lo que se desarrollaran ejercicios que tengan que ver con Bases de datos y algo de analítica de datos.
 
 
 A la par, el curso consta de dos examenes 
 
 |Examen|Fecha|
 |-----:|-----|
-|[Inicio de curso]()|6 de Octubre|
-|[Final]()|12 de Noviembre|
+|[Inicio del curso]()|6 de Octubre|
+|[Final del curso]()|12 de Noviembre|
 
-Por favor realice los examenes en las fechas asignadas y escriba su nombre completo.
+<center>Por favor realice los examenes en las fechas asignadas y escriba su nombre completo.</center>
+
+## Agenda de las clases
+
+|
 
 
 
