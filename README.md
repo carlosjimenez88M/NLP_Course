@@ -1,5 +1,5 @@
 ## Clase de Github
 
-![](https://minas.medellin.unal.edu.co/templates/minas/images/escudoUnal.png)
+![](https://conflictos-ambientales.net/oca_bd/img/Logo%20UN.jpg)
 
 
