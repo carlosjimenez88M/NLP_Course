@@ -9,7 +9,7 @@ Instructor : *Carlos Daniel Jiménez M*
 * web: www.danieljimenezm.com
 * github: carlosjimenez88M
 
-<center>El uso de herramientas que permitan automatizar procesos, y guardar su respectivo versionamiento es vital para el desarrollo tecnológico de las industrias y organizaciones gubernamentales, y es por ello que la Universidad Nacional de Colombia, a través de la escuela de [Economía](http://www.fce.unal.edu.co/pec.html) creo este curso, el cual generará en cada uno de los participantes adquirir habilidades para desarrollar trabajos colaborativos, actualizar versiones de códigos, conocer quienes estan modificando o participando en los proyectos y generar un esquema de seguridad para el trabajo en grupo de manera oportuna.</center>
+El uso de herramientas que permitan automatizar procesos, y guardar su respectivo versionamiento es vital para el desarrollo tecnológico de las industrias y organizaciones gubernamentales, y es por ello que la Universidad Nacional de Colombia, a través de la escuela de [Economía](http://www.fce.unal.edu.co/pec.html) creo este curso, el cual generará en cada uno de los participantes adquirir habilidades para desarrollar trabajos colaborativos, actualizar versiones de códigos, conocer quienes estan modificando o participando en los proyectos y generar un esquema de seguridad para el trabajo en grupo de manera oportuna.
 
 Dicho lo anteriro, el objetivo del curso es que cada uno de los participantes pueda :
 
