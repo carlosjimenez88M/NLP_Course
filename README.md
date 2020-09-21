@@ -53,6 +53,7 @@ A la par, el curso consta de dos examenes
 |[Inicio del curso](https://docs.google.com/forms/d/1vMYu1IS4nJ0Fqnx-vgCxlm9DVg7un7_NJE8Kfekq9yw/edit?ts=5f681b8f)|6 de Octubre|
 |[Final del curso](https://docs.google.com/forms/d/1EL2uyevVIEeUBmG7Cr6l3YqkCveBDETWnx58GGcxN2g/edit?ts=5f681ffc)|12 de Noviembre|
 
+
 <center>Por favor realice los examenes en las fechas asignadas y escriba su nombre completo.</center>
 
 ## Agenda de las clases
