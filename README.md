@@ -64,13 +64,10 @@ A la par, el curso consta de dos examenes
 |13 de Octubre|Comandos básicos de Git II|[Clase 3]()|
 |15 de Octubre|flujo de trabajo con Git I|[Clase 4]()|
 |20 de Octubre|flujo de trabajo con Git II|[Clase 5]()|
-|22 de Octubre|flujo de trabajo con Git III|[Clase 6]()|
-|27 de Octubre|Control de versiones|[Clase 7]()|
-|29 de Octubre|Github y trabajo remoto|[Clase 8]()|
-|3 de Noviembre|Pull Requests y manejo higiénico de repositorios|[Clase 8]()|
-|5 de Noviembre|Crear páginas, blogs, portafolios, presentaciones y demás herramientas en Github|[Clase 9]()|
-|10 de Noviembre|Integración de Github con Docker y Jenkins|[Clase 8]()|
-|12 de Noviembre|Caso aplicado de Git con todo lo visto en clase|[Clase 8]()|
+|22 de Octubre|Control de versiones|[Clase 6]()|
+|27 de Octubre - 29 de Octubre|Control de versiones|[Clase 7]()|
+|3 de Noviembre -5 de Noviembre|Pull Requests y manejo higiénico de repositorios- Integración de Docker y Jenkins |[Clase 8]()|
+|10 de Noviembre - 12 de Noviembre|Caso aplicado de Git con todo lo visto en clase|[Clase 9]()|
 
 
 ## Monitorías
