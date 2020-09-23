@@ -28,7 +28,7 @@ options(knitr.duplicate.label = "allow")
 
 * Editores de texto para Git
   
-  + Algunas diferencias
+  + Algunas diferencias entre los editores.
 
 * Primeros comandos en Git
 
