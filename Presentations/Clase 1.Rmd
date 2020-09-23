@@ -27,6 +27,8 @@ options(knitr.duplicate.label = "allow")
 * ¿Cómo se instala Git?
 
 * Editores de texto para Git
+  
+  + Algunas diferencias
 
 * Primeros comandos en Git
 
