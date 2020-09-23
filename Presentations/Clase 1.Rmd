@@ -8,7 +8,7 @@ output:
   beamer_presentation:
     theme: "Madrid"
     colortheme: "beaver"
-    incremental: true
+    #incremental: true
     slide_level: 2
     latex_engine: xelatex
  
@@ -28,21 +28,25 @@ knitr::opts_chunk$set(echo = FALSE)
 * Primeros comandos en Git
 * Ejemplo de uso de Git
 
-## Slide with Bullets
+## ¿Qué es Git?
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+Según el portal de \textcolor{blue}{\href{https://git-scm.com/}{git}} se define como :
 
-## Slide with R Output
+\vspace{1cm}
 
-```{r cars, echo = TRUE}
-summary(cars)
-```
+>"Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency."
 
-## Slide with Plot
 
-```{r pressure}
-plot(pressure)
+## ¿Qué es Git?
+
+Una forma sencilla de entenderlo es definirlo como 
+
+\vspace{1cm}
+
+>"Un sistema que guarda solo los cambios de los archivos, basado en el trabajo colaborativo"
+
+
+```{r figurename, echo=FALSE, out.width = '90%'}
+knitr::include_graphics("homer.jpg")
 ```
 
