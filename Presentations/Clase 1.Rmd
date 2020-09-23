@@ -195,6 +195,16 @@ Dicho lo anterior Git sirve para :
 
 * Merge : Integrar.
 
+## ¿Para qué sirve Git?
+
+Lo anterior sirve para validar el siguiente flujo
+
+```{r , echo=FALSE ,out.width = '90%'}
+knitr::include_graphics("./images/flujo.png")
+```
+
+
+
 
 ## ¿Cómo se instala Git?
 
