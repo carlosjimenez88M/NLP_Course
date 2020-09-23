@@ -28,8 +28,6 @@ options(knitr.duplicate.label = "allow")
 
 * Editores de texto para Git
   
-  + Algunas diferencias entre los editores.
-
 * Primeros comandos en Git
 
 * Ejemplo de uso de Git
@@ -243,5 +241,48 @@ Observación:
 * Existen varios editores de texto, pero tenga presente que cada uno tiene una función
 
 * VIM es un editor difícil de manejar, pero optimizado para el trabajo de máquina.
+
+
+## Editores de texto para Git
+
+Acá hay un tema importante, existen editores para todo tipo de proyecto, en esta diapositiva presento algunas apreciaciones y experiencias  sobre los editores :
+
+* Si eres desarrollador (bases de datos, ciencia de datos, analítica, devops) usa [Visual Studio Code](https://code.visualstudio.com/)
+
+* Si trabajas con gestión documental trabaja con [Sublime Text](https://www.sublimetext.com/)
+
+* Otra alternativa para gestión documental, o actualización de códigos por devops es [Atom](https://atom.io/)
+
+
+## Editores de texto para Git
+
+
+Si no le temes a nada, eres el alfa independiente a cualquier aspecto y en especial eres osado(a) y te gusta el riesgo, trabaja con VIM.
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/sinmiedo.jpg")
+```
+
+## Editores de texto para Git
+
+Para este curso se trabajará con Visual Studio Code.
+
+Razón: Esta optimizado para deploy.
+
+Pero es necesario ser drásticos y trabajaremos un rato en VIM.
+
+## Editores de texto para Git
+
+En el ejercicio en Vivo mostraré más cosas de VIM, pero dejo la introducción de varios comandos necesarios :
+
+* touch : Para crear un archivo;
+* VIM open archivo.ext: para abrir el archivo;
+* I: Insertar comentarios ;
+* :wq: Para salir de VIM
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/VIM2.png")
+```
+
 
 

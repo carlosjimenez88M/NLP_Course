@@ -5,3 +5,5 @@ Soy su profesor XYZ
 
 Desde hoy empezaremos a usar **VIM** para escribir nuestros códigos 🥵.
 Mejor NO! seamos Pros😎 y trabajemos con [Visual Studio COde](https://code.visualstudio.com/)
+
+A mis estudiantes les gusta el riesgo, por lo tanto quieren trabajar un rato en VIM,y  ¿quién soy yo? para negarles ese privilegio
