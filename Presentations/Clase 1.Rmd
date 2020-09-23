@@ -1,7 +1,7 @@
 ---
 title: "Introducción a Git & Github"
 subtitle: "Conceptos básicos e instalación"
-author: "Enrique Rendón"
+author: "Daniel Jiménez M."
 date: "`r format(Sys.time(), '%d -%m -%Y')`"
 institute: "Universidad Nacional de Colombia"
 output: 
