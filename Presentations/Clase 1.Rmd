@@ -27,6 +27,8 @@ options(knitr.duplicate.label = "allow")
 * ¿Cómo se instala Git?
 
 * Editores de texto para Git
+
+  + Línea de comando
   
 * Primeros comandos en Git
 
@@ -283,6 +285,45 @@ En el ejercicio en Vivo mostraré más cosas de VIM, pero dejo la introducción 
 ```{r , echo=FALSE ,out.width = '80%'}
 knitr::include_graphics("./images/VIM2.png")
 ```
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/vim3.png")
+```
+
+## Editores de texto para Git
+
+Notese que hice una modificación al documento y recuerde estos pasos :
+
+* git init;
+* git add . ;
+* git commit -m "mensaje" ;
+* git status
+* git log ejemplo.txt
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/anexos.png")
+```
+
+
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/status.png")
+```
+
+
+## Editores de texto para Git
+
+Para sacarle provecho a Git es necesario conocer y trabajar con la terminal y la linea de trabajo. Acá recompilaré algunos comandos y buenas practicas, pero les recomiendo que la estudien por su cuenta, se darán cuenta que no cambiaran el CMD o la terminal por ningún interfaz gráfico.
+
+
+
+## Línea de comando
 
 
 
