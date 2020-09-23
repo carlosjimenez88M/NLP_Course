@@ -1,0 +1,7 @@
+Hola a todos
+
+BIenvenidos a su primer clase de GIt & Github
+Soy su profesor XYZ
+
+Desde hoy empezaremos a usar **VIM** para escribir nuestros códigos 🥵.
+Mejor NO! seamos Pros😎 y trabajemos con [Visual Studio COde](https://code.visualstudio.com/)
