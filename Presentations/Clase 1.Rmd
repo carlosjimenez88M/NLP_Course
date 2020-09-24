@@ -332,11 +332,73 @@ knitr::include_graphics("./images/ciclo.jpeg")
 
 
 
+## Primeros comandos en Git - crear un repositorio -
+
+* Se debe designar donde está la carpeta central de los archivos
 
 
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/gitfirst.png")
+```
+
+## Primeros comandos en Git - crear un repositorio -
 
 
+* El .git es una carpeta oculta que reposará los cambios de los archivos.
+* Cada uno de los cambios se guarda de manera independiente.
 
+Ahora se creará un nuevo archivo y tendrá algunas particularidades.
+
+Desarrolle el nuevo archivo con VIM o con Visual Studio Code
+
+
+## Primeros comandos en Git
+
+
+Al crear el archivo es necesario hacer git add "nombre del archivo", y después verificar el estatus.
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/crear doc.png")
+```
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git status.png")
+```
+
+
+## Primeros comandos en Git
+
+
+Se finaliza con un git commit -m "escribe algo"
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/commit.png")
+```
+
+
+## Primeros comandos en Git
+
+Si su git no está configurado haga git config `git config --list`
+
+* Para hacer los cambios globales : `git config --global user.name "su nombre"`
+
+* Para hacer los cambios globales : `git config --global user.mail "su mail"`
+
+* Vea los cambios con `git config --list`
+
+## Primeros comandos en Git
+
+
+Suponga que quiere hacer una modificación del documento y ver quién la hizo.
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/mod.png")
+```
+
+## Primeros comandos en Git
 
 
 
