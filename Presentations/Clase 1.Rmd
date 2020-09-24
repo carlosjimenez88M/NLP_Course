@@ -69,7 +69,7 @@ Por lo tanto:
 Git se usa para trabajar de manera local, cuando se quiere trabajar con varias personas se debe usar github (red social del código).
 
 ```{r , echo=FALSE, out.width = '90%'}
-knitr::include_graphics("homer.jpg")
+knitr::include_graphics("./images/homer.jpg")
 ```
 
 
@@ -403,6 +403,16 @@ knitr::include_graphics("./images/mod.png")
 
 Con `git log 'nombre del documento'` se puede ver la historia del archivo.
 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/log.png")
+```
+
+
+## Primeros comandos en Git
+
+
+Escriba `git show` y vea los cambios en el archivo
 
 ```{r , echo=FALSE ,out.width = '80%'}
 knitr::include_graphics("./images/log.png")
