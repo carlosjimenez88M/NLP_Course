@@ -81,7 +81,7 @@ knitr::include_graphics("./images/homer.jpg")
 Imaginesé el siguiente ejemplo:
 
 ```{r , echo=FALSE, out.width = '90%'}
-knitr::include_graphics("vim1.png")
+knitr::include_graphics("./images/vim1.png")
 ```
 
 
@@ -412,9 +412,9 @@ knitr::include_graphics("./images/log.png")
 ## Primeros comandos en Git
 
 
-Escriba `git show` y vea los cambios en el archivo
+Escriba `git show + nombre del documento` y vea los cambios en el archivo
 
 ```{r , echo=FALSE ,out.width = '80%'}
-knitr::include_graphics("./images/log.png")
+knitr::include_graphics("./images/cambios.png")
 ```
 
