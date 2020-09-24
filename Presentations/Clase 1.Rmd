@@ -304,7 +304,7 @@ Notese que hice una modificación al documento y recuerde estos pasos :
 ## Editores de texto para Git
 
 ```{r , echo=FALSE ,out.width = '80%'}
-knitr::include_graphics("./images/anexos.png")
+knitr::include_graphics("./images/sinmiedo.jpg")
 ```
 
 
@@ -312,7 +312,7 @@ knitr::include_graphics("./images/anexos.png")
 ## Editores de texto para Git
 
 ```{r , echo=FALSE ,out.width = '80%'}
-knitr::include_graphics("./images/status.png")
+knitr::include_graphics("./images/git status.png")
 ```
 
 
@@ -401,5 +401,10 @@ knitr::include_graphics("./images/mod.png")
 ## Primeros comandos en Git
 
 
+Con `git log 'nombre del documento'` se puede ver la historia del archivo.
 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/log.png")
+```
 
