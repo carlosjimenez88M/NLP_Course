@@ -79,17 +79,17 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 
 ## Agenda de las clases
 
-|Fecha|Clase|Presentación|
-|----:|----:|------------|
-|6 de Octubre|Introducción a Git y Github|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|
+|Fecha|Clase|Presentación|Código|
+|----:|----:|------------:|----:|
+|6 de Octubre|Introducción a Git y Github|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|[cod1]()|
 |8 de Octubre|Introducción a la analítica de texto|[Clase 2]()|
-|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|
-|15 de Octubre|Organización de textos, topics y tagging|[Clase 4]()|
-|20 de Octubre|Topics Modelling|[Clase 5]()|
-|22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|
-|27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|
-|3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8]()|
-|10 de Noviembre - 12 de Noviembre|Estudio de Caso|[Clase 9]()|
+|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|[cod2]()|
+|15 de Octubre|Organización de textos, topics y tagging|[Clase 4]()|[cod4]()|
+|20 de Octubre|Topics Modelling|[Clase 5]()|[cod5]()|
+|22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|[cod6]()|
+|27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|[cod7]()|
+|3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8]()|[cod8]()|
+|10 de Noviembre - 12 de Noviembre|Estudio de Caso|[Clase 9]()|[cod9]()|
 
 
 ## Monitorías
