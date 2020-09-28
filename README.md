@@ -45,11 +45,15 @@ Con el aumento de la información en todas sus versiones: escrita, oral, documen
 
 Por otro lado instale las siguientes librerías
 
-````
+```{r}
 install.packages(c('tidytext','tidymodels','tidyverse','tm','wordcloud','reshape2','stringr','ggrepel','ggraph','igraph','topicmodels','SnowballC','stopwords','magrittr','widyr','pdftools','lubridate','openNLP','cleanNLP','tidylo',')'))
 ```
 
+
+
 ## Forma de trabajo
+
+
 
 Las clases tienen dos componentes: i) La clase magistral donde el docente expone y presenta ideas y aplicaciones de Git & Github en el mundo real y ii) El trabajo colaborativo entre el grupo, por lo que se desarrollaran ejercicios que tengan que ver con Bases de datos y algo de analítica de datos.
 
