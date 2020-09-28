@@ -82,8 +82,8 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 |Fecha|Clase|Presentación|Código|
 |----:|----:|------------:|----:|
 |6 de Octubre|Introducción a Git y Github|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|[cod1]()|
-|8 de Octubre|Introducción a la analítica de texto|[Clase 2]()|
-|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|[cod2]()|
+|8 de Octubre|Introducción a la analítica de texto|[Clase 2]()|[cod2]()|
+|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|[cod3]()|
 |15 de Octubre|Organización de textos, topics y tagging|[Clase 4]()|[cod4]()|
 |20 de Octubre|Topics Modelling|[Clase 5]()|[cod5]()|
 |22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|[cod6]()|
