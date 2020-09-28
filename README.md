@@ -1,5 +1,5 @@
-# Curso  de NLP y Deploy
-\justify
+# Curso  de NLP 
+
 ![](https://conflictos-ambientales.net/oca_bd/img/Logo%20UN.jpg)
 
 
