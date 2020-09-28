@@ -60,10 +60,19 @@ Las clases tienen dos componentes: i) La clase magistral donde el docente expone
 
 A la par, el curso consta de dos examenes 
 
+Para la fase de Automatización y Versionamiento desarrolle el siguiente cuestionario:
+
 |Examen|Fecha|
 |-----:|-----|
 |[Inicio del curso](https://docs.google.com/forms/d/1vMYu1IS4nJ0Fqnx-vgCxlm9DVg7un7_NJE8Kfekq9yw/edit?ts=5f681b8f)|6 de Octubre|
 |[Final del curso](https://docs.google.com/forms/d/1EL2uyevVIEeUBmG7Cr6l3YqkCveBDETWnx58GGcxN2g/edit?ts=5f681ffc)|12 de Noviembre|
+
+Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
+
+|Examen|Fecha|
+|-----:|-----|
+|[Inicio del curso](https://docs.google.com/forms/d/1bjiMaLPnIjNCBOLaHDrjvc5UY_AaeJ2WUWz0WyFRWSg/edit)|6 de Octubre|
+|[Final del curso](https://docs.google.com/forms/d/1BOJXEjxhyp_UBXhdx1-AqSjPDfBLBBT6Zp_oN3cqtzw/)|12 de Noviembre|
 
 
 <center>Por favor realice los examenes en las fechas asignadas y escriba su nombre completo.</center>
@@ -72,15 +81,15 @@ A la par, el curso consta de dos examenes
 
 |Fecha|Clase|Presentación|
 |----:|----:|------------|
-|6 de Octubre|Introducción a Git y Editores de Texto|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|
-|8 de Octubre|Comandos básicos de Git|[Clase 2]()|
-|13 de Octubre|Comandos básicos de Git II|[Clase 3]()|
-|15 de Octubre|flujo de trabajo con Git I|[Clase 4]()|
-|20 de Octubre|flujo de trabajo con Git II|[Clase 5]()|
-|22 de Octubre|Control de versiones|[Clase 6]()|
-|27 de Octubre - 29 de Octubre|Control de versiones|[Clase 7]()|
-|3 de Noviembre -5 de Noviembre|Pull Requests y manejo higiénico de repositorios- Integración de Docker y Jenkins |[Clase 8]()|
-|10 de Noviembre - 12 de Noviembre|Caso aplicado de Git con todo lo visto en clase|[Clase 9]()|
+|6 de Octubre|Introducción a Git y Github|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|
+|8 de Octubre|Introducción a la analítica de texto|[Clase 2]()|
+|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|
+|15 de Octubre|Organización de textos, topics y tagging|[Clase 4]()|
+|20 de Octubre|Topics Modelling|[Clase 5]()|
+|22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|
+|27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|
+|3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8]()|
+|10 de Noviembre - 12 de Noviembre|Estudio de Caso|[Clase 9]()|
 
 
 ## Monitorías
