@@ -55,7 +55,7 @@ install.packages(c('tidytext','tidymodels','tidyverse','tm','wordcloud','reshape
 
 
 
-Las clases tienen dos componentes: i) La clase magistral donde el docente expone y presenta ideas y aplicaciones de Git & Github en el mundo real y ii) El trabajo colaborativo entre el grupo, por lo que se desarrollaran ejercicios que tengan que ver con Bases de datos y algo de analítica de datos.
+Las clases tienen dos componentes: i) La clase magistral donde el docente expone y presenta ideas y aplicaciones del proceso de Text Mining y NLP con estudios de caso y ii) El trabajo colaborativo entre el grupo, por lo que se desarrollaran ejercicios que tengan que ver con el core de su operación dentro de la organización.
 
 
 A la par, el curso consta de dos examenes 
