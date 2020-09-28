@@ -46,7 +46,7 @@ Con el aumento de la información en todas sus versiones: escrita, oral, documen
 Por otro lado instale las siguientes librerías
 
 ```{r}
-install.packages(c('tidytext','tidymodels','tidyverse','tm','wordcloud','reshape2','stringr','ggrepel','ggraph','igraph','topicmodels','SnowballC','stopwords','magrittr','widyr','pdftools','lubridate','openNLP','cleanNLP','tidylo',')'))
+install.packages(c('tidytext','tidymodels','tidyverse','tm','wordcloud','reshape2','stringr','ggrepel','ggraph','igraph','topicmodels','SnowballC','stopwords','magrittr','widyr','pdftools','lubridate','openNLP','cleanNLP','tidylo'))
 ```
 
 
