@@ -580,12 +580,13 @@ Ahora probemos con ver estas ventas en varios países, y guardemos los cambios.
 
 
 ```{r , echo=FALSE ,out.width = '80%'}
-knitr::include_graphics("./images/Cambios_R1.png")
+knitr::include_graphics("./images/cambiosr2.png")
 ```
 
 
+## Primeros comandos en Git
 
-=======
->>>>>>> 55cadc6d34c2905460e767afa031e5396d530d51
+Se anexan los cambios 
+
 
 
