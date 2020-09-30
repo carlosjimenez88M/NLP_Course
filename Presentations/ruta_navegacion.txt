@@ -1,0 +1,25 @@
+#======================================#
+#       Lecturas e instrumentos        #
+#          necesarios para el          # 
+#          desarrollo de NLP           #
+#======================================#
+
+
+Para el desarrollo de NLP es necesario que revise la siguiente documentación:
+
+* "Text Mining with R" -> https://www.tidytextmining.com/
+* "Supervised Machine Learning for Text Analysis" https://smltar.com/
+
+
+Paso seguido vea los siguientes ejemplos
+
+
+* https://www.youtube.com/watch?v=RggCAXBe6BA
+* https://www.youtube.com/watch?v=evTuL-RcRpc&t=171s
+
+
+Y lo último pero no menos importente:
+> "La practica hace al maestro"
+
+
+Si tiene alguna duda comuniquesé con Mary   <-  Esta es la modificación  

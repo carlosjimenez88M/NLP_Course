@@ -479,6 +479,7 @@ knitr::include_graphics("./images/cambios_diff.png")
 ## Primeros comandos en Git
 
 Para volver a una versión anterior de los documentos se trabaja de la siguiente manera:
+<<<<<<< HEAD
 
 * git reset + commit 
   + Se puede usar la extensión -- hard 🤡 : Todo se convierte en su estado natural anterior.
@@ -584,5 +585,7 @@ knitr::include_graphics("./images/Cambios_R1.png")
 
 
 
+=======
+>>>>>>> 55cadc6d34c2905460e767afa031e5396d530d51
 
 

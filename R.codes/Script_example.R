@@ -29,10 +29,36 @@ charts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 
 ## Exploratory Data Analysis -----
 
+beyonce_lyrics %>%
+  count(song_name, sort = TRUE)
 
 
+sales %>%
+  filter(country == "US") %>%
+  mutate(title = fct_reorder(title, sales)) %>%
+  ggplot(aes(sales, title, fill = artist)) +
+  geom_col() +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Sales (US)",
+       y = "",
+       title = 'Relation Sales Beyonce/Taylor',
+       subtitle = 'Total in Dollars')
 
 
+top_contries<-sales%>%
+  count(country, sort = TRUE)%>%
+  top_n(3,n)
 
 
-
+sales %>%
+  filter(country %in% top_contries$country) %>%
+  mutate(title = fct_reorder(title, sales)) %>%
+  ggplot(aes(sales, title, fill = artist)) +
+  geom_col() +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Sales (US)",
+       y = "",
+       title = 'Relation Sales Beyonce/Taylor',
+       subtitle = 'Total in Dollars')+
+  facet_wrap(~country,scales='free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
