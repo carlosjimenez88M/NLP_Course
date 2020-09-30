@@ -452,4 +452,32 @@ Se agregan unos cambios y se analizan
 knitr::include_graphics("./images/Cambios_doc.png")
 ```
 
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_eval.png")
+```
+
+
+## Primeros comandos en Git
+
+Para ver la historia de los documentos se emplea el comendo `git log + nombre documento`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git log.png")
+```
+
+
+## Primeros comandos en Git
+
+Para ver las diferencias entre un archivo y otro se usa el comando `git diff + nombre del commit final + nombre del commit a comparar`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambios_diff.png")
+```
+
+## Primeros comandos en Git
+
+Para volver a una versión anterior de los documentos se trabaja de la siguiente manera:
+
 
