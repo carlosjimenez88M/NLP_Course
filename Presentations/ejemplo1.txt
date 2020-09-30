@@ -7,3 +7,19 @@ Desde hoy empezaremos a usar **VIM** para escribir nuestros códigos 🥵.
 Mejor NO! seamos Pros😎 y trabajemos con [Visual Studio COde](https://code.visualstudio.com/)
 
 A mis estudiantes les gusta el riesgo, por lo tanto quieren trabajar un rato en VIM,y  ¿quién soy yo? para negarles ese privilegio
+
+
+## Segmento de NLP y Text Mining
+
+Muchachos para entender bien el tema del Text Mining y las redes neuronales que usaremos en este curso,
+les recomiendo las siguientes lecturas :
+
+* https://www.researchgate.net/publication/337172055_Procesamiento_del_Lenguaje_Natural_PLN_Natural_Language_Processing_NLP
+
+* https://nlp.stanford.edu/courses/NAACL2013/NAACL2013-Socher-Manning-DeepLearning.pdf
+
+Detrás de esto hay un componente matemático muy importante, y de corazón ♥️ les pido que repasen el siguente documento:
+
+* https://books.google.com.co/books?id=eI34KBt0tTwC&printsec=frontcover&hl=es&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false
+
+Aunque parezca una 💩 es demasiado bacano!!! Se daran cuenta que el mundo es solamente algebraico 

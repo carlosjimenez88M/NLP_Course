@@ -28,7 +28,6 @@ options(knitr.duplicate.label = "allow")
 
 * Editores de texto para Git
 
-  
 * Primeros comandos en Git
 
 * Ejemplo de uso de Git
@@ -417,4 +416,40 @@ Escriba `git show + nombre del documento` y vea los cambios en el archivo
 ```{r , echo=FALSE ,out.width = '80%'}
 knitr::include_graphics("./images/cambios.png")
 ```
+
+
+## Primeros comandos en Git
+
+Ahora haremos una modificación al documento pero con [Visual Studio Code](https://code.visualstudio.com/blogs/2020/07/27/containers-edu), aplicando los siguientes pasos :
+
+* Ir a la terminal o el CMD;
+* Cambiar de directorio hasta llegar a donde se encuentre el documento;
+* Escribir en la terminal o cmd `code + nombre del documento`
+
+Lo que aparecerá sera lo siguiente
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Ruta_code.png")
+```
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/VSC.png")
+```
+
+## Primeros comandos en Git
+
+Se agregan unos cambios y se analizan 
+
+(Recuerde agregar y hacer el commit)
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_doc.png")
+```
+
 
