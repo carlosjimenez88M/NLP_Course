@@ -27,7 +27,7 @@ options(knitr.duplicate.label = "allow")
 * ¿Cómo se instala Git?
 
 * Editores de texto para Git
-  
+
 * Primeros comandos en Git
 
 * Ejemplo de uso de Git
@@ -68,7 +68,7 @@ Por lo tanto:
 Git se usa para trabajar de manera local, cuando se quiere trabajar con varias personas se debe usar github (red social del código).
 
 ```{r , echo=FALSE, out.width = '90%'}
-knitr::include_graphics("homer.jpg")
+knitr::include_graphics("./images/homer.jpg")
 ```
 
 
@@ -80,7 +80,7 @@ knitr::include_graphics("homer.jpg")
 Imaginesé el siguiente ejemplo:
 
 ```{r , echo=FALSE, out.width = '90%'}
-knitr::include_graphics("vim1.png")
+knitr::include_graphics("./images/vim1.png")
 ```
 
 
@@ -283,6 +283,256 @@ En el ejercicio en Vivo mostraré más cosas de VIM, pero dejo la introducción 
 ```{r , echo=FALSE ,out.width = '80%'}
 knitr::include_graphics("./images/VIM2.png")
 ```
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/vim3.png")
+```
+
+## Editores de texto para Git
+
+Notese que hice una modificación al documento y recuerde estos pasos :
+
+* git init;
+* git add . ;
+* git commit -m "mensaje" ;
+* git status
+* git log ejemplo.txt
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/sinmiedo.jpg")
+```
+
+
+
+## Editores de texto para Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git status.png")
+```
+
+
+## Editores de texto para Git
+
+Para sacarle provecho a Git es necesario conocer y trabajar con la terminal y la línea de comando. Acá recompilaré algunos comandos y buenas prácticas, pero les recomiendo que la estudien por su cuenta, se darán cuenta que no cambiaran el CMD o la terminal por ningún interfaz gráfico.
+
+
+
+
+## Primeros comandos en Git
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/ciclo.jpeg")
+```
+
+
+
+## Primeros comandos en Git - crear un repositorio -
+
+* Se debe designar donde está la carpeta central de los archivos
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/gitfirst.png")
+```
+
+## Primeros comandos en Git - crear un repositorio -
+
+
+* El .git es una carpeta oculta que reposará los cambios de los archivos.
+* Cada uno de los cambios se guarda de manera independiente.
+
+Ahora se creará un nuevo archivo y tendrá algunas particularidades.
+
+Desarrolle el nuevo archivo con VIM o con Visual Studio Code
+
+
+## Primeros comandos en Git
+
+
+Al crear el archivo es necesario hacer git add "nombre del archivo", y después verificar el estatus.
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/crear doc.png")
+```
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git status.png")
+```
+
+
+## Primeros comandos en Git
+
+
+Se finaliza con un git commit -m "escribe algo"
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/commit.png")
+```
+
+
+## Primeros comandos en Git
+
+Si su git no está configurado haga git config `git config --list`
+
+* Para hacer los cambios globales : `git config --global user.name "su nombre"`
+
+* Para hacer los cambios globales : `git config --global user.mail "su mail"`
+
+* Vea los cambios con `git config --list`
+
+## Primeros comandos en Git
+
+
+Suponga que quiere hacer una modificación del documento y ver quién la hizo.
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/mod.png")
+```
+
+## Primeros comandos en Git
+
+
+Con `git log 'nombre del documento'` se puede ver la historia del archivo.
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/log.png")
+```
+
+
+## Primeros comandos en Git
+
+
+Escriba `git show + nombre del documento` y vea los cambios en el archivo
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambios.png")
+```
+
+
+## Primeros comandos en Git
+
+Ahora haremos una modificación al documento pero con [Visual Studio Code](https://code.visualstudio.com/blogs/2020/07/27/containers-edu), aplicando los siguientes pasos :
+
+* Ir a la terminal o el CMD;
+* Cambiar de directorio hasta llegar a donde se encuentre el documento;
+* Escribir en la terminal o cmd `code + nombre del documento`
+
+Lo que aparecerá sera lo siguiente
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Ruta_code.png")
+```
+
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/VSC.png")
+```
+
+## Primeros comandos en Git
+
+Se agregan unos cambios y se analizan 
+
+(Recuerde agregar y hacer el commit)
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_doc.png")
+```
+
+## Primeros comandos en Git
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_eval.png")
+```
+
+
+## Primeros comandos en Git
+
+Para ver la historia de los documentos se emplea el comendo `git log + nombre documento`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git log.png")
+```
+
+
+## Primeros comandos en Git
+
+Para ver las diferencias entre un archivo y otro se usa el comando `git diff + nombre del commit final + nombre del commit a comparar`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambios_diff.png")
+```
+
+## Primeros comandos en Git
+
+Para volver a una versión anterior de los documentos se trabaja de la siguiente manera:
+
+* git reset + commit 
+  + Se puede usar la extensión -- hard 🤡 : Todo se convierte en su estado natural anterior.
+  + Se puede usar la extensión --soft 👶 : Y se vuelve a una versión anterior sin tener presente los cambios en el staging 
+
+## Primeros comandos en Git
+
+Un ejemplo :
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambios_diff.png")
+```
+
+## Primeros comandos en Git
+
+Se anexan los cambios locales
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git_add_terror.png")
+```
+
+
+## Primeros comandos en Git
+
+Se verifican los cambios a través de los **logs**
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/losg_terror.png")
+```
+
+## Primeros comandos en Git
+
+Ahora se retrocede de manera hard 🤡, con el comando 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/had.png")
+```
+
+
+## Primeros comandos en Git
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/reset.png")
+```
+
+
+## Primeros comandos en Git
+
+Ahora hagamos un ejemplo con R.
+
+
+
 
 
 
