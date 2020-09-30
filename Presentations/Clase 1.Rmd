@@ -586,7 +586,18 @@ knitr::include_graphics("./images/cambiosr2.png")
 
 ## Primeros comandos en Git
 
-Se anexan los cambios 
+Se anexan los cambios y se validan con git diff
 
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambiosr3.png")
+```
+
+## Primeros comandos en Git
+
+No se les olvide hacer el commit para validar los cambios
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Anexo de cambios.png")
+```
 
 
