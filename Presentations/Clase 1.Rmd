@@ -531,6 +531,56 @@ knitr::include_graphics("./images/reset.png")
 
 Ahora hagamos un ejemplo con R.
 
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/R1.png")
+```
+
+
+
+## Primeros comandos en Git
+
+Se le hace seguimiento al archivo
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_registrados.png")
+```
+
+
+
+
+
+## Primeros comandos en Git
+
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/AnexosR.png")
+```
+
+
+
+
+
+## Primeros comandos en Git
+
+Ahora desarrollamos un poco de código y lo agregamos al repositorio
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_R1.png")
+```
+
+
+
+
+## Primeros comandos en Git
+
+Ahora probemos con ver estas ventas en varios países, y guardemos los cambios.
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios_R1.png")
+```
 
 
 
