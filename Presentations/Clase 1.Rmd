@@ -479,7 +479,7 @@ knitr::include_graphics("./images/cambios_diff.png")
 ## Primeros comandos en Git
 
 Para volver a una versión anterior de los documentos se trabaja de la siguiente manera:
-<<<<<<< HEAD
+
 
 * git reset + commit 
   + Se puede usar la extensión -- hard 🤡 : Todo se convierte en su estado natural anterior.
@@ -601,3 +601,71 @@ knitr::include_graphics("./images/Anexo de cambios.png")
 ```
 
 
+## Primeros comandos en Git
+
+Ahora suponga que quiere agregar este código
+
+```{r, eval=F, echo=T}
+sales %>%
+  filter(country %in% c("World", "WW")) %>%
+  mutate(title = fct_reorder(title, sales)) %>%
+  ggplot(aes(sales, title, fill = artist)) +
+  geom_col() +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Sales (World)",
+       y = "")
+```
+
+
+## Primeros comandos en Git
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambiosr4.png")
+```
+Esto se ve muy bien !!! Ahora anexemos los cambios
+
+## Primeros comandos en Git
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Toods_commits2.png")
+```
+## Primeros comandos en Git
+
+Ahora como ustedes son sofisticados, seguro se preguntaran ¿Y Donde vemos los cambios en tamaño, bytes y de más?
+
+A lo cual les dejare un código y una imagen
+
+* git log  + -- stat
+
+## Primeros comandos en Git
+
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/GIT--STAT.png")
+```
+
+
+## ADIVINEN 
+
+Tarea
+
+* Como unidad tendran que crear un Git donde trabajaremos un proyecto en conjunto.
+
+* Suba un documento, un texto, el que ustedes quieran, no rollo por ello.
+
+* Ahora creen un Script e intenten leer ese documento.
+
+* Haganle cambios de palabras , investiguen como, yo dejaré esto por acá y me retirare lentamente 
+
+```{r, eval=F, echo=T}
+gsub('palabra','palabra a cambiar',
+     donde_se_encuentra_la_palabra)
+```
+
+
+## ADIVINEN 
+
+Está tarea se debe hacer antes de la siguiente clase!!!
