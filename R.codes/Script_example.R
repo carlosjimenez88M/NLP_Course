@@ -60,5 +60,5 @@ sales %>%
        y = "",
        title = 'Relation Sales Beyonce/Taylor',
        subtitle = 'Total in Dollars')+
-  facet_wrap(~country,scales='free')+
+  facet_wrap(~country,scales='free',nrow = 3)+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
