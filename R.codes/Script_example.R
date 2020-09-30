@@ -64,3 +64,12 @@ sales %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 
+sales %>%
+  filter(country %in% c("World", "WW")) %>%
+  mutate(title = fct_reorder(title, sales)) %>%
+  ggplot(aes(sales, title, fill = artist)) +
+  geom_col() +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Sales (World)",
+       y = "")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
