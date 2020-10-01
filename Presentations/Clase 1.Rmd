@@ -704,5 +704,14 @@ Suponga que anexo un cambio al script y analizo  los textos de Taylor Swift
 knitr::include_graphics("./images/cambior5.png")
 ```
 
+## Flujo  de trabajo
+
+Se evalua el cambio
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git7.png")
+```
+
+## Flujo  de trabajo
 
 
