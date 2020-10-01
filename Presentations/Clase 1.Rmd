@@ -32,6 +32,8 @@ options(knitr.duplicate.label = "allow")
 
 * Flujo de trabajo
 
+* Introducción a Github.
+
 
 
 ## ¿Qué es Git?
@@ -777,6 +779,100 @@ Ahora tenemos el Merge
 
 Ahora notesé que se pueden ver los logs que se hicieron entre las ramas!!
 
+Queda pendiente para su investigación como resolver un problema de conflictos de versiones. 
+
+Un consejo, los conflictos solucionelos desde Visual Studio Code.
+
+## Introducción a Github
+
+Github: Es un servidor que permite colaborar en el desarrollo de códigos.
+En breve palabras es la red social de los programadores.
+
+Por favor acceda al siguiente link y registrese https://github.com/
+
+## Introducción a Github
+
+* Cree un repositorio;
+* Integre sus cambios;
+* Subalo (git push)
+
+
+## Introducción a Github
+
+
+El respositorio se clona desde el parámetro `code`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/clonar.png")
+```
+
+## Introducción a Github
+
+Para hacer el trabajo colaborativo es necesario crear llaves SSH, estas se dividen en :
+
+* Llave pública, es la que se comparte para que puedas acceder al respositorio;
+
+* Llave privada: Se usa para cifrar el mensaje enviado!
+
+## Introducción a Github
+
+* La llave ssh se crea de la siguiente manera : `ssh-keygen -t rsa -b 4096 -C "tu@email.com"`
+
+* Para encender el servidor `eval $(ssh-agent -s)`
+
+* Para añadir la llave `ssh-add ruta-donde-guardaste-tu-llave-privada`
+  + Si es MAC use el siguiente comando __Host *
+        AddKeysToAgent yes
+        UseKeychain yes
+        IdentityFile ruta-donde-guardaste-tu-llave-privada__
+  
+  + ssh-add -K ruta-donde-guardaste-tu-llave-privada
+
+
+## Introducción a Github
+
+
+Después de crear las llaves:
+
+* En github ve a settings;
+
+* Ve a SSH;
+
+* Agregue la llave 
+
+* Ahora escriba el siguiente código: `git remote set-url origin + ssh git `
+
+## Introducción a Github
+
+Para fusionar bien los repositorios :
+
+* Descargue el repositorio con git pull
+
+* Use git pull origin master
+
+* Verifique el Status.
+
+* Haga cambios y envielos con git push origin master
+
+## Introducción a Github
+
+Ahora verifique la historia del respositorio con el siguiente código :
+`git log --all --decorate --oneline`
+
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/decorate.png")
+```
 
 
 
+
+## Introducción a Github
+
+* El tag es una etiqueta que se le asigna a las versiones de los commits.
+
+* Para crear un tag copie el nombre del commit en el cual va hacer las etiquetas `git tag -a v.0.1 -m "Cambios en las diapositivas" 716c45d` 
+
+* Para ver los tags use el comando `git show-ref --tags`
+
+* 

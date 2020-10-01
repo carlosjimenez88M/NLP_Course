@@ -158,7 +158,7 @@ word_differences %>%
   ggplot(aes(log_odds_weighted, word)) +
   geom_col(width = .1) +
   geom_point(aes(size = num_words_total, color = direction)) +
-  geom_vline(lty = 2, xintercept = 0) +
+  geom_vline(lty = 3, xintercept = 0) + # Se hicieron cambios al tipo de línea.
   scale_x_continuous(breaks = log(2 ^ seq(-6, 9, 3)),
                      labels = x_labels) +
   labs(x = "Relative use in Beyoncé vs Taylor Swift (weighted)",
@@ -167,3 +167,29 @@ word_differences %>%
        subtitle = "Among the 100 words most used by the artists (combined)",
        color = "",
        size = "# of words\n(both artists)")
+<<<<<<< HEAD
+=======
+
+
+       comparison <- by_artist_word %>%
+  select(artist, word, pct_words, num_words_total) %>%
+  pivot_wider(names_from = artist,
+              values_from = pct_words,
+              values_fill = list(pct_words = 0)) %>%
+  janitor::clean_names() %>%
+  slice_max(num_words_total, n = 200, with_ties = FALSE)
+comparison %>%
+  ggplot(aes(taylor_swift, beyonce)) +
+  geom_abline(color = "red") +
+  geom_point() +
+  geom_text(aes(label = word), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = percent) +
+  scale_y_log10(labels = percent)
+comparison %>%
+  ggplot(aes(num_words_total, beyonce / taylor_swift)) +
+  geom_hline(yintercept = 1) +
+  geom_point() +
+  geom_text(aes(label = word), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = percent) +
+  scale_y_log10()
+>>>>>>> beyonce
