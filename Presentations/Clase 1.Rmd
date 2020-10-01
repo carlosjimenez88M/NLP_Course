@@ -744,4 +744,16 @@ knitr::include_graphics("./images/anexo_rama.png")
 
 
 
+## Flujo  de trabajo
+
+Se anexan los cambios 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git_rama.png")
+```
+
+## Flujo  de trabajo
+
+
+Ahora toca hacer un `merge`, en donde la rama se une a la ruta final.
 
