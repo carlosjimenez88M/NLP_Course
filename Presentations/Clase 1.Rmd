@@ -726,6 +726,12 @@ knitr::include_graphics("./images/rama1.png")
 
 ## Flujo  de trabajo
 
+Ahora con git checkout + nombre de la rama, nos movemos a la rama creada
+
 ```{r , echo=FALSE ,out.width = '80%'}
-knitr::include_graphics("./images/rama1.png")
+knitr::include_graphics("./images/Cambios en la rama.png")
 ```
+
+
+
+## Flujo  de trabajo
