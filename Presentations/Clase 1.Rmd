@@ -755,6 +755,7 @@ knitr::include_graphics("./images/git_rama.png")
 ## Flujo  de trabajo
 
 
+
 Ahora toca hacer un `merge`, en donde la rama se une a la ruta final. Pero suponga lo siguiente : Agregue un segmento de código 
 
 ```{r , echo=FALSE ,out.width = '80%'}
@@ -765,7 +766,17 @@ knitr::include_graphics("./images/segmento_beyonce.png")
 
 Vea que los cambios no se ven en el código general, por lo cual hay que hacer un merge con `git merge + nombre de la rama`
 
-```{r}
-
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/merge_beyonce.png")
 ```
+Ahora tenemos el Merge 
+
+
+## Flujo  de trabajo
+
+
+Ahora notesé que se pueden ver los logs que se hicieron entre las ramas!!
+
+
+
 
