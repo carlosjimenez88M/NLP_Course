@@ -148,3 +148,22 @@ word_differences %>%
        title = "Which words most distinguish Beyoncé and Taylor Swift songs?",
        subtitle = "Among the 100 words most used by the artists (combined)",
        fill = "")
+
+
+## Anexos desde la rama Beyonce
+
+x_labels <- paste0(2 ^ abs(seq(-6, 9, 3)), "X")
+x_labels <- ifelse(x_labels == "1X", "Same", x_labels)
+word_differences %>%
+  ggplot(aes(log_odds_weighted, word)) +
+  geom_col(width = .1) +
+  geom_point(aes(size = num_words_total, color = direction)) +
+  geom_vline(lty = 2, xintercept = 0) +
+  scale_x_continuous(breaks = log(2 ^ seq(-6, 9, 3)),
+                     labels = x_labels) +
+  labs(x = "Relative use in Beyoncé vs Taylor Swift (weighted)",
+       y = "",
+       title = "Which words most distinguish Beyoncé and Taylor Swift songs?",
+       subtitle = "Among the 100 words most used by the artists (combined)",
+       color = "",
+       size = "# of words\n(both artists)")
