@@ -714,4 +714,41 @@ knitr::include_graphics("./images/git7.png")
 
 ## Flujo  de trabajo
 
+Ahora se crea la rama, para eso debemos ir a donde vive el archivo
+
+* Verifique el Status `git status`;
+
+* Se crea la rama con `git branch + nombre de la rama`
+
+```{r , echo=FALSE ,out.width = '60%'}
+knitr::include_graphics("./images/rama1.png")
+```
+
+## Flujo  de trabajo
+
+Ahora con git checkout + nombre de la rama, nos movemos a la rama creada
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/Cambios en la rama.png")
+```
+
+
+
+## Flujo  de trabajo
+
+Ahora suponga que se hicieron unos cambios en la rama `beyonce`
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/anexo_rama.png")
+```
+
+
+
+## Flujo  de trabajo
+
+Se anexan los cambios 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/git_rama.png")
+```
 
