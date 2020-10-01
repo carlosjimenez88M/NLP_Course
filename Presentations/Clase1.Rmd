@@ -899,12 +899,34 @@ Para manejar las ramas de desarrollo es necesario :
 
 * Use el comando git show-branch 
 * Use git push origin y el nombre de la rama 
+* Trabaje por unidad las ramas.
+* Verifiqué que el código está bien 
+* Haga un merge.
+
+## Introducción a Github
+
+* Para finalizar esta clase, vamos a trabajar con Pull requests.👨🏻‍💻
+
+* Un pull request es un estado intermedio antes de hacer merge.
+
+* Otros miembros del equipo ven estos cambios y tienen la oportunidad de aprobarlos o no!
+
+* El Pull requests sirve para aquellos que no son colaboradores puedan trabajar en una rama.
+
+
+
 
 ## Introducción a Github
 
 
 
 
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/pullR.png")
+```
+
+Y Ahí el equipo aprueba o no !!
 
 
 
