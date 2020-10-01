@@ -1,6 +1,6 @@
 ---
 title: "Introducción a Git & Github"
-subtitle: "Conceptos básicos e instalación"
+subtitle: "Conceptos básicos"
 author: "Daniel Jiménez M."
 date: "`r format(Sys.time(), '%d -%m -%Y')`"
 institute: "Universidad Nacional de Colombia"
@@ -30,7 +30,9 @@ options(knitr.duplicate.label = "allow")
 
 * Primeros comandos en Git
 
-* Ejemplo de uso de Git
+* Flujo de trabajo
+
+
 
 ## ¿Qué es Git?
 
@@ -669,3 +671,38 @@ gsub('palabra','palabra a cambiar',
 ## ADIVINEN 
 
 Está tarea se debe hacer antes de la siguiente clase!!!
+
+
+## Flujo de Trabajo
+
+Cuando se trabaja de forma colaborativa, los repositorios no pueden estar de forma local y es por ello que se trabaja con **Github** (hay otras alternativas pero no hablaremos de ellas en esta clase!)
+
+Cuando se trabaja con un servidor remoto se trabaja no con init sino con **git clone** del respositorio original.
+
+## Flujo de Trabajo
+
+Para el flujo de trabajo, por lo general se trabaja con ramas (branch), con lo cual se busca asignar partes de proyecto a miembros del equipo, para así después hacerle fusión con **merge**
+
+Para esto es necesario entender lo siguiente:
+
+* Cuando se clona el repositorio `git clone + ID `, 
+
+* En el local se crea un nuevo staging el cual se le puede hacer seguimiento ,
+
+* En cada commit, se puede evaluar el bugfix del proceso.
+
+## Flujo de Trabajo
+
+Con las ramas, es necesario poder generar versionamiento sobre los cambios y es por ello que ya no se usará (en esta fase) el git add , sino el **git commit -am**
+
+
+## Flujo  de trabajo
+
+Suponga que anexo un cambio al script y analizo  los textos de Taylor Swift
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/cambior5.png")
+```
+
+
+

@@ -73,3 +73,33 @@ sales %>%
   labs(x = "Sales (World)",
        y = "")+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+
+
+## Análisis de texto Taylor  Swift
+
+
+release_dates <- charts %>%
+  distinct(album = title, released) %>%
+  mutate(album = fct_recode(album,
+                            folklore = "Folklore",
+                            reputation = "Reputation")) %>%
+  mutate(released = str_remove(released, " \\(.*")) %>%
+  mutate(released = mdy(released))
+
+taylor_swift_words <- taylor_swift_lyrics %>%
+  rename_all(str_to_lower) %>%
+  select(-artist) %>%
+  unnest_tokens(word, lyrics) %>%
+  anti_join(stop_words, by = "word") %>%
+  inner_join(release_dates, by = "album") %>%
+  mutate(album = fct_reorder(album, released))
+
+
+taylor_swift_words %>%
+  count(word, sort = TRUE) %>%
+  head(25) %>%
+  mutate(word = fct_reorder(word, n)) %>%
+  ggplot(aes(n, word)) +
+  geom_col()
