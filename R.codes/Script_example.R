@@ -167,3 +167,26 @@ word_differences %>%
        subtitle = "Among the 100 words most used by the artists (combined)",
        color = "",
        size = "# of words\n(both artists)")
+
+
+       comparison <- by_artist_word %>%
+  select(artist, word, pct_words, num_words_total) %>%
+  pivot_wider(names_from = artist,
+              values_from = pct_words,
+              values_fill = list(pct_words = 0)) %>%
+  janitor::clean_names() %>%
+  slice_max(num_words_total, n = 200, with_ties = FALSE)
+comparison %>%
+  ggplot(aes(taylor_swift, beyonce)) +
+  geom_abline(color = "red") +
+  geom_point() +
+  geom_text(aes(label = word), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = percent) +
+  scale_y_log10(labels = percent)
+comparison %>%
+  ggplot(aes(num_words_total, beyonce / taylor_swift)) +
+  geom_hline(yintercept = 1) +
+  geom_point() +
+  geom_text(aes(label = word), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = percent) +
+  scale_y_log10()
