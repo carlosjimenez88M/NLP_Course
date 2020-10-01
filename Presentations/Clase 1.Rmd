@@ -891,3 +891,21 @@ Para eliminar los tags
 * Use git tag -d nombre del tag para eliminarlo.
 
 * Envie los cambios con el comando `git push origin :refs/tags/v.0.1`
+
+
+## Introducción a Github
+
+Para manejar las ramas de desarrollo es necesario :
+
+* Use el comando git show-branch 
+* Use git push origin y el nombre de la rama 
+
+## Introducción a Github
+
+
+
+
+
+
+
+
