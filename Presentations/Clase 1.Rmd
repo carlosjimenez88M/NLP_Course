@@ -875,4 +875,19 @@ knitr::include_graphics("./images/decorate.png")
 
 * Para ver los tags use el comando `git show-ref --tags`
 
-* 
+* Para subir los cambios use `git push origin --tags`
+
+## Introducción a Github
+
+```{r , echo=FALSE ,out.width = '80%'}
+knitr::include_graphics("./images/tags.png")
+```
+## Introducción a Github
+
+Para eliminar los tags 
+
+* Use git tag para saber cuales son los tags creados;
+
+* Use git tag -d nombre del tag para eliminarlo.
+
+* Envie los cambios con el comando `git push origin :refs/tags/v.0.1`
