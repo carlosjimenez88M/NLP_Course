@@ -158,7 +158,7 @@ word_differences %>%
   ggplot(aes(log_odds_weighted, word)) +
   geom_col(width = .1) +
   geom_point(aes(size = num_words_total, color = direction)) +
-  geom_vline(lty = 2, xintercept = 0) +
+  geom_vline(lty = 3, xintercept = 0) + # Se hicieron cambios al tipo de línea.
   scale_x_continuous(breaks = log(2 ^ seq(-6, 9, 3)),
                      labels = x_labels) +
   labs(x = "Relative use in Beyoncé vs Taylor Swift (weighted)",
