@@ -1,0 +1,270 @@
+---
+title: "Clase2"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(tidytext)
+imdb_data<- read.csv("IMDB-movies.csv")
+imdb_data==
+head(imdb_data
+     )
+str(imdb_data
+    )
+
+imdb_data %>%
+    filter(director == "Sidney Olcott") %>%
+    summarize(dir_mean = mean((avg_vote)))
+
+imdb_data %>% 
+    group_by(director)%>%
+    summarize(dir_mean = mean((avg_vote)))%>%
+    arrange(desc(dir_mean))
+
+#para homogenizar como factor
+
+ imdb_data%>%
+    mutate_if(is.character,as.factor)%>%
+    mutate(year=as.numeric(year))%>%
+
+
+```
+tokenizar y limpiar II
+
+```{r}
+
+tidy_ejemplo<- imdb_data %>%
+    unnest_tokens(word, description)
+
+tidy_ejemplo
+
+tidy_ejemplo %>%
+    count(word)%>%
+    arrange(desc(n))
+
+## ejemplo con stopwors  y anti join 
+
+tidy_ejemplo2 <- imdb_data%>%
+    unnest_tokens(word, description)%>%
+    anti_join(stop_words)
+
+tidy_ejemplo2
+
+tidy_ejemplo2 %>%
+    count(word)%>%
+    arrange(desc(n))
+
+```
+
+Graficar el conteo de palabras 
+
+
+```{r}
+
+tidy_ejemplo <- imdb_data %>%
+    mutate(id = row_number()) %>%
+    unnest_tokens(word,description) %>%
+    anti_join(stop_words)
+
+
+word_counts <- tidy_ejemplo %>%
+    count (word) %>%
+    arrange(desc(n))
+
+ggplot(
+    word_counts,aes(x = word, y = n)
+)+
+    geom_col()
+
+word_counts2 <- tidy_ejemplo %>%
+    count(word) %>%
+    filter(n > 2400) %>%
+    arrange(desc(n))
+
+ggplot(
+    word_counts2,aes(x = word, y = n)
+)+
+    geom_col()+
+    coord_flip()+
+    ggtitle("Palabras más usadas para describir peliculas en la historia del cine")
+
+
+
+```
+
+*reorganizar la lista de palabras
+
+
+```{r}
+ggplot(
+    word_counts2,aes(reorder(word, n), n)
+)+
+    geom_col()+
+    coord_flip()+
+    ggtitle("Palabras más usadas para describir peliculas en la historia del cine")
+
+
+```
+
+* creamos un nuevo data frame y lo unificamos ais vamos puliendo nuestras stop words
+```{r}
+mod_stop_words <- tribble(
+    ~word, ~lexicon,
+    "life","CUSTOM",
+    "2", "CUSTOM",
+    "girl","CUSTOM",
+    "father","CUSTOM",
+    "wife", "CUSTOM",
+    "son", "CUSTOM",
+    "wife","CUSTOM",
+    "mother", "CUSTOM",
+    "daughter","CUSTOM",
+    "day", "CUSTOM",
+    "love", "CUSTOM",
+    "story", "CUSTOM"
+    
+)
+
+stop_words2 <- stop_words %>%
+    bind_rows(mod_stop_words)
+
+stop_words2
+
+```
+
+*hagamos la prueba con nuestro nuevo dataframe modificado
+
+```{r}
+
+tidy_ejemplo <- imdb_data %>%
+    mutate(id = row_number()) %>%
+    select( id, original_title, description )%>%
+    unnest_tokens(word,description)%>%
+    anti_join(stop_words2)
+
+tidy_ejemplo %>%
+    filter(word == "life")
+
+
+word_counts3 <- tidy_ejemplo %>%
+    count(word) %>%
+    filter(n > 2400) %>%
+    arrange(desc(n))
+
+
+ggplot(
+    word_counts3,aes(reorder(word, n), n)
+)+
+    geom_col()+
+    coord_flip()+
+    ggtitle("Palabras más usadas para describir peliculas en la historia del cine")
+
+
+
+```
+
+* hagamos un ejemplo separando las graficas por anios 
+
+
+```{r, fig.width=12}
+
+tidy_ejemplo <- imdb_data %>%
+    mutate(id = row_number()) %>%
+    select( id, original_title, description, year )%>%
+    unnest_tokens(word,description)%>%
+    anti_join(stop_words2)
+
+
+word_counts3 <- tidy_ejemplo %>%
+    count(word) %>%
+    filter(n > 2400) %>%
+    arrange(desc(n))
+
+tidy_ejemplo %>% 
+    count(word, year) %>%
+    arrange(desc(n))
+
+word_counts <- tidy_ejemplo%>% 
+    mutate(year=as.numeric(year))%>%
+    mutate(decade = (year %/% 10) * 10) %>%
+    group_by(decade) %>%
+    count(word) %>% 
+    top_n(10, n)%>%
+    ungroup() %>%
+    mutate(word = fct_reorder(word,n))%>%
+    filter(!is.na(decade))
+word_counts%>%
+    mutate(decade=factor(decade),
+           word=reorder_within(word,n,decade))%>%
+    ggplot(aes(x = word, y = n , fill= decade))+
+    geom_col(show.legend = FALSE) +
+    facet_wrap( ~decade, scales = "free")+
+    coord_flip()+
+    scale_x_reordered()+
+    ggtitle("Palabras mas usadas por año para describir una pelicula")
+
+
+```
+
+
+
+
+```{r}
+imdb_data<-imdb_data%>%
+    mutate(year=as.numeric(year),
+           date_published = lubridate::ymd(date_published))
+```
+
+
+```{r}
+imdb_data%>%
+    glimpse()
+```
+
+
+
+### Ver los 'ultimos diez años
+
+```{r}
+
+imdb_data%>%
+    count(year)%>%
+    ggplot(aes(n))+
+    geom_histogram(bins = 15)
+
+```
+
+
+
+```{r,fig.width=12}
+imdb_data%>%
+    filter(year>=2010)%>%
+    select(-title)%>%
+    unnest_tokens(word,description)%>%
+    group_by(year)%>%
+    count(word,sort=TRUE)%>%
+    anti_join(stop_words2)%>%
+    top_n(10,n)%>%
+    ungroup()%>%
+    mutate(year=factor(year),
+           word=reorder_within(word,n,year))%>%
+    ggplot(aes(word,n,fill=year))+
+    geom_col(show.legend = FALSE)+
+    scale_x_reordered()+
+    facet_wrap(~year,scales = 'free')+
+    labs(title = 'Kike Dijo',
+         caption = '#UNAL')+
+    coord_flip()
+```
+
+
+
+
+
+
+
