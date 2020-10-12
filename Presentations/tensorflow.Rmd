@@ -1,0 +1,52 @@
+---
+title: "TensorFlow"
+subtitle: "Introducción y Aplicaciones"
+author: "Daniel Jiménez M."
+date: "`r format(Sys.time(), '%d -%m -%Y')`"
+institute: "Universidad Nacional de Colombia"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "beaver"
+    #incremental: true
+    slide_level: 2
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+## Agenda 
+
+
+## ¿Qué es TensorFlow?
+
+### TensorFlow es :
+
+* Una creación de Google Brain;
+* Es una libreria del tipo OpenSource;
+* Trabaja bajo API;
+* Se ejecuta a través de C++
+* Un Framework que permite la creación de modelos de Machine Learning y Deep Learning;
+* Como Framework funciona  como una biblioteca;
+* Su trabajo se basa en la construcción de redes neuronales;
+
+## ¿Qué es TensorFlow?
+
+Tensorflow es popular para el trabajo de :
+
+* NLP: Comprensión de textos;
+* RNN (Redes Neuronales recurrentes): Análisis de datos en series temporales, la dimensión del tiempo es importante;
+* Visual recognition: Reconocimiento de Imagenes 
+
+
+## ¿Qué es TensorFlow?
+
+
+TensorFlow funciona con Tensores que son arrays de multiples dimensiones
+
+
