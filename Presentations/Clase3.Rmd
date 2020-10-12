@@ -610,14 +610,6 @@ prp(modelo_2,type=4,varlen = 0)
 ```
 
 
-## Modelamiento Estadístico 
 
-Para mejorar el performance de un modelo de regresión se puede trabajar el análisis de covariantes, en donde variables que no son de interes pueden mejorar el rendimiento de la variable de respuesta
-
-
-```{r, fig.height=1}
-lm(Sepal.Length~Sepal.Width, data = iris)%>%
-  summary()
-```
 
 
