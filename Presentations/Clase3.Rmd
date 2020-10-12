@@ -340,3 +340,284 @@ La función de autocorrelación es la siguiente :
 acf(ma.norm)
 ```
 
+
+## Distribución Weibull
+
+Es conocida también como análisis de sobrevivencia, ya que estudia el tiempo transcurrido hasta que llegue un evento de fallecimiento o falla de un fenómeno estudiado.
+
+Matemáticamente se describe como:
+
+$$
+f(x)=\frac{k}{\theta^k}x^{(k-1)}exp\{-\frac{x^k}{\theta^k}\}I_{(0,\infty)}
+$$
+
+
+## Distribución Weibull
+
+Las propiedades de la Weibull son :
+
+* $E(X)$=$\theta T(1+\frac{1}{k})$
+
+* $Var(X)$=$\theta^2[T(1+\frac{2}{k})-(T(1+\frac{1}{k}))^2]$
+
+
+## Distribución Weibull
+
+Las partes de un Computador *Compaq* tiene una duración de vida $\alpha=4$ y $\beta=3$, ¿Calcule la fiabilidad que no fallen a las .70 horas?
+
+```{r}
+pweibull(.70,4,scale = 3^(1/4),lower.tail = FALSE)
+```
+
+
+## Modelamiento Estadístico
+
+El modelamiento estadístico sirve para:
+
+* Identificar patrones en los datos;
+* Clasificar Datos;
+* Detectar multiples influencias en los datos;
+* Evaluar fuerza de la evidencia de los datos
+
+
+## Modelamiento Estadístico
+
+Algunas definciones necesarias:
+
+* Modelo: Representación de la realidad;
+* Modelo matemático: Construcción matemática de objetos
+* Modelo estadístico: Entrenamiento de datos para construir objetos.
+
+
+## Modelamiento Estadístico
+
+* Bases de datos: conjunto de matriz que se caracteriza por tener nombres de variables y valores.
+
+
+
+## Modelamiento Estadístico
+
+Suponga que quiere averiguar el promedio del sepalo (largo) por especie
+```{r}
+library(mosaic)
+data("iris")# Cargar data
+mean(Sepal.Length~Species,data=iris) # Esta es una forma elegante de hacer análisis estadístico
+```
+
+
+## Modelamiento Estadístico
+
+Construyendo un modelo: Suponga que quiere construir un modelo que describa el largo del sepalo, de tal manera que cada variable nueva en el set de datos se pueda calcular. Para ello trabajaremos con la función `lm`
+
+```{r}
+modelo<-lm(Sepal.Length~Species,data=iris)
+modelo
+```
+
+
+
+## Modelamiento Estadístico
+
+```{r}
+modelo%>%summary()
+```
+
+## Modelamiento Estadístico
+
+Lo anterior quiere decir 
+
+
+$$
+\mbox{Largo del sepalo }=\mbox{intercepto}(5.006)+(\beta_1 \mbox{ versicolor}*(0.930 )+(\beta_1 \mbox{ virginica }*(1.582))
+$$
+
+
+## Modelamiento Estadístico
+
+Una forma practica aunque con falta de rigor para hallar los datos que sirvan para pronosticar el largo del sepalo es con la función `step` y el criterio de Akaike
+
+```{r}
+modelo1<-lm(Sepal.Length~.,data=iris)
+step(modelo1,direction = 'both',trace = 1)
+```
+
+
+## Modelamiento Estadístico
+
+Para conocer los intervalos de confianza
+
+```{r}
+confint(modelo1)
+```
+
+
+
+## Modelamiento Estadístico
+
+Una buena practica para desarrollar modelos estadísticos es validar su nivel de correlación
+
+
+```{r, fig.height=3}
+library(corrplot)
+cor(iris[,-5])%>%
+  corrplot()
+```
+
+## Modelamiento Estadístico
+
+
+Una manera más elegante y eficiente de trabajar esto es con la función `ggpairs`
+
+```{r, eval=FALSE}
+library(GGally)
+iris%>%
+  ggpairs(aes(color=Species))
+```
+
+## Modelamiento Estadístico
+
+```{r, echo=FALSE}
+library(GGally)
+iris%>%
+  ggpairs(aes(color=Species))
+```
+
+
+## Modelamiento Estadístico
+
+Una última forma de validar estas relaciones es 
+
+```{r,fig.height=3}
+library(psych)
+multi.hist(x = iris[,-5], dcol = c("blue", "red"), dlty = c("dotted", "solid"),
+           main = "")
+```
+
+
+## Modelamiento Estadístico
+
+Pasos para diseñar un modelo:
+
+* Definir el objetivo;
+* Diseñar un modelo con las variables necesarias;
+* Entrenar un modelo;
+* Evaluar un modelo;
+* Testear el modelo;
+* Interpretar el modelo.
+
+
+## Modelamiento Estadístico 
+
+Una forma excelente de entender la arquitectura de un modelo es con `rpart`
+
+
+```{r}
+library(rpart)
+library(rpart.plot)
+modelo_1<-lm(Sepal.Length~.,data=iris)
+modelo_2<-rpart(Sepal.Length~.,data=iris)
+```
+
+
+## Modelamiento Estadístico 
+
+```{r}
+modelo_1
+```
+
+## Modelamiento Estadístico 
+
+
+
+```{r}
+modelo_2
+```
+
+
+## Modelamiento Estadístico 
+
+```{r, fig.height=3}
+library(rpart.plot)
+rpart.plot(modelo_2)
+```
+
+
+## Modelamiento Estadístico 
+
+Para calcular nuevos outputs se hace de la siguiente manera
+
+```{r}
+new_input<-data.frame("Sepal.Width"=4,"Petal.Length"=1.1,"Petal.Width"=0.4,"Species"="setosa")
+predict(modelo_1,newdata = new_input)
+```
+
+## Modelamiento Estadístico 
+
+A través del modelo rpart
+
+```{r}
+predict(modelo_2,newdata = new_input)
+```
+
+## Modelamiento Estadístico 
+
+¿Cúal de los modelos es mejor?
+
+
+```{r}
+output1<-iris$Sepal.Length-predict(modelo_1,newdata = new_input)
+head(output1)
+```
+
+```{r}
+output2<-iris$Sepal.Length-predict(modelo_2,newdata = new_input)
+head(output2)
+```
+
+El que tenga menor error
+
+
+## Modelamiento Estadístico 
+
+
+La forma correcta de seleccionar un modelo es a través de un `Mean Square Error`
+
+```{r}
+print(mean(output1^2))
+print(mean(output2^2))
+```
+
+## Modelamiento Estadístico 
+
+```{r,fig.height=3}
+prp(modelo_2, type = 3,varlen = 0)
+```
+## Modelamiento Estadístico 
+
+Si se quiere detallar mas el modelo
+
+
+```{r}
+modelo_2<-rpart(Sepal.Length~.,data=iris,cp=0.0002)
+```
+
+
+
+## Modelamiento Estadístico 
+
+```{r, fig.height=3}
+prp(modelo_2,type=4,varlen = 0)
+```
+
+
+## Modelamiento Estadístico 
+
+Para mejorar el performance de un modelo de regresión se puede trabajar el análisis de covariantes, en donde variables que no son de interes pueden mejorar el rendimiento de la variable de respuesta
+
+
+```{r, fig.height=1}
+lm(Sepal.Length~Sepal.Width, data = iris)%>%
+  summary()
+```
+
+
