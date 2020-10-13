@@ -167,6 +167,8 @@ word_differences %>%
        subtitle = "Among the 100 words most used by the artists (combined)",
        color = "",
        size = "# of words\n(both artists)")
+<<<<<<< HEAD
+=======
 
 
        comparison <- by_artist_word %>%
@@ -190,3 +192,4 @@ comparison %>%
   geom_text(aes(label = word), vjust = 1, hjust = 1, check_overlap = TRUE) +
   scale_x_log10(labels = percent) +
   scale_y_log10()
+>>>>>>> beyonce
