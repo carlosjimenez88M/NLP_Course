@@ -1,5 +1,5 @@
 ---
-title: "Clase2"
+title: "Clase2 Intro Text Minig"
 output: github_document
 ---
 
@@ -7,9 +7,15 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r}
+#isntalamos las librerias 
+
 library(tidyverse)
 library(tidytext)
+
+#leemos la base de datos o dataframe
+
 imdb_data<- read.csv("IMDB-movies.csv")
 imdb_data==
 head(imdb_data
@@ -34,7 +40,7 @@ imdb_data %>%
 
 
 ```
-tokenizar y limpiar II
+## tokenizar y limpiar
 
 ```{r}
 
@@ -111,7 +117,8 @@ ggplot(
 
 ```
 
-* creamos un nuevo data frame y lo unificamos ais vamos puliendo nuestras stop words
+* creamos un nuevo data frame y lo unificamos asi vamos puliendo nuestras stop words
+
 ```{r}
 mod_stop_words <- tribble(
     ~word, ~lexicon,
@@ -168,7 +175,7 @@ ggplot(
 
 ```
 
-* hagamos un ejemplo separando las graficas por anios 
+## hagamos un ejemplo separando las graficas por años 
 
 
 ```{r, fig.width=12}
@@ -228,7 +235,7 @@ imdb_data%>%
 
 
 
-### Ver los 'ultimos diez años
+### Ver los ultimos diez años
 
 ```{r}
 
