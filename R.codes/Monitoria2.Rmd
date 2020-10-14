@@ -9,28 +9,33 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## ¿Cómo gestionar proyectos con datos?
 
-* Anotación especial: un chunk se abre bajo la combinación de control + alt + i
+* Anotación especial: un chunk se abre bajo la combinación de `control` + `alt` + `i`
+* Si usted usa un MAC el comando para el chunk es `cmd` + `alt` + `i`
+
 
 ```{r, warning=FALSE,message=FALSE}
 library(tidyverse)
 library(skimr)
+library(knitr)
 ```
 
 ## Cargar una base de datos
 
 ```{r}
-iris
+iris%>%
+  head()%>%# Función para ver la cabecera de la base de datos 
+  kable(format = 'markdown',caption = 'Primer vista de Iris')
 ```
 ## Conocer la naturaleza de los datos
  
 ```{r}
 iris%>%
-  glimpse() 
+  glimpse() # Forma dplyr de ver los datos
 ```
 
 
 ```{r}
-glimpse(iris)
+glimpse(iris) # Estructura clásica de programación 
 ```
 
 ## Comprender una base de datos
@@ -63,13 +68,21 @@ iris%>%
 
 ## Funciones Lógicas
 
+La función `for` sirve para enlistar un número de sentencias (operaciones), esto quiere decir, para cada uno de los elementos de **iris especies** imprime el nombre de las díez primeras especies.
+
+La siguiente imagen muestra el flujo de trabajo de un for[^1].
+
+![](https://cdn.datamentor.io/wp-content/uploads/2017/11/r-for-loop.jpg)
+
+[^1]: Imagen tomada de https://www.datamentor.io/r-programming/for-loop/
+
 ```{r}
-for (i in iris$Species){
+for (i in iris$Species[1:10]){
   print(i)
 }
 ```
 
-
+En esta función `for` se pide que imprima `print()` el promedio del `Sepal.Length`
 
 ```{r}
 for (i in iris){
@@ -78,9 +91,18 @@ for (i in iris){
 }
 ```
 
+
 ## Crear Funciones
 
-Las funciones se crean con el comando `function`
+Con la función `count()` sirve para generar un conteo de apariciones de una variable especifica.
+
+```{r}
+iris%>%
+  count(Species,sort = TRUE)
+```
+
+Las funciones se crean con el comando `function`.
+
 ```{r}
 trae_promedio<-function(especie){
   iris%>%
@@ -90,10 +112,8 @@ trae_promedio<-function(especie){
 }
 ```
 
-```{r}
-iris%>%
-  count(Species,sort = TRUE)
-```
+
+
 
 
 ```{r}
@@ -143,9 +163,9 @@ res
 
 # For en iris
 
-Cuando quiero
-utilizar
-tíldes en R, debo hacer un cambio en el formato de escritura y colocarlo como utf-8 (español)
+
+
+Cuando quiero utilizar tíldes en R, debo hacer un cambio en el formato de escritura y colocarlo como utf-8 (español).
 
 
 ```{r}
@@ -185,4 +205,192 @@ for(i in x){
   }
 }
 ```
+
+
+## Función While
+
+EL `while` es un `for` que corre bajo una condición especifica^[2] , veamos un ejemplo:
+
+```{r}
+i<-3
+while(i<10){ # Cuando i sea menor a diez
+  print(i) # imprime el valor de i
+  i = i+2 # aumenta cada uno de los valores de i de dos en dos 
+}
+```
+
+
+Lo anterior muestra que el `while` se puede y debe usar cuando una condición cumpla un patron lógico.
+
+Hagamos otro ejemplo: Vamos a desarrollar un contador de 1 al 10 que aumente de uno en uno.
+
+Notese las condiciones:
+
+* No debe ser i mayor a 10
+* debe aumentar de uno en uno
+
+Entonces el código será:
+
+```{r}
+i<-1
+while(i <=10){
+  print(paste0(i, ' Es el valor del contador'))
+  i <- i + 1
+}
+```
+
+Un ejemplo más avanzado para que calculemos el poder de está función, es super ñoño pero ustedes también lo son:
+
+Recuerde que el método de Newton para encontrar las soluciones de las raices cuadradas es mediante una función iteractiva, entonces hagamos el siguiente ejemplo:
+
+En la clase de **NLP**, los estudiantes no quieren usar la función `sqrt()` para hallar la raíz cuadrada, sino el método vintage , por ello se pusieron el reto de hacerlo a través de funciones de aproximación en donde el valor a encontrar es la raíz de 16.
+
+$$
+f(x) = x^2-16=0
+$$
+
+Entonces el proceso empieza escogiendo un valor inicial para $x_0$
+
+$$
+x_{(t-1)}={x_t}\frac{f(x_t)}{f'(x_t)}
+$$
+Por lo tanto el valor de $x_{(t-1)}$ adquiere la forma de
+
+$$
+x_{(t-1)}=\frac{x_t^2 - 16}{2_{x_t}}
+$$
+Pero ahora lo vamos hacer con un `while`
+
+
+```{r}
+y<-16
+x<-1
+fx<-x^2-y
+
+while(abs(fx)>1e-5){
+  x<- x-(fx/(2*x))
+  fx<- x^2 -y
+}
+x
+```
+
+
+
+## Comando  else if 
+
+El `else if` permite ejecutar un # de acciones condicionadas a que no se cumplan condiciones lógicas que deben pasar en un `if`.
+
+Veamos esto en un ejemplo:
+
+Nos interesa saber si en el día resolvimos un total entre 40 y 50 casos de un delito especifico.  Si lo logramos debemos imprimir un mensaje que diga: *Lo hicimos!!*, si lo superamos debe decir *Somos Fenomenales* y sino se logra el objetivo debe decir *Qué paso? muchachejos!!=(*
+
+```{r}
+#creamos el vector de las cantidades de documentos solucionados
+documentos<-5
+# Ahora creamos las condiciones
+
+if(documentos<20){
+  print("Qué paso? muchachejos!!=(")
+} else if (documentos>40 & documentos<=50) {
+  print("Lo hicimos!!")
+} else {
+  print("Somos Fenomenales")
+}
+```
+
+
+[^2]: Imagen tomada de https://cdn.datamentor.io/wp-content/uploads/2017/11/r-while-loop.jpg
+
+
+
+## Comado ifelse
+
+Este comando es super útil cuando se quieren reemplazar valores según si se cumplen condiciones  o no.
+
+Veamos un ejemplo.
+
+```{r}
+a<-c(1:30)
+ifelse(a %% 2==0, "Es un # par", "Es un # impar")
+```
+
+
+
+## Funciones - algunas aplicaciones -
+
+
+Antes hablamos de como crear una función, retomemos con  un ejemplo:
+
+```{r}
+mi_primer_funcion<-function(){
+  print("Hola, ya se hacer una función!!!")
+}
+```
+
+
+```{r}
+mi_primer_funcion()
+```
+
+Ahora vamos a crear una función que transforme las variables de `especies` en `iris`, donde la primer letra de `Species` sea Mayuscula.
+
+
+```{r}
+capital_letter<-function(variable){
+  iris%>%
+    mutate(variable=str_to_title(variable))%>%
+    head()
+}
+```
+
+
+
+```{r}
+capital_letter('Species')
+```
+
+Ahora creemos una función que nos proporcione la relación entre el largo del petalo y el sepalo por especie.
+
+
+Originalmente sería así:
+
+```{r}
+iris%>%
+  mutate(Species=str_to_title(Species))%>%
+  group_by(Species)%>%
+  summarize(relation=mean(Petal.Length/Sepal.Length))
+```
+
+
+Ahora hagamoslo a través de una función sin la función `mean`, y con variables aleatorias.
+
+
+La idea iriginal sería así:
+
+```{r}
+iris%>%
+  mutate(relation=Sepal.Length/Petal.Length)%>%
+  head()
+```
+
+
+Ahora en función sería así:
+
+
+```{r}
+relation<-function(data1,data2){
+  iris%>%
+    mutate(rel=data1/data2)%>%
+    head()
+}
+
+```
+```{r}
+relation(iris$Sepal.Length,iris$Sepal.Width)
+```
+
+
+Y así podemos hacerlo con cualquier variable.
+
+
 

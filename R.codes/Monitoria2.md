@@ -3,179 +3,42 @@ Tutoria \# 2 NLP
 
 ## ¿Cómo gestionar proyectos con datos?
 
-  - Anotación especial: un chunk se abre bajo la combinación de control
-    + alt + i
+  - Anotación especial: un chunk se abre bajo la combinación de
+    `control` + `alt` + `i`
+  - Si usted usa un MAC el comando para el chunk es `cmd` + `alt` + `i`
 
 <!-- end list -->
 
 ``` r
 library(tidyverse)
 library(skimr)
+library(knitr)
 ```
 
 ## Cargar una base de datos
 
 ``` r
-iris
+iris%>%
+  head()%>%# Función para ver la cabecera de la base de datos 
+  kable(format = 'markdown',caption = 'Primer vista de Iris')
 ```
 
-    ##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-    ## 1            5.1         3.5          1.4         0.2     setosa
-    ## 2            4.9         3.0          1.4         0.2     setosa
-    ## 3            4.7         3.2          1.3         0.2     setosa
-    ## 4            4.6         3.1          1.5         0.2     setosa
-    ## 5            5.0         3.6          1.4         0.2     setosa
-    ## 6            5.4         3.9          1.7         0.4     setosa
-    ## 7            4.6         3.4          1.4         0.3     setosa
-    ## 8            5.0         3.4          1.5         0.2     setosa
-    ## 9            4.4         2.9          1.4         0.2     setosa
-    ## 10           4.9         3.1          1.5         0.1     setosa
-    ## 11           5.4         3.7          1.5         0.2     setosa
-    ## 12           4.8         3.4          1.6         0.2     setosa
-    ## 13           4.8         3.0          1.4         0.1     setosa
-    ## 14           4.3         3.0          1.1         0.1     setosa
-    ## 15           5.8         4.0          1.2         0.2     setosa
-    ## 16           5.7         4.4          1.5         0.4     setosa
-    ## 17           5.4         3.9          1.3         0.4     setosa
-    ## 18           5.1         3.5          1.4         0.3     setosa
-    ## 19           5.7         3.8          1.7         0.3     setosa
-    ## 20           5.1         3.8          1.5         0.3     setosa
-    ## 21           5.4         3.4          1.7         0.2     setosa
-    ## 22           5.1         3.7          1.5         0.4     setosa
-    ## 23           4.6         3.6          1.0         0.2     setosa
-    ## 24           5.1         3.3          1.7         0.5     setosa
-    ## 25           4.8         3.4          1.9         0.2     setosa
-    ## 26           5.0         3.0          1.6         0.2     setosa
-    ## 27           5.0         3.4          1.6         0.4     setosa
-    ## 28           5.2         3.5          1.5         0.2     setosa
-    ## 29           5.2         3.4          1.4         0.2     setosa
-    ## 30           4.7         3.2          1.6         0.2     setosa
-    ## 31           4.8         3.1          1.6         0.2     setosa
-    ## 32           5.4         3.4          1.5         0.4     setosa
-    ## 33           5.2         4.1          1.5         0.1     setosa
-    ## 34           5.5         4.2          1.4         0.2     setosa
-    ## 35           4.9         3.1          1.5         0.2     setosa
-    ## 36           5.0         3.2          1.2         0.2     setosa
-    ## 37           5.5         3.5          1.3         0.2     setosa
-    ## 38           4.9         3.6          1.4         0.1     setosa
-    ## 39           4.4         3.0          1.3         0.2     setosa
-    ## 40           5.1         3.4          1.5         0.2     setosa
-    ## 41           5.0         3.5          1.3         0.3     setosa
-    ## 42           4.5         2.3          1.3         0.3     setosa
-    ## 43           4.4         3.2          1.3         0.2     setosa
-    ## 44           5.0         3.5          1.6         0.6     setosa
-    ## 45           5.1         3.8          1.9         0.4     setosa
-    ## 46           4.8         3.0          1.4         0.3     setosa
-    ## 47           5.1         3.8          1.6         0.2     setosa
-    ## 48           4.6         3.2          1.4         0.2     setosa
-    ## 49           5.3         3.7          1.5         0.2     setosa
-    ## 50           5.0         3.3          1.4         0.2     setosa
-    ## 51           7.0         3.2          4.7         1.4 versicolor
-    ## 52           6.4         3.2          4.5         1.5 versicolor
-    ## 53           6.9         3.1          4.9         1.5 versicolor
-    ## 54           5.5         2.3          4.0         1.3 versicolor
-    ## 55           6.5         2.8          4.6         1.5 versicolor
-    ## 56           5.7         2.8          4.5         1.3 versicolor
-    ## 57           6.3         3.3          4.7         1.6 versicolor
-    ## 58           4.9         2.4          3.3         1.0 versicolor
-    ## 59           6.6         2.9          4.6         1.3 versicolor
-    ## 60           5.2         2.7          3.9         1.4 versicolor
-    ## 61           5.0         2.0          3.5         1.0 versicolor
-    ## 62           5.9         3.0          4.2         1.5 versicolor
-    ## 63           6.0         2.2          4.0         1.0 versicolor
-    ## 64           6.1         2.9          4.7         1.4 versicolor
-    ## 65           5.6         2.9          3.6         1.3 versicolor
-    ## 66           6.7         3.1          4.4         1.4 versicolor
-    ## 67           5.6         3.0          4.5         1.5 versicolor
-    ## 68           5.8         2.7          4.1         1.0 versicolor
-    ## 69           6.2         2.2          4.5         1.5 versicolor
-    ## 70           5.6         2.5          3.9         1.1 versicolor
-    ## 71           5.9         3.2          4.8         1.8 versicolor
-    ## 72           6.1         2.8          4.0         1.3 versicolor
-    ## 73           6.3         2.5          4.9         1.5 versicolor
-    ## 74           6.1         2.8          4.7         1.2 versicolor
-    ## 75           6.4         2.9          4.3         1.3 versicolor
-    ## 76           6.6         3.0          4.4         1.4 versicolor
-    ## 77           6.8         2.8          4.8         1.4 versicolor
-    ## 78           6.7         3.0          5.0         1.7 versicolor
-    ## 79           6.0         2.9          4.5         1.5 versicolor
-    ## 80           5.7         2.6          3.5         1.0 versicolor
-    ## 81           5.5         2.4          3.8         1.1 versicolor
-    ## 82           5.5         2.4          3.7         1.0 versicolor
-    ## 83           5.8         2.7          3.9         1.2 versicolor
-    ## 84           6.0         2.7          5.1         1.6 versicolor
-    ## 85           5.4         3.0          4.5         1.5 versicolor
-    ## 86           6.0         3.4          4.5         1.6 versicolor
-    ## 87           6.7         3.1          4.7         1.5 versicolor
-    ## 88           6.3         2.3          4.4         1.3 versicolor
-    ## 89           5.6         3.0          4.1         1.3 versicolor
-    ## 90           5.5         2.5          4.0         1.3 versicolor
-    ## 91           5.5         2.6          4.4         1.2 versicolor
-    ## 92           6.1         3.0          4.6         1.4 versicolor
-    ## 93           5.8         2.6          4.0         1.2 versicolor
-    ## 94           5.0         2.3          3.3         1.0 versicolor
-    ## 95           5.6         2.7          4.2         1.3 versicolor
-    ## 96           5.7         3.0          4.2         1.2 versicolor
-    ## 97           5.7         2.9          4.2         1.3 versicolor
-    ## 98           6.2         2.9          4.3         1.3 versicolor
-    ## 99           5.1         2.5          3.0         1.1 versicolor
-    ## 100          5.7         2.8          4.1         1.3 versicolor
-    ## 101          6.3         3.3          6.0         2.5  virginica
-    ## 102          5.8         2.7          5.1         1.9  virginica
-    ## 103          7.1         3.0          5.9         2.1  virginica
-    ## 104          6.3         2.9          5.6         1.8  virginica
-    ## 105          6.5         3.0          5.8         2.2  virginica
-    ## 106          7.6         3.0          6.6         2.1  virginica
-    ## 107          4.9         2.5          4.5         1.7  virginica
-    ## 108          7.3         2.9          6.3         1.8  virginica
-    ## 109          6.7         2.5          5.8         1.8  virginica
-    ## 110          7.2         3.6          6.1         2.5  virginica
-    ## 111          6.5         3.2          5.1         2.0  virginica
-    ## 112          6.4         2.7          5.3         1.9  virginica
-    ## 113          6.8         3.0          5.5         2.1  virginica
-    ## 114          5.7         2.5          5.0         2.0  virginica
-    ## 115          5.8         2.8          5.1         2.4  virginica
-    ## 116          6.4         3.2          5.3         2.3  virginica
-    ## 117          6.5         3.0          5.5         1.8  virginica
-    ## 118          7.7         3.8          6.7         2.2  virginica
-    ## 119          7.7         2.6          6.9         2.3  virginica
-    ## 120          6.0         2.2          5.0         1.5  virginica
-    ## 121          6.9         3.2          5.7         2.3  virginica
-    ## 122          5.6         2.8          4.9         2.0  virginica
-    ## 123          7.7         2.8          6.7         2.0  virginica
-    ## 124          6.3         2.7          4.9         1.8  virginica
-    ## 125          6.7         3.3          5.7         2.1  virginica
-    ## 126          7.2         3.2          6.0         1.8  virginica
-    ## 127          6.2         2.8          4.8         1.8  virginica
-    ## 128          6.1         3.0          4.9         1.8  virginica
-    ## 129          6.4         2.8          5.6         2.1  virginica
-    ## 130          7.2         3.0          5.8         1.6  virginica
-    ## 131          7.4         2.8          6.1         1.9  virginica
-    ## 132          7.9         3.8          6.4         2.0  virginica
-    ## 133          6.4         2.8          5.6         2.2  virginica
-    ## 134          6.3         2.8          5.1         1.5  virginica
-    ## 135          6.1         2.6          5.6         1.4  virginica
-    ## 136          7.7         3.0          6.1         2.3  virginica
-    ## 137          6.3         3.4          5.6         2.4  virginica
-    ## 138          6.4         3.1          5.5         1.8  virginica
-    ## 139          6.0         3.0          4.8         1.8  virginica
-    ## 140          6.9         3.1          5.4         2.1  virginica
-    ## 141          6.7         3.1          5.6         2.4  virginica
-    ## 142          6.9         3.1          5.1         2.3  virginica
-    ## 143          5.8         2.7          5.1         1.9  virginica
-    ## 144          6.8         3.2          5.9         2.3  virginica
-    ## 145          6.7         3.3          5.7         2.5  virginica
-    ## 146          6.7         3.0          5.2         2.3  virginica
-    ## 147          6.3         2.5          5.0         1.9  virginica
-    ## 148          6.5         3.0          5.2         2.0  virginica
-    ## 149          6.2         3.4          5.4         2.3  virginica
-    ## 150          5.9         3.0          5.1         1.8  virginica
+| Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species |
+| -----------: | ----------: | -----------: | ----------: | :------ |
+|          5.1 |         3.5 |          1.4 |         0.2 | setosa  |
+|          4.9 |         3.0 |          1.4 |         0.2 | setosa  |
+|          4.7 |         3.2 |          1.3 |         0.2 | setosa  |
+|          4.6 |         3.1 |          1.5 |         0.2 | setosa  |
+|          5.0 |         3.6 |          1.4 |         0.2 | setosa  |
+|          5.4 |         3.9 |          1.7 |         0.4 | setosa  |
+
+Primer vista de Iris
 
 ## Conocer la naturaleza de los datos
 
 ``` r
 iris%>%
-  glimpse() 
+  glimpse() # Forma dplyr de ver los datos
 ```
 
     ## Rows: 150
@@ -187,7 +50,7 @@ iris%>%
     ## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, setosa, …
 
 ``` r
-glimpse(iris)
+glimpse(iris) # Estructura clásica de programación 
 ```
 
     ## Rows: 150
@@ -269,8 +132,16 @@ iris%>%
 
 ## Funciones Lógicas
 
+La función `for` sirve para enlistar un número de sentencias
+(operaciones), esto quiere decir, para cada uno de los elementos de
+**iris especies** imprime el nombre de las díez primeras especies.
+
+La siguiente imagen muestra el flujo de trabajo de un for\[1\].
+
+![](https://cdn.datamentor.io/wp-content/uploads/2017/11/r-for-loop.jpg)
+
 ``` r
-for (i in iris$Species){
+for (i in iris$Species[1:10]){
   print(i)
 }
 ```
@@ -285,146 +156,9 @@ for (i in iris$Species){
     ## [1] "setosa"
     ## [1] "setosa"
     ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "setosa"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "versicolor"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
-    ## [1] "virginica"
+
+En esta función `for` se pide que imprima `print()` el promedio del
+`Sepal.Length`
 
 ``` r
 for (i in iris){
@@ -441,16 +175,8 @@ for (i in iris){
 
 ## Crear Funciones
 
-Las funciones se crean con el comando `function`
-
-``` r
-trae_promedio<-function(especie){
-  iris%>%
-    filter(Species==especie)%>%
-    group_by(Species)%>%
-    summarize(Promedio=mean(Sepal.Length))
-}
-```
+Con la función `count()` sirve para generar un conteo de apariciones de
+una variable especifica.
 
 ``` r
 iris%>%
@@ -461,6 +187,17 @@ iris%>%
     ## 1     setosa 50
     ## 2 versicolor 50
     ## 3  virginica 50
+
+Las funciones se crean con el comando `function`.
+
+``` r
+trae_promedio<-function(especie){
+  iris%>%
+    filter(Species==especie)%>%
+    group_by(Species)%>%
+    summarize(Promedio=mean(Sepal.Length))
+}
+```
 
 ``` r
 trae_promedio('virginica')
@@ -515,7 +252,7 @@ res
 # For en iris
 
 Cuando quiero utilizar tíldes en R, debo hacer un cambio en el formato
-de escritura y colocarlo como utf-8 (español)
+de escritura y colocarlo como utf-8 (español).
 
 ``` r
 Sepalo<-iris$Sepal.Length
@@ -581,3 +318,249 @@ for(i in x){
     ## [1] "8 Es mayor a 5"
     ## [1] "9 Es mayor a 5"
     ## [1] "10 Es mayor a 5"
+
+## Función While
+
+EL `while` es un `for` que corre bajo una condición especifica\[2\] ,
+veamos un ejemplo:
+
+``` r
+i<-3
+while(i<10){ # Cuando i sea menor a diez
+  print(i) # imprime el valor de i
+  i = i+2 # aumenta cada uno de los valores de i de dos en dos 
+}
+```
+
+    ## [1] 3
+    ## [1] 5
+    ## [1] 7
+    ## [1] 9
+
+Lo anterior muestra que el `while` se puede y debe usar cuando una
+condición cumpla un patron lógico.
+
+Hagamos otro ejemplo: Vamos a desarrollar un contador de 1 al 10 que
+aumente de uno en uno.
+
+Notese las condiciones:
+
+  - No debe ser i mayor a 10
+  - debe aumentar de uno en uno
+
+Entonces el código será:
+
+``` r
+i<-1
+while(i <=10){
+  print(paste0(i, ' Es el valor del contador'))
+  i <- i + 1
+}
+```
+
+    ## [1] "1 Es el valor del contador"
+    ## [1] "2 Es el valor del contador"
+    ## [1] "3 Es el valor del contador"
+    ## [1] "4 Es el valor del contador"
+    ## [1] "5 Es el valor del contador"
+    ## [1] "6 Es el valor del contador"
+    ## [1] "7 Es el valor del contador"
+    ## [1] "8 Es el valor del contador"
+    ## [1] "9 Es el valor del contador"
+    ## [1] "10 Es el valor del contador"
+
+Un ejemplo más avanzado para que calculemos el poder de está función, es
+super ñoño pero ustedes también lo son:
+
+Recuerde que el método de Newton para encontrar las soluciones de las
+raices cuadradas es mediante una función iteractiva, entonces hagamos el
+siguiente ejemplo:
+
+En la clase de **NLP**, los estudiantes no quieren usar la función
+`sqrt()` para hallar la raíz cuadrada, sino el método vintage , por ello
+se pusieron el reto de hacerlo a través de funciones de aproximación en
+donde el valor a encontrar es la raíz de 16.
+
+\[
+f(x) = x^2-16=0
+\]
+
+Entonces el proceso empieza escogiendo un valor inicial para \(x_0\)
+
+\[
+x_{(t-1)}={x_t}\frac{f(x_t)}{f'(x_t)}
+\] Por lo tanto el valor de \(x_{(t-1)}\) adquiere la forma de
+
+\[
+x_{(t-1)}=\frac{x_t^2 - 16}{2_{x_t}}
+\] Pero ahora lo vamos hacer con un `while`
+
+``` r
+y<-16
+x<-1
+fx<-x^2-y
+
+while(abs(fx)>1e-5){
+  x<- x-(fx/(2*x))
+  fx<- x^2 -y
+}
+x
+```
+
+    ## [1] 4.000001
+
+## Comando else if
+
+El `else if` permite ejecutar un \# de acciones condicionadas a que no
+se cumplan condiciones lógicas que deben pasar en un `if`.
+
+Veamos esto en un ejemplo:
+
+Nos interesa saber si en el día resolvimos un total entre 40 y 50 casos
+de un delito especifico. Si lo logramos debemos imprimir un mensaje que
+diga: *Lo hicimos\!\!*, si lo superamos debe decir *Somos Fenomenales* y
+sino se logra el objetivo debe decir *Qué paso? muchachejos\!\!=(*
+
+``` r
+#creamos el vector de las cantidades de documentos solucionados
+documentos<-5
+# Ahora creamos las condiciones
+
+if(documentos<20){
+  print("Qué paso? muchachejos!!=(")
+} else if (documentos>40 & documentos<=50) {
+  print("Lo hicimos!!")
+} else {
+  print("Somos Fenomenales")
+}
+```
+
+    ## [1] "Qué paso? muchachejos!!=("
+
+## Comado ifelse
+
+Este comando es super útil cuando se quieren reemplazar valores según si
+se cumplen condiciones o no.
+
+Veamos un ejemplo.
+
+``` r
+a<-c(1:30)
+ifelse(a %% 2==0, "Es un # par", "Es un # impar")
+```
+
+    ##  [1] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ##  [5] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ##  [9] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ## [13] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ## [17] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ## [21] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ## [25] "Es un # impar" "Es un # par"   "Es un # impar" "Es un # par"  
+    ## [29] "Es un # impar" "Es un # par"
+
+## Funciones - algunas aplicaciones -
+
+Antes hablamos de como crear una función, retomemos con un ejemplo:
+
+``` r
+mi_primer_funcion<-function(){
+  print("Hola, ya se hacer una función!!!")
+}
+```
+
+``` r
+mi_primer_funcion()
+```
+
+    ## [1] "Hola, ya se hacer una función!!!"
+
+Ahora vamos a crear una función que transforme las variables de
+`especies` en `iris`, donde la primer letra de `Species` sea Mayuscula.
+
+``` r
+capital_letter<-function(variable){
+  iris%>%
+    mutate(variable=str_to_title(variable))%>%
+    head()
+}
+```
+
+``` r
+capital_letter('Species')
+```
+
+    ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species variable
+    ## 1          5.1         3.5          1.4         0.2  setosa  Species
+    ## 2          4.9         3.0          1.4         0.2  setosa  Species
+    ## 3          4.7         3.2          1.3         0.2  setosa  Species
+    ## 4          4.6         3.1          1.5         0.2  setosa  Species
+    ## 5          5.0         3.6          1.4         0.2  setosa  Species
+    ## 6          5.4         3.9          1.7         0.4  setosa  Species
+
+Ahora creemos una función que nos proporcione la relación entre el largo
+del petalo y el sepalo por especie.
+
+Originalmente sería así:
+
+``` r
+iris%>%
+  mutate(Species=str_to_title(Species))%>%
+  group_by(Species)%>%
+  summarize(relation=mean(Petal.Length/Sepal.Length))
+```
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## # A tibble: 3 x 2
+    ##   Species    relation
+    ##   <chr>         <dbl>
+    ## 1 Setosa        0.293
+    ## 2 Versicolor    0.718
+    ## 3 Virginica     0.844
+
+Ahora hagamoslo a través de una función sin la función `mean`, y con
+variables aleatorias.
+
+La idea iriginal sería así:
+
+``` r
+iris%>%
+  mutate(relation=Sepal.Length/Petal.Length)%>%
+  head()
+```
+
+    ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species relation
+    ## 1          5.1         3.5          1.4         0.2  setosa 3.642857
+    ## 2          4.9         3.0          1.4         0.2  setosa 3.500000
+    ## 3          4.7         3.2          1.3         0.2  setosa 3.615385
+    ## 4          4.6         3.1          1.5         0.2  setosa 3.066667
+    ## 5          5.0         3.6          1.4         0.2  setosa 3.571429
+    ## 6          5.4         3.9          1.7         0.4  setosa 3.176471
+
+Ahora en función sería así:
+
+``` r
+relation<-function(data1,data2){
+  iris%>%
+    mutate(rel=data1/data2)%>%
+    head()
+}
+```
+
+``` r
+relation(iris$Sepal.Length,iris$Sepal.Width)
+```
+
+    ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species      rel
+    ## 1          5.1         3.5          1.4         0.2  setosa 1.457143
+    ## 2          4.9         3.0          1.4         0.2  setosa 1.633333
+    ## 3          4.7         3.2          1.3         0.2  setosa 1.468750
+    ## 4          4.6         3.1          1.5         0.2  setosa 1.483871
+    ## 5          5.0         3.6          1.4         0.2  setosa 1.388889
+    ## 6          5.4         3.9          1.7         0.4  setosa 1.384615
+
+Y así podemos hacerlo con cualquier variable.
+
+1.  Imagen tomada de <https://www.datamentor.io/r-programming/for-loop/>
+
+2.  2
