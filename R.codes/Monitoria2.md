@@ -1,5 +1,300 @@
-Tutoria \# 2 NLP
+Código Clases y Tutoria \# 2 NLP
 ================
+
+## Clase número 1
+
+## Operaciones Básicas
+
+\*Este código corresponde a las clases del 9 y el 12 de octubre
+
+``` r
+15+60
+```
+
+    ## [1] 75
+
+``` r
+15-50
+```
+
+    ## [1] -35
+
+``` r
+50/90
+```
+
+    ## [1] 0.5555556
+
+``` r
+(54*95)+300
+```
+
+    ## [1] 5430
+
+``` r
+log(45)
+```
+
+    ## [1] 3.806662
+
+``` r
+30>90
+```
+
+    ## [1] FALSE
+
+## Asignaciones con “\<-”
+
+``` r
+x<-70
+Y<-x
+Y
+```
+
+    ## [1] 70
+
+## Varios datos “C()”
+
+``` r
+a<-c(10,16,90)
+a
+```
+
+    ## [1] 10 16 90
+
+``` r
+print(a)
+```
+
+    ## [1] 10 16 90
+
+``` r
+b<- c(60,90,80)
+
+a+b
+```
+
+    ## [1]  70 106 170
+
+``` r
+ahorros <- c(50,70,60,40,80)
+gastos <- c(-30,-60,-30,-10,-60)
+
+ahorros+gastos
+```
+
+    ## [1] 20 10 30 30 20
+
+## otras operaciones básicas (listas)
+
+``` r
+lista<-c(1:100)
+
+runif(100,1,100)
+```
+
+    ##   [1] 40.662066 50.312110 44.451261 44.548346 58.373311 37.171662 36.611307
+    ##   [8] 42.874926 60.349409 68.662966 80.253818 38.893974 97.136649 37.308926
+    ##  [15] 69.482617 22.585427 22.767257 49.462586 52.037895 55.530760 35.057565
+    ##  [22] 93.952090 38.806799 88.277740 75.300758 74.506790 25.316105 64.212560
+    ##  [29] 66.286868 15.201715 25.623487 43.769980 98.735416  6.172976 52.750044
+    ##  [36] 63.524432 35.584362 38.391942 22.262987 78.556517 72.889156 72.782848
+    ##  [43] 72.806709 17.689960 94.370798 37.320902 47.038223 91.775101 33.414844
+    ##  [50]  2.322692 24.452917 65.644912 52.987525 39.182968 44.466683 58.541781
+    ##  [57] 66.968218 70.960359 30.964226 63.732596 17.500887 61.869784 74.960027
+    ##  [64] 50.599647 40.710312 79.787299 60.678436  4.120691 60.214279 30.533446
+    ##  [71] 37.913806 59.292366 96.128927  9.895077 15.532049 44.847069 90.680093
+    ##  [78] 29.712760 80.955203 11.106311 26.969329 86.002396 61.832113 31.884292
+    ##  [85] 95.480656 90.860213 10.818972 46.709005 48.993823  7.385671 24.560763
+    ##  [92] 73.438053 39.602510 15.399003 19.925423  1.517788 63.190530 84.045659
+    ##  [99] 42.051335  7.132361
+
+``` r
+sample(100,10)
+```
+
+    ##  [1] 31 86  4 14 64 78  9 65 80 42
+
+``` r
+seq(0,10,by=2)
+```
+
+    ## [1]  0  2  4  6  8 10
+
+``` r
+lista<-sample(100,30)
+
+sort(lista)
+```
+
+    ##  [1]  1  2  9 10 17 21 22 27 28 30 32 33 35 39 42 48 52 53 58 59 60 65 70 77 84
+    ## [26] 85 86 90 92 96
+
+``` r
+lista[15]
+```
+
+    ## [1] 9
+
+``` r
+lista[lista>17]
+```
+
+    ##  [1] 53 96 84 22 52 30 85 59 21 86 65 48 27 32 77 58 35 60 42 90 92 28 39 70 33
+
+``` r
+casilla_15<- lista[15]
+
+print(casilla_15)
+```
+
+    ## [1] 9
+
+## tipos de datos y creacion de objetos
+
+``` r
+a<- 6.5
+b<-7
+c<- FALSE
+d<- "Hola mundo"
+c<-"c"
+class(c)
+```
+
+    ## [1] "character"
+
+``` r
+lista<-c(1:100)
+print(lista)
+```
+
+    ##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+    ##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
+    ##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
+    ##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+    ##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+    ##  [91]  91  92  93  94  95  96  97  98  99 100
+
+``` r
+c<-rep(5,8)
+
+c<-rep("A",7)
+
+c(rep("M",3),rep("F",3))
+```
+
+    ## [1] "M" "M" "M" "F" "F" "F"
+
+## Funciones Estadísticas
+
+``` r
+#media
+mean(lista)
+```
+
+    ## [1] 50.5
+
+``` r
+Zulma<- 30
+Daniel<- 120
+Quique<- 150 
+mean(c(Zulma,Daniel,Quique))
+```
+
+    ## [1] 100
+
+``` r
+alumnos<-c(Zulma,Daniel,Quique)
+alumnos
+```
+
+    ## [1]  30 120 150
+
+``` r
+mean(alumnos)
+```
+
+    ## [1] 100
+
+``` r
+lista[c(45,65)]
+```
+
+    ## [1] 45 65
+
+``` r
+sample(100,10)
+```
+
+    ##  [1] 16 23 58 44 30 19 91 98  5  9
+
+``` r
+#mediana
+
+median(c(Zulma,Daniel,Quique))
+```
+
+    ## [1] 120
+
+``` r
+median(alumnos)
+```
+
+    ## [1] 120
+
+``` r
+#varianza
+
+var(alumnos)
+```
+
+    ## [1] 3900
+
+``` r
+#Desviacion estandar
+
+sd(alumnos)
+```
+
+    ## [1] 62.44998
+
+``` r
+#algunas descripcions 
+
+summary(lista)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##    1.00   25.75   50.50   50.50   75.25  100.00
+
+## Otras operaciones matemáticas
+
+``` r
+3==9/3
+```
+
+    ## [1] TRUE
+
+``` r
+15==14.99
+```
+
+    ## [1] FALSE
+
+``` r
+3==3 & 2<2
+```
+
+    ## [1] FALSE
+
+``` r
+3==3 | 2<2
+```
+
+    ## [1] TRUE
+
+\#\#A partir de esta linea inicia el el codigo de la monitoría de 13 de
+octubre
 
 ## ¿Cómo gestionar proyectos con datos?
 
@@ -43,11 +338,11 @@ iris%>%
 
     ## Rows: 150
     ## Columns: 5
-    ## $ Sepal.Length <dbl> 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4…
-    ## $ Sepal.Width  <dbl> 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3…
-    ## $ Petal.Length <dbl> 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1…
-    ## $ Petal.Width  <dbl> 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0…
-    ## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, setosa, …
+    ## $ Sepal.Length <dbl> 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4,...
+    ## $ Sepal.Width  <dbl> 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7,...
+    ## $ Petal.Length <dbl> 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5,...
+    ## $ Petal.Width  <dbl> 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2,...
+    ## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, setosa...
 
 ``` r
 glimpse(iris) # Estructura clásica de programación 
@@ -55,11 +350,11 @@ glimpse(iris) # Estructura clásica de programación
 
     ## Rows: 150
     ## Columns: 5
-    ## $ Sepal.Length <dbl> 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4…
-    ## $ Sepal.Width  <dbl> 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3…
-    ## $ Petal.Length <dbl> 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1…
-    ## $ Petal.Width  <dbl> 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0…
-    ## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, setosa, …
+    ## $ Sepal.Length <dbl> 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4,...
+    ## $ Sepal.Width  <dbl> 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7,...
+    ## $ Petal.Length <dbl> 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5,...
+    ## $ Petal.Width  <dbl> 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2,...
+    ## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, setosa...
 
 ## Comprender una base de datos
 
@@ -128,7 +423,7 @@ iris%>%
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](Monitoria2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Monitoria2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ## Funciones Lógicas
 
@@ -228,7 +523,7 @@ trae_media('virginica')
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](Monitoria2_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Monitoria2_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ## Análisis con for
 
