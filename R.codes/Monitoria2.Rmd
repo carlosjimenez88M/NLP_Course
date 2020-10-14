@@ -1,0 +1,550 @@
+---
+title: "Código Clases y Tutoria # 2 NLP"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Clase número 1
+## Operaciones Básicas
+*Este código corresponde a las clases del 9 y el 12 de octubre
+
+
+```{r}
+15+60
+15-50
+50/90
+(54*95)+300
+log(45)
+30>90
+
+
+```
+
+## Asignaciones con "<-"
+
+```{r}
+x<-70
+Y<-x
+Y
+
+```
+## Varios datos "C()"
+
+```{r}
+
+a<-c(10,16,90)
+a
+print(a)
+b<- c(60,90,80)
+
+a+b
+
+ahorros <- c(50,70,60,40,80)
+gastos <- c(-30,-60,-30,-10,-60)
+
+ahorros+gastos
+
+
+
+```
+
+## otras operaciones básicas (listas)
+*ejemplo con listas
+
+```{r}
+
+lista<-c(1:100)
+
+runif(100,1,100)
+
+sample(100,10)
+
+seq(0,10,by=2)
+
+lista<-sample(100,30)
+
+sort(lista)
+
+lista[15]
+lista[lista>17]
+
+casilla_15<- lista[15]
+
+print(casilla_15)
+
+```
+
+## tipos de datos y creacion de objetos
+
+```{r}
+
+a<- 6.5
+b<-7
+c<- FALSE
+d<- "Hola mundo"
+c<-"c"
+class(c)
+lista<-c(1:100)
+print(lista)
+
+
+
+```
+
+## Función para repetir
+
+```{r}
+
+c<-rep(5,8)
+
+c<-rep("A",7)
+
+c(rep("M",3),rep("F",3))
+
+```
+
+## Funciones Estadísticas
+
+```{r}
+
+#media
+mean(lista)
+
+Zulma<- 30
+Daniel<- 120
+Quique<- 150 
+mean(c(Zulma,Daniel,Quique))
+alumnos<-c(Zulma,Daniel,Quique)
+alumnos
+
+mean(alumnos)
+lista[c(45,65)]
+sample(100,10)
+#mediana
+
+median(c(Zulma,Daniel,Quique))
+median(alumnos)
+
+
+#varianza
+
+var(alumnos)
+
+#Desviacion estandar
+
+sd(alumnos)
+
+#algunas descripcions 
+
+summary(lista)
+
+```
+
+## Otras operaciones matemáticas
+
+```{r}
+
+3==9/3
+15==14.99
+3==3 & 2<2
+3==3 | 2<2
+
+```
+
+
+
+
+## A partir de esta linea inicia el el codigo de la monitoría de 13 de octubre
+
+
+## ¿Cómo gestionar proyectos con datos?
+
+* Anotación especial: un chunk se abre bajo la combinación de `control` + `alt` + `i`
+* Si usted usa un MAC el comando para el chunk es `cmd` + `alt` + `i`
+
+
+```{r, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(skimr)
+library(knitr)
+```
+
+## Cargar una base de datos
+
+```{r}
+iris%>%
+  head()%>%# Función para ver la cabecera de la base de datos 
+  kable(format = 'markdown',caption = 'Primer vista de Iris')
+```
+## Conocer la naturaleza de los datos
+ 
+```{r}
+iris%>%
+  glimpse() # Forma dplyr de ver los datos
+```
+
+
+```{r}
+glimpse(iris) # Estructura clásica de programación 
+```
+
+## Comprender una base de datos
+
+1) La base de datos esta completa ?
+
+```{r}
+iris%>%
+  skim() # con esta función se logro entender la naturaleza de los datos.
+```
+
+
+2) Análisis Exploratorio de datos 
+
+
+```{r}
+cor(iris[,-5])
+```
+
+
+¿Cómo es la relación del largo del sepalo con respecto al largo del petalo?
+
+```{r}
+iris%>%
+  ggplot(aes(Sepal.Length ,Petal.Length,color=Species))+ # este comando se uiliza para diseñar las gráficas
+  geom_point()+ # hacer gráfico de puntos 
+  geom_smooth() + # mostrar tendencia 
+  labs(title = "Relacióne entre Sepalo y Petalo")
+```
+
+## Funciones Lógicas
+
+La función `for` sirve para enlistar un número de sentencias (operaciones), esto quiere decir, para cada uno de los elementos de **iris especies** imprime el nombre de las díez primeras especies.
+
+La siguiente imagen muestra el flujo de trabajo de un for[^1].
+
+![](https://cdn.datamentor.io/wp-content/uploads/2017/11/r-for-loop.jpg)
+
+[^1]: Imagen tomada de https://www.datamentor.io/r-programming/for-loop/
+
+```{r}
+for (i in iris$Species[1:10]){
+  print(i)
+}
+```
+
+En esta función `for` se pide que imprima `print()` el promedio del `Sepal.Length`
+
+```{r}
+for (i in iris){
+  i = mean(iris$Sepal.Length)
+  print(i)
+}
+```
+
+
+## Crear Funciones
+
+Con la función `count()` sirve para generar un conteo de apariciones de una variable especifica.
+
+```{r}
+iris%>%
+  count(Species,sort = TRUE)
+```
+
+Las funciones se crean con el comando `function`.
+
+```{r}
+trae_promedio<-function(especie){
+  iris%>%
+    filter(Species==especie)%>%
+    group_by(Species)%>%
+    summarize(Promedio=mean(Sepal.Length))
+}
+```
+
+
+
+
+
+```{r}
+trae_promedio('virginica')
+```
+
+
+## Como mejorar la función 
+
+
+```{r}
+trae_media<-function(especie){
+  iris%>%
+    filter(Species==especie)%>%
+    ggplot(aes(Sepal.Length,Petal.Length))+
+    geom_point()+
+    geom_smooth()
+}
+```
+
+
+
+```{r}
+trae_media('virginica')
+```
+
+## Análisis con for 
+
+Un for es un loop, uina condición 
+
+```{r}
+
+a<-1:10
+b<-1:10
+
+res<-numeric(length = length(a))
+
+for(i in seq_along(a)){
+  res[i]<-a[i] + b[i]
+}   
+
+res
+```
+
+
+
+
+# For en iris
+
+
+
+Cuando quiero utilizar tíldes en R, debo hacer un cambio en el formato de escritura y colocarlo como utf-8 (español).
+
+
+```{r}
+Sepalo<-iris$Sepal.Length
+Petalo<-iris$Petal.Length
+proporcion<-numeric(length = length(Sepalo))
+
+for(i in seq_along(Sepalo)){
+  proporcion[i]<-round((Sepalo[i]/Petalo[i])*100,2)
+}
+proporcion
+```
+
+
+
+## Else 
+
+Else se ejecuta cuando existe otra alternativa a una cadena de sentencias 
+
+
+```{r}
+x<-2
+if(x>3){
+  print("Es mayor a tres")
+} else {
+  print("Es menor a tres")
+}
+```
+
+```{r}
+x<-1:10
+for(i in x){
+  if(i>5){
+    print(paste0(i," Es mayor a 5"))
+  }else{
+    print(paste0(i," Es menor a 5"))
+  }
+}
+```
+
+
+## Función While
+
+EL `while` es un `for` que corre bajo una condición especifica^[2] , veamos un ejemplo:
+
+```{r}
+i<-3
+while(i<10){ # Cuando i sea menor a diez
+  print(i) # imprime el valor de i
+  i = i+2 # aumenta cada uno de los valores de i de dos en dos 
+}
+```
+
+
+Lo anterior muestra que el `while` se puede y debe usar cuando una condición cumpla un patron lógico.
+
+Hagamos otro ejemplo: Vamos a desarrollar un contador de 1 al 10 que aumente de uno en uno.
+
+Notese las condiciones:
+
+* No debe ser i mayor a 10
+* debe aumentar de uno en uno
+
+Entonces el código será:
+
+```{r}
+i<-1
+while(i <=10){
+  print(paste0(i, ' Es el valor del contador'))
+  i <- i + 1
+}
+```
+
+Un ejemplo más avanzado para que calculemos el poder de está función, es super ñoño pero ustedes también lo son:
+
+Recuerde que el método de Newton para encontrar las soluciones de las raices cuadradas es mediante una función iteractiva, entonces hagamos el siguiente ejemplo:
+
+En la clase de **NLP**, los estudiantes no quieren usar la función `sqrt()` para hallar la raíz cuadrada, sino el método vintage , por ello se pusieron el reto de hacerlo a través de funciones de aproximación en donde el valor a encontrar es la raíz de 16.
+
+$$
+f(x) = x^2-16=0
+$$
+
+Entonces el proceso empieza escogiendo un valor inicial para $x_0$
+
+$$
+x_{(t-1)}={x_t}\frac{f(x_t)}{f'(x_t)}
+$$
+Por lo tanto el valor de $x_{(t-1)}$ adquiere la forma de
+
+$$
+x_{(t-1)}=\frac{x_t^2 - 16}{2_{x_t}}
+$$
+Pero ahora lo vamos hacer con un `while`
+
+
+```{r}
+y<-16
+x<-1
+fx<-x^2-y
+
+while(abs(fx)>1e-5){
+  x<- x-(fx/(2*x))
+  fx<- x^2 -y
+}
+x
+```
+
+
+
+## Comando  else if 
+
+El `else if` permite ejecutar un # de acciones condicionadas a que no se cumplan condiciones lógicas que deben pasar en un `if`.
+
+Veamos esto en un ejemplo:
+
+Nos interesa saber si en el día resolvimos un total entre 40 y 50 casos de un delito especifico.  Si lo logramos debemos imprimir un mensaje que diga: *Lo hicimos!!*, si lo superamos debe decir *Somos Fenomenales* y sino se logra el objetivo debe decir *Qué paso? muchachejos!!=(*
+
+```{r}
+#creamos el vector de las cantidades de documentos solucionados
+documentos<-5
+# Ahora creamos las condiciones
+
+if(documentos<20){
+  print("Qué paso? muchachejos!!=(")
+} else if (documentos>40 & documentos<=50) {
+  print("Lo hicimos!!")
+} else {
+  print("Somos Fenomenales")
+}
+```
+
+
+[^2]: Imagen tomada de https://cdn.datamentor.io/wp-content/uploads/2017/11/r-while-loop.jpg
+
+
+
+## Comado ifelse
+
+Este comando es super útil cuando se quieren reemplazar valores según si se cumplen condiciones  o no.
+
+Veamos un ejemplo.
+
+```{r}
+a<-c(1:30)
+ifelse(a %% 2==0, "Es un # par", "Es un # impar")
+```
+
+
+
+## Funciones - algunas aplicaciones -
+
+
+Antes hablamos de como crear una función, retomemos con  un ejemplo:
+
+```{r}
+mi_primer_funcion<-function(){
+  print("Hola, ya se hacer una función!!!")
+}
+```
+
+
+```{r}
+mi_primer_funcion()
+```
+
+Ahora vamos a crear una función que transforme las variables de `especies` en `iris`, donde la primer letra de `Species` sea Mayuscula.
+
+
+```{r}
+capital_letter<-function(variable){
+  iris%>%
+    mutate(variable=str_to_title(variable))%>%
+    head()
+}
+```
+
+
+
+```{r}
+capital_letter('Species')
+```
+
+Ahora creemos una función que nos proporcione la relación entre el largo del petalo y el sepalo por especie.
+
+
+Originalmente sería así:
+
+```{r}
+iris%>%
+  mutate(Species=str_to_title(Species))%>%
+  group_by(Species)%>%
+  summarize(relation=mean(Petal.Length/Sepal.Length))
+```
+
+
+Ahora hagamoslo a través de una función sin la función `mean`, y con variables aleatorias.
+
+
+La idea iriginal sería así:
+
+```{r}
+iris%>%
+  mutate(relation=Sepal.Length/Petal.Length)%>%
+  head()
+```
+
+
+Ahora en función sería así:
+
+
+```{r}
+relation<-function(data1,data2){
+  iris%>%
+    mutate(rel=data1/data2)%>%
+    head()
+}
+
+```
+```{r}
+relation(iris$Sepal.Length,iris$Sepal.Width)
+```
+
+
+Y así podemos hacerlo con cualquier variable.
+
+
+

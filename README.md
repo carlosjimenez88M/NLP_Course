@@ -89,9 +89,9 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 |Fecha|Clase|Presentación|Código|
 |----:|----:|------------:|----:|
 |6 de Octubre|Introducción a Git y Github|[Clase 1](https://github.com/carlosjimenez88M/Github-Class/blob/master/Presentations/Clase-1.pdf)|[cod1](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Script_example.R)|
-|8 de Octubre|Introducción a la analítica de texto|[Clase 2](https://github.com/ECortina/NLP_Course/blob/master/Presentations/Clase2%20intro%20analitica%20de%20texto.pdf)|[cod2](https://github.com/ECortina/NLP_Course/blob/master/Presentations/Clase2code.Rmd)|
-|13 de Octubre|Manipulación de textos y relación entre palabras|[Clase 3]()|[cod3]()|
-|15 de Octubre|Organización de textos, topics y tagging|[Clase 4]()|[cod4]()|
+|8 de Octubre|Introducción a R|[Clase 2](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/clase2.pdf)|[cod2](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Monitoria2.md)|
+|13 de Octubre|Introducción al análisis estadístico|[Clase 3](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/Clase3.pdf)|[cod3]()|
+|15 de Octubre|Introducción al análisis de texto|[Clase 4]()|[cod4]()|
 |20 de Octubre|Topics Modelling|[Clase 5]()|[cod5]()|
 |22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|[cod6]()|
 |27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|[cod7]()|
@@ -104,19 +104,6 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 Las monitorias se realizaran los días sabados de 8:00am a 10:00am con previo aviso por parte del estudiante.
 
 Los correos tienen un tiempo de respuesta entre 24 a 48 horas.
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

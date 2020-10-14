@@ -1,6 +1,6 @@
 ---
-title: "Introducción a la analítica de texto"
-subtitle: "Aplicaciones y conceptos"
+title: "Introducción al manejo de datos con R"
+subtitle: "Programación y Conceptos Estádisticos"
 author: "Daniel Jiménez M."
 date: "`r format(Sys.time(), '%d -%m -%Y')`"
 institute: "Universidad Nacional de Colombia"
@@ -14,30 +14,513 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-## R Markdown
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
-## Slide with Bullets
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+## R como calculadora 
 
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
+En R las sumas se realizan de la siguiente manera
+```{r,echo=TRUE}
+100+200
 ```
 
-## Slide with Plot
 
-```{r pressure}
-plot(pressure)
+##  R como calculadora 
+
+Otra forma de hacer esta operación es a través de las asignaciones
+
+```{r, echo=TRUE}
+a <- 12
+b <- 55
+c <- a+b
+print(c)
 ```
+
+##  R como calculadora 
+
+Las demás operaciones pueden realizar de la siguiente manera
+
+```{r, echo=FALSE}
+#Resta
+
+300-199
+
+# Multiplicación
+
+12*12
+
+# División
+
+500/2
+
+# Elevar un número a una potencia
+
+2^2
+
+```
+
+
+## Operaciones Lógicas
+
+En está sección se introducen los conceptos de lógica matemática.
+
+Las operaciones lógicas son aquellas que intentan descubir valores de falso o verdadero como veremos en el siguiente ejemplo
+
+```{r}
+4>8
+```
+
+
+## Operaciones Lógicas
+
+Otra propiedad es la siguiente 
+```{r}
+3==9/3
+```
+
+## Operaciones Lógicas
+
+Estas operaciones se pueden combinar y son muy útiles a la hora de trabajar con programación
+
+```{r}
+3==9/3 & 2<3
+```
+
+Otro ejemplo será el siguiente :
+
+```{r}
+3==9/3 & 2<2
+```
+
+
+## Operaciones Lógicas
+
+Suponga el siguiente ejemplo: Los Views de su última publicación son los siguientes
+
+```{r}
+Views<-c(20,30,12,60,13)
+```
+
+Ahora suponga que quiere saber cuales son mayores a 50
+
+```{r}
+Views>50
+```
+
+## Operaciones Lógicas
+
+Para ver los datos de mayores de 50 
+
+```{r}
+Views[Views>50]
+```
+
+## Operaciones Lógicas
+
+Ahora suponga que su publicación sale en dos tipos de revistas, Revista X y Revista Y,
+Ahora evalue ¿Cuál es mejor? por días
+
+```{r}
+Revista_X<-c(30,45,23)
+Revista_Y<-c(20,55,33)
+Revista_X<=Revista_Y
+```
+
+## Operaciones Lógicas
+
+El comando `if`  se usa cuando queremos que una operación se ejecute bajo una condición
+
+```{r}
+x<-5
+if(x>3){
+  print("El valor es mayor a tres")
+}
+```
+
+## Operaciones Lógicas
+
+`else` se usa para complementar alguna de las condiciones o ejecutar otra alternativa bajo el supuesto de que la condición inicial no pueda ser ejecutada
+
+```{r}
+x<-50
+y<-90
+
+if(x>60){
+  print("El número de x cumplio la condición")
+} else {
+  print("EL número de y cumplio la condición")
+}
+
+```
+
+## Operaciones Lógicas
+
+Un `loop` es una serie de repeticiones de procesos hasta que se cumpla una condición.
+
+```{r}
+i <- 1
+while (i < 6) {
+print(i)
+i = i+1
+}
+```
+
+
+## Operaciones Lógicas
+
+la función `break` es la orden donde se rompe un loop cuando llega a un paso pre-determinado
+
+```{r}
+x<-1:10
+for(i in x){
+  if(i==5){
+    break
+  }
+  print(i)
+}
+```
+
+## Operaciones Lógicas
+
+Para que la anterior sentencia continue y omita el valor de break es necesario trabajar con `next`
+
+```{r}
+x<-1:10
+for(i in x){
+  if(i==5){
+    next
+  }
+  print(i)
+}
+```
+
+## Crear FUnciones
+
+Para crear funciones se trabaja con el comando `function`
+
+```{r}
+potencia<-function(x,y){
+  z=x^y
+  print(paste0("Este es el valor del número elevado ",z))
+}
+potencia(3,2)
+```
+
+
+## Funciones logarítmicas
+
+Las función es logarítmicas hacen parte del mundo del análisis matemático 🤓, en donde se estudia la propiedad de los números reales positivos dada una base con lo cual se logra obtener una mejor aproximación de la naturaleza de los datos.
+
+
+
+## Funciones logarítmicas
+
+El logarítmo se puede calcular de manera directa
+
+```{r}
+log(100)
+```
+
+
+
+O asignandole una base
+
+```{r}
+log(100,base = 4)
+```
+
+
+
+## Funciones exponenciales 
+
+Las funciones exponenciales, como su nombre lo indica, es elevar un número a un exponente
+
+```{r}
+exp(3)
+```
+
+Esto lo usaremos en la parte de probabilidad.
+
+
+## Funciones con objetos
+
+
+Una forma de trabajar en R es con la creación de listas las cuales se pueden desarrollar de la siguiente manera :
+
+
+```{r}
+# Lista 
+a<-c(1:10)
+print(a)
+```
+
+
+```{r}
+b<-seq(0,10,by = 2)
+print(b)
+```
+
+## Funciones con objetos
+
+Para ordenar en R usamos el comando `sort`
+
+```{r}
+c<-c(10,45,8,32)
+sort(c)
+```
+
+## Extracción de componentes
+
+
+En programación y en especial en el análisis de datos, la extracción de elementos es muy importante y es por ello que se explicará de dos maneras , la primera extraer un valor de un array y la segunda un segmento de un dataframe que en este caso será `iris` que viene por defecto en R
+
+
+```{r}
+# Extraer elemento de un array
+
+a<-c(1:10)
+a[1] # Extrae el primer elemento
+
+```
+
+
+```{r}
+a[3] # Extrae el tercer elemento
+```
+
+## Extracción de componentes
+
+
+```{r}
+iris[1,]# Extrae la primer Columna
+```
+
+```{r}
+iris[,1] # Extrae los valores de la primer fila 
+```
+
+
+## Extracción de componentes
+
+
+```{r}
+iris[1,2] # Extrae el segundo valor de la primer columna 
+```
+
+
+
+## Funciones estadísticas
+
+* Promedio: mean()
+* Varianza: var()
+* Desviación Estandar : sd()
+* Percentiles: quantile()
+* Covarianza: cov(,)
+* Correlación de pearson: cor(,)
+* Regresión : lm()
+* Máximo: max ()
+* Mínimo: min()
+
+
+## Funciones estadísticas con R
+
+Ahora veremos algunas aplicaciones de estas funciones en R. Lo que usaremos para ello es un tipo de programación basado en `dplyr`, pero que tenga más paquetes para hacer el trabajo más ordenado, por lo tanto trabajaremos con la librería `tidyverse`. 
+
+Para empezar examinemos la naturaleza de los datos.
+
+
+```{r}
+library(tidyverse)
+iris%>%
+  glimpse() # Función para ver el formato en que estan los datos.
+```
+
+
+
+## Funciones estadísticas con R
+
+Ahora exploremos un poco del comportamiento de una de las variables, para esto es necesario y recomendable hacerlo a través de un histograma.
+
+```{r, eval=FALSE}
+iris%>%
+  ggplot(aes(Sepal.Length))+ # Función para gráficar
+  geom_histogram() + # Geometría
+  labs(title = 'Distribución de los datos del Largo del Sépalo') # Agregar títulos y ejes.
+```
+
+## Funciones estadísticas con R
+
+```{r, echo=FALSE}
+iris%>%
+  ggplot(aes(Sepal.Length))+ # Función para gráficar
+  geom_histogram() + # Geometría
+  labs(title = 'Distribución de los datos del Largo del Sépalo') # Agregar títulos y ejes.
+```
+
+
+
+## Funciones estadísticas con R
+
+Ahora si lo quiere trabajar por especies puede usar la función `facet_wrap(~variable a distribuir)`. Es recomendable asignarle colores a cada una de  las variables .
+
+
+```{r eval=FALSE, include=TRUE}
+iris%>%
+  ggplot(aes(Sepal.Length, fill=Species))+ # Función para gráficar
+  geom_histogram(bins = 15) + # Geometría
+  facet_wrap(~Species, scales='free') # Distribución del gráfico
+  labs(title = 'Distribución de los datos del Largo del Sépalo') # Agregar títulos y ejes.
+```
+
+Con esto podremos saber a que tipo de distribución de probabilidad nos enfrentamos y entender más a fondo la naturaleza de los datos.
+
+## Funciones estadísticas con R
+
+```{r, echo=FALSE}
+iris%>%
+  ggplot(aes(Sepal.Length, fill=Species))+ # Función para gráficar
+  geom_histogram(bins = 15) + # Geometría
+  facet_wrap(~Species, scales='free') # Distribución del gráfico
+  labs(title = 'Distribución de los datos del Largo del Sépalo') # Agregar títulos y ejes.
+```
+
+
+## Funciones estadísticas con R
+
+
+Ahora creemos un resumen  estadístico
+
+
+```{r}
+iris%>%
+  group_by(Species)%>% # Se agrupa por especie
+  summarize(Promedio=mean(Sepal.Length), # Se crea el promedio por especie
+            Mediana=median(Sepal.Length), # Mediana por especie 
+            p25=quantile(Sepal.Length)[2], # Quantil 25
+            p75=quantile(Sepal.Length)[4]) # Quantil 75
+```
+Esta estadística de resumen describe muy bien la naturaleza de los datos y con base a ella podemos hacer la siguiente inferencia gráfica 
+
+
+## Funciones estadísticas con R
+
+
+```{r, eval=FALSE}
+iris%>%
+  group_by(Species)%>% # Se agrupa por especie
+  summarize(Promedio=mean(Sepal.Length), # Se crea el promedio por especie
+            Mediana=median(Sepal.Length), # Mediana por especie 
+            p25=quantile(Sepal.Length)[2], # Quantil 25
+            p75=quantile(Sepal.Length)[4])%>%
+  ggplot(aes(Mediana,Species, color=Species))+
+  geom_point(show.legend = FALSE,aes(size=Mediana))+
+  geom_errorbar(aes(xmin=p25,xmax=p75),show.legend = FALSE,linetype = "dashed")+
+  labs(title = 'Distribución por especies con amplitud cuantílica')
+```
+
+## Funciones estadísticas con R
+
+
+```{r, echo=FALSE}
+iris%>%
+  group_by(Species)%>% # Se agrupa por especie
+  summarize(Promedio=mean(Sepal.Length), # Se crea el promedio por especie
+            Mediana=median(Sepal.Length), # Mediana por especie 
+            p25=quantile(Sepal.Length)[2], # Quantil 25
+            p75=quantile(Sepal.Length)[4])%>%
+  ggplot(aes(Mediana,Species, color=Species))+
+  geom_point(show.legend = FALSE,aes(size=Mediana))+
+  geom_errorbar(aes(xmin=p25,xmax=p75),show.legend = FALSE,linetype = "dashed")+
+  labs(title = 'Distribución por especies con amplitud cuantílica')
+```
+
+
+
+## Matrices
+
+Ojo<- El mundo y todo lo que nos rodea es matricial, así que esto será fundamental más adelante.
+
+Las matrices se crean con la función `matrix`
+
+```{r}
+# Ejemplo tomado de `help(matrix)`
+mdat <- matrix(c(1,2,3, 11,12,13), nrow = 2, ncol = 3, byrow = TRUE,
+               dimnames = list(c("row1", "row2"),
+                               c("C.1", "C.2", "C.3")))
+mdat
+```
+
+
+## Matrices
+
+A las matrices se les puede asignar un número de operaciones respetando sus reglas[^1]
+
+
+```{r}
+a<-matrix(c(1:10),nrow = 2)
+a+a # Suma
+```
+
+```{r}
+a*2 # Multiplicación por si misma
+```
+
+
+[^1]: Para conocer las propiedades y las reglas de las matrices,por favor visite el siguiente link <https://books.google.es/books?hl=es&lr=&id=eI34KBt0tTwC&oi=fnd&pg=PR5&ots=MJIVJKr48y&sig=UkJ10vFbvmfeoMzrDNW06HIT3ac#v=onepage&q&f=false>
+
+## Matrices
+
+
+```{r}
+# Multiplicación entre matrices
+a<-matrix(c(1,2,3,4,5,6),2,3)
+b<-matrix(c(7,8,9))
+a%*%b
+```
+
+## Matrices
+
+```{r}
+a<-matrix(c(1,2,3,4),2,2)
+#Promedio
+mean(a)
+```
+
+
+## Matrices
+
+```{r}
+# Resolver una matriz
+solve(a)
+```
+
+## Matrices
+
+```{r}
+# Hallar el determinante de una matriz
+det(a)
+```
+
+```{r}
+# trasponer una matriz
+
+t(a)
+```
+
+## Matrices
+
+Cuando veamos Machine Learning, la parte de valores propios sera muy importante, por ello solo se presentan en este momento.
+
+```{r}
+eigen(a)
+```
+
+
+
+
+
 
