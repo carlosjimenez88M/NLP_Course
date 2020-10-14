@@ -1,0 +1,188 @@
+---
+title: "Tutoria # 2 NLP"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ¿Cómo gestionar proyectos con datos?
+
+* Anotación especial: un chunk se abre bajo la combinación de control + alt + i
+
+```{r, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(skimr)
+```
+
+## Cargar una base de datos
+
+```{r}
+iris
+```
+## Conocer la naturaleza de los datos
+ 
+```{r}
+iris%>%
+  glimpse() 
+```
+
+
+```{r}
+glimpse(iris)
+```
+
+## Comprender una base de datos
+
+1) La base de datos esta completa ?
+
+```{r}
+iris%>%
+  skim() # con esta función se logro entender la naturaleza de los datos.
+```
+
+
+2) Análisis Exploratorio de datos 
+
+
+```{r}
+cor(iris[,-5])
+```
+
+
+¿Cómo es la relación del largo del sepalo con respecto al largo del petalo?
+
+```{r}
+iris%>%
+  ggplot(aes(Sepal.Length ,Petal.Length,color=Species))+ # este comando se uiliza para diseñar las gráficas
+  geom_point()+ # hacer gráfico de puntos 
+  geom_smooth() + # mostrar tendencia 
+  labs(title = "Relacióne entre Sepalo y Petalo")
+```
+
+## Funciones Lógicas
+
+```{r}
+for (i in iris$Species){
+  print(i)
+}
+```
+
+
+
+```{r}
+for (i in iris){
+  i = mean(iris$Sepal.Length)
+  print(i)
+}
+```
+
+## Crear Funciones
+
+Las funciones se crean con el comando `function`
+```{r}
+trae_promedio<-function(especie){
+  iris%>%
+    filter(Species==especie)%>%
+    group_by(Species)%>%
+    summarize(Promedio=mean(Sepal.Length))
+}
+```
+
+```{r}
+iris%>%
+  count(Species,sort = TRUE)
+```
+
+
+```{r}
+trae_promedio('virginica')
+```
+
+
+## Como mejorar la función 
+
+
+```{r}
+trae_media<-function(especie){
+  iris%>%
+    filter(Species==especie)%>%
+    ggplot(aes(Sepal.Length,Petal.Length))+
+    geom_point()+
+    geom_smooth()
+}
+```
+
+
+
+```{r}
+trae_media('virginica')
+```
+
+## Análisis con for 
+
+Un for es un loop, uina condición 
+
+```{r}
+
+a<-1:10
+b<-1:10
+
+res<-numeric(length = length(a))
+
+for(i in seq_along(a)){
+  res[i]<-a[i] + b[i]
+}   
+
+res
+```
+
+
+
+
+# For en iris
+
+Cuando quiero
+utilizar
+tíldes en R, debo hacer un cambio en el formato de escritura y colocarlo como utf-8 (español)
+
+
+```{r}
+Sepalo<-iris$Sepal.Length
+Petalo<-iris$Petal.Length
+proporcion<-numeric(length = length(Sepalo))
+
+for(i in seq_along(Sepalo)){
+  proporcion[i]<-round((Sepalo[i]/Petalo[i])*100,2)
+}
+proporcion
+```
+
+
+
+## Else 
+
+Else se ejecuta cuando existe otra alternativa a una cadena de sentencias 
+
+
+```{r}
+x<-2
+if(x>3){
+  print("Es mayor a tres")
+} else {
+  print("Es menor a tres")
+}
+```
+
+```{r}
+x<-1:10
+for(i in x){
+  if(i>5){
+    print(paste0(i," Es mayor a 5"))
+  }else{
+    print(paste0(i," Es menor a 5"))
+  }
+}
+```
+
