@@ -1,11 +1,164 @@
 ---
-title: "Tutoria # 2 NLP"
+title: "Código Clases y Tutoria # 2 NLP"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+## Clase número 1
+## Operaciones Básicas
+*Este código corresponde a las clases del 9 y el 12 de octubre
+
+
+```{r}
+15+60
+15-50
+50/90
+(54*95)+300
+log(45)
+30>90
+
+
+```
+
+## Asignaciones con "<-"
+
+```{r}
+x<-70
+Y<-x
+Y
+
+```
+## Varios datos "C()"
+
+```{r}
+
+a<-c(10,16,90)
+a
+print(a)
+b<- c(60,90,80)
+
+a+b
+
+ahorros <- c(50,70,60,40,80)
+gastos <- c(-30,-60,-30,-10,-60)
+
+ahorros+gastos
+
+
+
+```
+
+## otras operaciones básicas (listas)
+
+
+```{r}
+
+lista<-c(1:100)
+
+runif(100,1,100)
+
+sample(100,10)
+
+seq(0,10,by=2)
+
+lista<-sample(100,30)
+
+sort(lista)
+
+lista[15]
+lista[lista>17]
+
+casilla_15<- lista[15]
+
+print(casilla_15)
+
+```
+
+## tipos de datos y creacion de objetos
+
+```{r}
+
+a<- 6.5
+b<-7
+c<- FALSE
+d<- "Hola mundo"
+c<-"c"
+class(c)
+lista<-c(1:100)
+print(lista)
+
+
+
+```
+
+
+```{r}
+
+c<-rep(5,8)
+
+c<-rep("A",7)
+
+c(rep("M",3),rep("F",3))
+
+```
+
+## Funciones Estadísticas
+
+```{r}
+
+#media
+mean(lista)
+
+Zulma<- 30
+Daniel<- 120
+Quique<- 150 
+mean(c(Zulma,Daniel,Quique))
+alumnos<-c(Zulma,Daniel,Quique)
+alumnos
+
+mean(alumnos)
+lista[c(45,65)]
+sample(100,10)
+#mediana
+
+median(c(Zulma,Daniel,Quique))
+median(alumnos)
+
+
+#varianza
+
+var(alumnos)
+
+#Desviacion estandar
+
+sd(alumnos)
+
+#algunas descripcions 
+
+summary(lista)
+
+```
+
+## Otras operaciones matemáticas
+
+```{r}
+
+3==9/3
+15==14.99
+3==3 & 2<2
+3==3 | 2<2
+
+```
+
+
+
+
+##A partir de esta linea inicia el el codigo de la monitoría de 13 de octubre
+
 
 ## ¿Cómo gestionar proyectos con datos?
 
