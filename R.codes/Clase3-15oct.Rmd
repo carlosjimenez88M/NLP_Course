@@ -1,0 +1,182 @@
+---
+title: "Clase3 Fundamentos R segunda parte"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejemplos de variables
+
+```{r}
+
+#como asignar correctamente una variable
+
+Diferentes_edades <- c(20,30,40)
+
+```
+
+## Ejercicio primera función
+
+```{r}
+
+mi_primera_funcion <- function(){
+    print("Ya se hacer mi primera funcion!")
+}
+
+mi_primera_funcion()
+
+#manual de ayuda con signo ? y nombre de la funcion ejemplo ?c()
+
+?c()
+
+lista <- c(1,7:9)
+
+?print
+
+ls()
+
+
+```
+
+## Directorio de trabajo
+
+```{r}
+
+getwd()
+setwd("C:/Users/tres/Documents")
+
+list.files()
+list.dirs()
+
+# Como ver mediante una instrucción, buscar por extención
+
+list.files( path = "." , pattern = "R")
+
+```
+
+## Que es un paquete y como instalarlo
+
+```{r}
+##instalar un paquete
+
+install.packages()
+
+##Cargar un paquete
+
+library(tidyverse)
+
+```
+
+## Matrices
+
+```{r}
+
+# vectores
+
+mi_vector <- 1:12
+
+mi_matriz <- matrix(1:12, nrow = 3, ncol = 4)
+
+
+# como crear matrices 
+
+mi_matriz <- matrix(1:12, nrow = 3, ncol = 4)
+
+## juntar columnas 
+cbind()
+
+## juntar filas 
+rbind()
+
+#ejemplo
+
+vector_1 <- 1:4
+vector_2 <- 5:8
+vector_3 <- 9:12
+vector_4 <- 13:16
+
+matriz_por_fila <- rbind(vector_1,vector_2,vector_3,vector_4)
+matriz_por_col <- cbind(vector_1,vector_2,vector_3,vector_4)
+
+
+#imprimir la informacion 
+
+print(matriz_por_fila)
+
+print(matriz_por_col)
+
+
+##ejemplos NA
+
+vector_na1 <- c(NA, 1, 2,3)
+vector_na2 <- c(4,5,6,NA)
+
+matriz_faltantes <- rbind(vector_na1,vector_na2)
+
+matriz_faltantes
+
+class(matriz_faltantes)
+class(vector_1)
+
+dim(matriz_faltantes)
+
+?dim
+#operaciones con matrices
+
+
+matriz_por_col +1
+
+ matris_final <- matriz_por_col 
+ 
+ matris_final * 5
+ 
+ matris_final ^ 2
+ 
+ matris_final / 10
+ 
+matrix_tr <- t(matris_final)
+
+?t
+
+?print
+
+ 
+ 
+```
+
+##Dataframe
+
+```{r}
+
+#Data frames 
+
+#filas tambien llamadas como casos, individuos u observaciones 
+#columnas tambien llmadas como atributos, rasgos o variables
+
+
+mi_df <- data.frame(
+    "entero" = 1:4,
+    "factores" = as.factor(c("a","b","c","d")),
+    "numericos" = c(1.1, 3.3,4.5,5.6),
+    "caracteres" = as.character(c("a","b","c","d"))
+    
+    
+    
+)
+
+mi_df
+
+dim(mi_df)
+
+# matriz como dataframe
+
+
+df_mtx <- as.data.frame(matrix_tr)
+
+
+df_mtx
+
+```
+
