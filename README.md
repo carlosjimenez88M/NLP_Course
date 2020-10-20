@@ -9,6 +9,13 @@ Instructor : *Carlos Daniel Jiménez M*
 * Web: www.danieljimenezm.com
 * Github: carlosjimenez88M
 
+
+Instructor : *Enrique Rendón*
+
+* Email : cortina.er@gmail.com
+* Github: ECortina
+
+
 Con el aumento de la información en todas sus versiones: escrita, oral, documental, de imagenes entre otras, el análisis de datos adquiere una dinámica propia por lo cual es necesario desarrollar habilidades estadísticas,para el modelamiento de dicha información, comprender el versionamiento de estos proyectos y por último tener la capacidad de integrarlo para la puesta en producción y es por ello que la Universidad Nacional de Colombia, a través de la escuela de [Economía](http://www.fce.unal.edu.co/pec.html)  diseño este curso, en donde los participantes desarrollaran las siguientes habilidades:
 
 * Manejo de Git & Github;
