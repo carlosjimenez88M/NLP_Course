@@ -14,13 +14,11 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 
 
-
-## Agenda 
 
 
 ## ¿Qué es TensorFlow?
@@ -47,6 +45,93 @@ Tensorflow es popular para el trabajo de :
 ## ¿Qué es TensorFlow?
 
 
-TensorFlow funciona con Tensores que son arrays de multiples dimensiones
+TensorFlow funciona con Tensores que son arrays de multiples dimensiones.
 
+$$
+(A*B)+C
+$$
+Donde :
+
+* A,B,C : son arrays
+* {A,B,C}: forman el tensor
+
+
+## Instalar Tensorflow
+
+Los comandos para instalar y trabajar con `tensorflow` son:
+
+```{r,eval=FALSE, include=TRUE}
+install.packages("tensorflow")
+library(tensorflow)
+tf_config()# Esto es para manejar la configuración
+```
+
+
+
+## Tensorflow - Flujo de trabajo
+
+Para trabajar con este framework es necesario iniciar la sección de la siguiente manera
+
+```{r, eval=FALSE, message=FALSE}
+library(tensorflow)
+session=tf$Session()
+print(session)
+```
+
+
+
+## Tensorflow - Flujo de trabajo
+
+Cuando termine de trabajar deberá correr el siguiente comando
+
+
+```{r, eval=FALSE}
+session$close()
+```
+
+## Tensorflow - Flujo de trabajo
+
+Este sería un ejemplo de flujo de trabajo
+
+```{r, eval=FALSE}
+library(tensorflow) # Se llama a la librería
+## Crear la sección de trabajo
+seccion<-tf$Session()
+## Creamos una constante de prueba - esto se hace para practicar
+Hola_mundo<-tf$constant('Hola Mundo!!!')
+## Se corre el trabajo hecho
+print(seccion$run(Hola_mundo))
+## Se finaliza el proceso
+seccion$close()
+```
+
+```{r, echo=FALSE}
+print('Hola Mundo!!!')
+```
+
+## Sintaxis 
+
+```{r, eval=FALSE}
+library(tensorflow)
+a<-tf$constant(20)
+print(a)
+```
+
+## Sintaxis 
+
+Para crear variables se trabaja con el siguiente comando
+
+```{r, eval=FALSE}
+matriz<-tf$Variable(tf$zeros(shape(4,3)))
+print(matriz)
+```
+
+## Sintaxis
+
+```{r, eval=FALSE}
+a <- tf$constant(5, name ="NumAdults")
+b <- tf$constant(6, name ="NumChildren")
+c <- tf$add(a,b)
+print(session$run(c))
+```
 

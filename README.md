@@ -105,5 +105,9 @@ Las monitorias se realizaran los días sabados de 8:00am a 10:00am con previo av
 
 Los correos tienen un tiempo de respuesta entre 24 a 48 horas.
 
+## Bases de datos 
 
+|Base|Link de descarga|
+|---:|---------------:|
+|IMBD|[base](https://www.kaggle.com/nltkdata/movie-review#movie_review.csv)|
 
