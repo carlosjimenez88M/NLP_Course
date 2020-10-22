@@ -109,5 +109,6 @@ Los correos tienen un tiempo de respuesta entre 24 a 48 horas.
 
 |Base|Link de descarga|
 |---:|---------------:|
+|IMBD_I|[base](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Bases_de_datos/IMDB-Movie-Data.csv)|
 |IMBD|[base](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Bases_de_datos/movie_review.csv)|
 
