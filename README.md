@@ -95,7 +95,7 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 |20 de Octubre|Topics Modelling|[Clase 5]()|[cod5]()|
 |22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|[cod6]()|
 |27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|[cod7]()|
-|3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8]()|[cod8]()|
+|3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/tensorflow.pdf)|[cod8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Clasificaci%C3%B3n-de-textos.Rmd)|
 |10 de Noviembre - 12 de Noviembre|Estudio de Caso|[Clase 9]()|[cod9]()|
 
 
