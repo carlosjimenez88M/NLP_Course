@@ -112,3 +112,9 @@ Los correos tienen un tiempo de respuesta entre 24 a 48 horas.
 |IMBD_I|[base](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Bases_de_datos/IMDB-Movie-Data.csv)|
 |IMBD|[base](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Bases_de_datos/movie_review.csv)|
 
+
+## Material de respaldo
+
+|Tema|Código|
+|---:|------|
+|Tensorflow|[code](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Tensorflow%201.Rmd)|
