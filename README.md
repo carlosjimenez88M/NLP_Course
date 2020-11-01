@@ -92,7 +92,7 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 |8 de Octubre|Introducción a R|[Clase 2](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/clase2.pdf)|[cod2](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Monitoria2.md)|
 |13 de Octubre|Introducción al análisis estadístico|[Clase 3](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/Clase3.pdf)|[cod3](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Clase3-15oct.Rmd)|
 |15 de Octubre|Introducción al análisis de texto|[Clase 4](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/text%20mining.pdf)|[cod4]()|
-|20 de Octubre|Topics Modelling|[Clase 5]()|[cod5]()|
+|20 de Octubre|Topics Modelling|[Clase 5](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/clase5.pdf)|[cod5](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Introducci%C3%B3n-al-Text-Mining.md)|
 |22 de Octubre|Machine Learning para clasificación de textos|[Clase 6]()|[cod6]()|
 |27 de Octubre - 29 de Octubre|Machine Learning para la clasificación de textos II|[Clase 7]()|[cod7]()|
 |3 de Noviembre -5 de Noviembre|Introducción al Deep Learning y NLP|[Clase 8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/tensorflow.pdf)|[cod8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Clasificaci%C3%B3n-de-textos.Rmd)|

@@ -101,6 +101,8 @@ hawai<-read_csv('../Bases_de_datos/hawai.txt',col_names = FALSE)%>%
 hawai<-read_csv('../Bases_de_datos/hawai.txt',col_names = FALSE)%>%
   rename(Letra=X1)
 ```
+
+
 ```{r, echo=FALSE}
 hawai%>%
   head()
@@ -379,5 +381,229 @@ hawai_ngram%>%
 ```
 
 
+## Hawai en Text Mining
+
+Ahora se separan los n-grams para poder preparar un análisis 
+
+```{r,echo=FALSE}
+hawai_ngram_filter<-hawai_ngram%>%
+  count(ngram,sort=TRUE)%>%
+  filter(!is.na(ngram))%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  filter(!word1 %in% stop_words_es)%>%
+  filter(!word2 %in% stop_words_es)
+
+hawai_ngram_filter%>%
+  head()
+```
+
+## Hawai en Text Mining
+
+Al separar el bigram podemos hacer el conteo y de paso con ello la unión se puede encontrar un nuevo patron.
+
+```{r, echo=FALSE}
+bigram_counts <- hawai_ngram_filter %>%
+  count(word1, word2, sort = TRUE)
+bigram_filtrado<-hawai_ngram%>%
+  filter(!is.na(ngram))%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  filter(!word1 %in% stop_words_es)%>%
+  filter(!word2 %in% stop_words_es)%>%
+  select(-texto)
+
+bigrams_unido <- bigram_filtrado %>%
+  unite(bigram, word1, word2, sep = " ")
+
+bigrams_unido%>%
+  head()
+```
+## Hawai en Text Mining
 
 
+```{r, echo=FALSE}
+bigram_hawai<-hawai_ngram%>%
+  select(-texto)%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  # filter(!word1 %in% stop_words_es)%>%
+  # filter(!word2 %in% stop_words_es)%>%
+  na.omit()%>%
+  count(word1, word2, sort = TRUE)
+
+bigram_hawai%>%
+  filter(word2=='no')%>%
+  ggplot(aes(reorder(word1,n),n))+
+  geom_col()+
+  coord_flip()+
+  labs(title = 'Relación e interacción de la palabra no',
+       subtitle = 'En el contexto de la canción',
+       x='',
+       y='')
+```
+
+## Contexto
+
+Con los bigrams podemos decontruir una oración y con base a ello poder comprender un poco más el contexto de lo que estamos evaluando.
+
+
+## Hawai en Text Mining
+
+Para profundizar sobre el entendimiento de la canción se trabaja sobre un análisis de redes.
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+hawai_words<-hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  add_count(word,name='total_words')%>%
+  filter(total_words>1)%>%
+  select(-texto)
+
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
+  head()
+```
+
+
+## Contexto 
+
+
+Para comprender el contexto de la canción es necesario trabajar una capa matemática más profunda y para ello sera necesario llamar a la librería  `widyr` con la cual se podrá hacer de manera ordenada permutaciones entre las palabras y con base a ello hacer correlaciones.
+
+
+## Hawai en Text Mining
+
+Suponga que quiere entender en que contexto se uso la palabra `foto`
+
+```{r, echo=FALSE, fig.height=4}
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
+  filter(item1 == 'foto')%>%
+  mutate(item2=fct_reorder(item2,correlation))%>%
+  ggplot(aes(correlation,item2,fill=correlation>0))+
+  geom_col()+
+  labs(title = 'Correlación de la palabra foto con el resto del texto',
+       fill= 'Correlation')
+```
+
+## Contexto
+
+Si se da cuenta en este contexto lo rojo significa algo inversamente proporcional, eso quiere decir que cada vez que se usan esas palabras, pierde frecuencia o sentido la palabra `foto`, mientras lo verde es algo que genera contexto con la misma palabra.
+
+El paso anterior es el desarrollo de un `PCA`, que en si consite en la creación de una pseudo-variable que almacena la mayor cantidad de información **varianza** en el contexto de los datos.
+
+
+
+## Hawai en Text Mining
+
+
+Ahora hagamos un análisis de redes para poder crear un contexto de la canción.
+
+
+```{r, cache=FALSE,fig.height=4}
+words_count<-hawai_words%>%
+  count(word,sort = TRUE)
+
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE)%>%
+  head(500)%>%
+  as_tbl_graph()%>%
+  left_join(words_count,by=c(name='word'))%>%
+  ggraph(layout = 'fr')+
+  geom_edge_link(aes(edge_alpha=correlation))+
+  geom_node_point(aes(size=n))+
+  geom_node_text(aes(label=name),
+                 check_overlap=TRUE,
+                 vjust=2,
+                 hjust=1,
+                 size=3)
+```
+## Contexto
+
+El análisis de redes es una técnica que sirve para encontrar y evidenciar de manera gráfica los patrones que no son vistos directamente en los datos.
+
+## Hawai en Text Mining
+
+Esta parte es un bonus! y es que usaremos una técnica con algunas modificaciones para crear un tag sobre la canción.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4}
+library(stm)
+hawai_matrix<-hawai_words%>%
+  group_by(word)%>%
+  filter(total_words>1)%>%
+  cast_sparse(line, word, total_words)
+
+topic_model_1 <- stm(hawai_matrix,
+                     K = 2,
+                     verbose = TRUE,
+                     init.type = "Spectral",
+                     emtol = 5)
+```
+
+## Hawai en Text Mining
+
+Ahora veremos las palabras que más representan en contexto a la canción.
+```{r, echo=FALSE}
+tidy(topic_model_1) %>%
+  filter(topic=='1')%>%
+  filter(!term %in% stop_words_es)%>%
+  filter(!term %in% c('va','na'))%>%
+  group_by(topic) %>%
+  top_n(12, beta) %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~ topic, scales = "free_y")
+```
+
+## Hawai en Text Mining
+
+Construimos un corpus del documento 
+```{r}
+hawai_dtm<-hawai_words%>%
+  group_by(word)%>%
+  filter(total_words>1)%>%
+  cast_dtm(line, word, total_words)
+hawai_dtm
+```
+
+## Contexto
+
+Corpus es la forma de desarrollar en un solo documento mega-data.
+
+## Hawai en Text Mining
+
+Ahora implementaremos un LDA para poder generar topics en la canción.
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, fig.height=4}
+hawai_lda <- LDA(hawai_dtm, k = 2, control = list(seed = 1234))
+hawai_topics <- tidy(hawai_lda, matrix = "beta")
+hawai_topics <- hawai_topics%>%
+  arrange(desc(beta))%>%
+  filter(!term %in% stop_words_es)%>%
+  filter(!term %in% c('va','na','pa'))
+hawai_top_terms<-hawai_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+hawai_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+
+## Contexto
+
+Latent Dirichlet allocation, es una técnica que permite agrupar los datos en grupos en grupos que tienen una explicación no observable, en este caso tópicos.
