@@ -1,0 +1,504 @@
+---
+title: "Introducción al Text Mining"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse) # Manipulación de datos
+library(tidytext) # Manipulación de textos
+library(tm) #  Procesamiento de mega-data y creación de corpus
+library(topicmodels) # Agrupación de textos por tema
+library(wordcloud) # Nube de palabras
+library(ggraph)
+library(ggrepel)
+library(widyr)
+library(stopwords)
+library(tidygraph)
+library(stm)
+stop_words_es<-stopwords::stopwords(language = "spanish")
+```
+
+
+
+
+```{r}
+hawai<-read_csv('../Bases_de_datos/hawai.txt',col_names = FALSE)%>%
+  rename(Letra=X1)
+```
+
+
+```{r}
+hawai_df<-hawai%>%
+  tibble(line=1:50,texto=Letra)
+hawai_df
+```
+
+
+## Partir la canción por palabras
+
+
+```{r}
+hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  count(word,sort=TRUE)
+```
+
+```{r}
+hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  count(word,sort=TRUE)%>%
+  mutate(word=fct_reorder(word,n))%>%
+  top_n(20)%>%
+  ggplot(aes(n,word))+
+  geom_col()+
+  labs(title = 'Base de datos sucia',
+       subtitle = 'De esta forma no se debe análizar un texto')
+```
+
+
+Un poco de limpieza, como hay muchas contracciones se eliminan las palabras de dos caracteres
+
+```{r}
+hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  mutate(word=gsub('\\b[[:alpha:]]{1,3}\\b','',word))%>%
+  filter(word!='')%>%
+  count(word,sort=TRUE)%>%
+  mutate(word=fct_reorder(word,n))%>%
+  top_n(20)%>%
+  ggplot(aes(n,word))+
+  geom_col()+
+  labs(title = 'Frecuencia de las palabras más usadas',
+       subtitle = 'En la canción de Hawai')
+  
+```
+
+Ahora se estudia la frecuencia de palabra en un rango, esta  de ley de Zipf
+
+```{r}
+total_words<-hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  count(word,sort=TRUE)
+total_words<-sum(total_words$n) 
+
+freq_words<-hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  mutate(word=gsub('\\b[[:alpha:]]{1,3}\\b','',word))%>%
+  filter(word!='')%>%
+  count(word,sort=TRUE)%>%
+  mutate(rank=row_number(),
+         frequency=n/total_words)
+
+```
+
+
+```{r}
+freq_words %>%
+  ggplot(aes(rank,frequency , group=1)) +
+  geom_line(size = 1.1, alpha = 0.8, show.legend = FALSE) +
+  labs(title = 'Relación en el uso de palabras con pendiente Negativa',
+       subtitle = 'en la canción Hawai')
+```
+
+
+Modelo de Zipf
+
+```{r}
+freq_words
+fit<-lm(frequency~rank,data=freq_words)
+fit
+```
+
+
+Está es la versión clásica de la ley de Zipf
+
+```{r}
+equatiomatic::extract_eq(fit,use_coefs = TRUE)
+```
+
+$$
+\operatorname{frequency} = 0.01 + 0(\operatorname{rank}) + \epsilon
+$$
+
+Ahora se genera la pendiente
+
+```{r}
+freq_words %>%
+  ggplot(aes(rank,frequency , group=1)) +
+  geom_abline(intercept = 0.01, slope = -0.0001469 , color = "gray50", linetype = 2) +
+  geom_line(size = 1.1, alpha = 0.8, show.legend = FALSE) +
+  # scale_x_log10() +
+  # scale_y_log10()+
+  labs(title = 'Relación en el uso de palabras con pendiente Negativa',
+       subtitle = 'en la canción Hawai')
+```
+
+
+La idea de tf-idf es encontrar las palabras importantes para el contenido de cada documento disminuyendo el peso de las palabras de uso común y aumentando el peso de las palabras que no se usan mucho en una colección o corpus de documentos, en este caso, el grupo de novelas de Jane Austen en su conjunto. El cálculo de tf-idf intenta encontrar las palabras que son importantes (es decir, comunes) en un texto, pero no demasiado comunes. Hagámoslo ahora.
+
+
+```{r}
+freq_words<-hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  mutate(word=gsub('\\b[[:alpha:]]{1,3}\\b','',word))%>%
+  filter(word!='')%>%
+  count(word,sort=TRUE)
+
+hawai_tf_idf<-freq_words%>%
+  left_join(hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  mutate(word=gsub('\\b[[:alpha:]]{1,3}\\b','',word))%>%
+  filter(word!=''), by='word')%>%
+  distinct(word,.keep_all = TRUE)%>%
+  bind_tf_idf(word, line, n)%>%
+  select(-texto)
+
+hawai_tf_idf %>%
+  arrange(desc(tf_idf))
+```
+
+
+Visualizar la importancia del texto
+
+
+```{r}
+hawai_tf_idf%>%
+  arrange(desc(tf_idf))%>%
+  mutate(word=fct_reorder(word,tf_idf))%>%
+  top_n(15)%>%
+  ggplot(aes(tf_idf,word,fill=tf_idf))+
+  geom_col()+
+  labs(title = 'Entendimiento por nivel de importancia de las palabras',
+       subtitle = 'En la canción')
+  
+```
+
+
+Ahora analicemos esta canción por grupos de palabras , esto se hara con un token de tres palabras 
+
+
+```{r}
+hawai_ngram<-hawai_df%>%
+  unnest_tokens(ngram,Letra,token = 'ngrams',n=2)
+
+hawai_ngram%>%
+  count(ngram,sort=TRUE)%>%
+  filter(!is.na(ngram))
+```
+
+
+Ahora se hace una separación de las palabras
+
+
+```{r}
+hawai_ngram_filter<-hawai_ngram%>%
+  count(ngram,sort=TRUE)%>%
+  filter(!is.na(ngram))%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  filter(!word1 %in% stop_words_es)%>%
+  filter(!word2 %in% stop_words_es)
+
+hawai_ngram_filter
+
+```
+
+```{r}
+bigram_counts <- hawai_ngram_filter %>%
+  count(word1, word2, sort = TRUE)
+bigram_counts
+```
+
+Ahora unimos las palabras para entender el contexto
+
+```{r}
+bigram_filtrado<-hawai_ngram%>%
+  filter(!is.na(ngram))%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  filter(!word1 %in% stop_words_es)%>%
+  filter(!word2 %in% stop_words_es)%>%
+  select(-texto)
+
+bigram_filtrado
+
+```
+
+```{r}
+bigrams_unido <- bigram_filtrado %>%
+  unite(bigram, word1, word2, sep = " ")
+bigrams_unido
+```
+
+Ahora analicemos la palabra `no`
+
+```{r}
+library(tidyr)
+hawai_ngram%>%
+  select(-texto)%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  # filter(!word1 %in% stop_words_es)%>%
+  # filter(!word2 %in% stop_words_es)%>%
+  na.omit()%>%
+  count(word1, word2, sort = TRUE)
+```
+
+
+```{r}
+bigram_hawai<-hawai_ngram%>%
+  select(-texto)%>%
+  separate(ngram, c("word1", "word2"), sep = " ")%>%
+  filter(!word1 %in% c('na'))%>%
+  filter(!word2 %in% c('na'))%>%
+  # filter(!word1 %in% stop_words_es)%>%
+  # filter(!word2 %in% stop_words_es)%>%
+  na.omit()%>%
+  count(word1, word2, sort = TRUE)
+
+```
+
+
+
+```{r}
+bigram_hawai%>%
+  filter(word2=='no')%>%
+  ggplot(aes(reorder(word1,n),n))+
+  geom_col()+
+  coord_flip()
+```
+
+Ahora analicemos el contexto de la canción
+
+
+```{r}
+hawai_words<-hawai_df%>%
+  unnest_tokens(word,Letra)%>%
+  filter(!word %in% stop_words_es)%>%
+  add_count(word,name='total_words')%>%
+  filter(total_words>1)%>%
+  select(-texto)
+
+hawai_words
+```
+
+
+Ahora analicemos las correlaciones de las palabras
+
+
+```{r}
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)
+```
+
+la palabra foto adquiere una nueva importancia 
+
+
+```{r}
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
+  filter(item1 == 'foto')
+```
+
+Ahora veamos como se contraponen con respecto a esta palabra
+
+
+```{r}
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
+  filter(item1 == 'foto')%>%
+  mutate(item2=fct_reorder(item2,correlation))%>%
+  ggplot(aes(correlation,item2,fill=correlation>0))+
+  geom_col()+
+  labs(title = 'Correlación de la palabra foto con el resto del texto',
+       fill= 'Correlation')
+```
+
+Ahora analicemos toda la canción
+
+
+```{r}
+words_count<-hawai_words%>%
+  count(word,sort = TRUE)
+
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE)%>%
+  head(500)%>%
+  as_tbl_graph()%>%
+  left_join(words_count,by=c(name='word'))%>%
+  ggraph(layout = 'fr')+
+  geom_edge_link(aes(edge_alpha=correlation))+
+  geom_node_point(aes(size=n))+
+  geom_node_text(aes(label=name),
+                 check_overlap=TRUE,
+                 vjust=2,
+                 hjust=1,
+                 size=3)
+```
+
+
+
+
+## Ahora se desarrolla el topic
+
+
+```{r}
+library(stm)
+hawai_matrix<-hawai_words%>%
+  group_by(word)%>%
+  filter(total_words>1)%>%
+  cast_sparse(line, word, total_words)
+
+topic_model_1 <- stm(hawai_matrix,
+                     K = 2,
+                     verbose = TRUE,
+                     init.type = "Spectral",
+                     emtol = 5)
+
+topic_model_1
+
+```
+
+
+
+```{r}
+tidy(topic_model_1) %>%
+  filter(topic=='1')%>%
+  filter(!term %in% stop_words_es)%>%
+  filter(!term %in% c('va','na'))%>%
+  group_by(topic) %>%
+  top_n(12, beta) %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~ topic, scales = "free_y")
+```
+```{r}
+hawai_words
+```
+
+
+```{r}
+
+topic_model_gamma <- tidy(topic_model_1, matrix = "gamma") %>%
+  mutate(lines = rownames(hawai_matrix)[document]) 
+
+topic_model_gamma %>%
+  group_by(topic) %>%
+  top_n(1, gamma)%>%
+  left_join(hawai_words,by=c('document'='line'))%>%
+  filter(total_words==max(total_words))
+```
+
+
+```{r}
+hawai_dtm<-hawai_words%>%
+  group_by(word)%>%
+  filter(total_words>1)%>%
+  cast_dtm(line, word, total_words)
+```
+
+
+
+## Latent Dirichlet allocation
+
+```{r}
+hawai_lda <- LDA(hawai_dtm, k = 2, control = list(seed = 1234))
+hawai_topics <- tidy(hawai_lda, matrix = "beta")
+hawai_topics <- hawai_topics%>%
+  arrange(desc(beta))%>%
+  filter(!term %in% stop_words_es)%>%
+  filter(!term %in% c('va','na','pa'))
+
+hawai_topics
+```
+
+```{r}
+hawai_top_terms<-hawai_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+hawai_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+
+```{r}
+beta_spread <- hawai_top_terms %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .0001 | topic2 > .0001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+beta_spread%>%
+  na.omit()
+```
+
+```{r}
+hawai_documents <- tidy(hawai_lda, matrix = "gamma")
+hawai_documents
+```
+
+
+```{r}
+hawai_documents %>%
+  mutate(title = reorder(document, gamma * topic)) %>%
+  ggplot(aes(factor(topic), gamma)) +
+  geom_boxplot() +
+  facet_wrap(~document)
+```
+
+```{r}
+hawai_documents %>%
+  group_by(topic) %>%
+  top_n(1, gamma) %>%
+  ungroup()
+```
+## tagging
+
+```{r}
+hawai_documents%>%
+  ungroup()%>%
+  group_by(topic)%>%
+  summarize(tagg=max(gamma))
+```
+
+```{r}
+topic_model_gamma <- tidy(hawai_lda, matrix = "gamma")%>%
+  left_join(hawai_words%>%
+              mutate(line=as.character(line)),by=c('document'='line'))%>%
+  filter(gamma==max(gamma))%>%
+  filter(!word %in% c('na','va','pa','vea','puede'))
+
+topic_model_gamma%>%
+  group_by(topic)%>%
+  filter(total_words==max(total_words))%>%
+  head(2)%>%
+  mutate(tagging=paste(word[1],word[2]))%>%
+  select(-word)%>%
+  head(1)
+```
+

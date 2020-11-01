@@ -1,0 +1,81 @@
+---
+title: "Introducción al Análisis de texto"
+subtitle: "Text Mining"
+author: "Daniel Jiménez M."
+date: "`r format(Sys.time(), '%d -%m -%Y')`"
+institute: "Universidad Nacional de Colombia"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "beaver"
+    #incremental: true
+    slide_level: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Bibliográfia
+
+* Ingo Feinerer, [**Introduction to the tm Package**](https://cran.r-project.org/web/packages/tm/vignettes/tm.pdf), 2019, CRAN.
+
+* Julia Silge & David Robinson, [**Text Mining with R**](https://www.tidytextmining.com/), 2020, O'Reilly.
+
+* Christopher D. Manning, [**Foundations os Statistical Natuale Lenguaje Processing**](cs.vassar.edu/~cs366/docs/Manning_Schuetze_StatisticalNLP.pdf), 1999, MIT.
+
+* Ted Kwartler, [**Text Mining in Practice with R**](https://www.amazon.com/-/es/Ted-Kwartler/dp/1119282012), 2017, Wiley.
+
+
+## Requisitos para la clase 
+
+Para esta clase es necesario que tengan instaladas y funcionales las siguientes liberías:
+
+```{r, eval=FALSE}
+library(tidyverse) # Manipulación de datos
+library(tidytext) # Manipulación de textos
+library(tm) #  Procesamiento de mega-data y creación de corpus
+library(topicmodels) # Agrupación de textos por tema
+library(wordcloud) # Nube de palabras
+```
+
+
+
+## ¿Qué es el Text Mining?
+
+Es un área de la ciencia de datos que estudia los documentos de naturaleza texto (Datos no estructurados), en el cual se explora su naturaleza, patrones, contenido y sentido.
+
+## ¿Qué es el Text Mining?
+
+Los objetivos del `text mining` son :
+
+* Comprender la naturaleza de los documentos;
+* Esta comprensión se basa en patrones estadísticos;
+* Con base a los elementos estadísticos se deben encontran patrones no evidentes entre los datos.
+
+## ¿Qué es el Text Mining?
+
+Para poder desarrollar Text Mining hay que comprender que este proceso se divide generalmente en tres capas:
+
+* Análisis de documentos;
+* Topic Modelling;
+* Machine Learning 
+
+## Análisis de documentos
+
+Para entender un poco esta parte, se desarrollará un ejemplo y sobre el definiremos los pasos que se implementaron para llegar a esta conclusión.
+
+El ejemplo será analizar la canción *Hawai* de Maluma, en el repositorio, en la sección `Bases de Datos`
+
+
+
+
+
+
+
+
+
+
+
+
+
