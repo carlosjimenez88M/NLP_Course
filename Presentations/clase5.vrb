@@ -1,0 +1,13 @@
+\frametitle{Hawai en Text Mining}
+\protect\hypertarget{hawai-en-text-mining-23}{}
+
+Y ahora tenemos el tagging gracias a \texttt{beta} y \texttt{gamma}
+
+\begin{verbatim}
+## # A tibble: 1 x 5
+## # Groups:   topic [1]
+##   document topic gamma total_words tagging
+##   <chr>    <int> <dbl>       <int> <chr>
+## 1 10           1 0.999           4 haga falta
+\end{verbatim}
+

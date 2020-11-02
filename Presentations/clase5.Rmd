@@ -607,3 +607,46 @@ hawai_top_terms %>%
 ## Contexto
 
 Latent Dirichlet allocation, es una técnica que permite agrupar los datos en grupos en grupos que tienen una explicación no observable, en este caso tópicos.
+
+## Hawai en Text Mining
+
+Evaluamos los topics candidatos
+
+
+```{r, echo=FALSE}
+beta_spread <- hawai_top_terms %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .0001 | topic2 > .0001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+beta_spread%>%
+  na.omit()
+```
+## Hawai en Text Mining
+
+Y ahora tenemos el tagging gracias a `beta` y `gamma`
+
+```{r, echo=FALSE}
+hawai_documents <- tidy(hawai_lda, matrix = "gamma")
+topic_model_gamma <- tidy(hawai_lda, matrix = "gamma")%>%
+  left_join(hawai_words%>%
+              mutate(line=as.character(line)),by=c('document'='line'))%>%
+  filter(gamma==max(gamma))%>%
+  filter(!word %in% c('na','va','pa','vea','puede'))
+
+topic_model_gamma%>%
+  group_by(topic)%>%
+  filter(total_words==max(total_words))%>%
+  head(2)%>%
+  mutate(tagging=paste(word[1],word[2]))%>%
+  select(-word)%>%
+  head(1)
+```
+## Contexto
+
+* Beta en text mining : La probabilidad de que una palabra pertenezca a un topic
+
+* Gamma en text mining : La probabilidad de cada documento por tema.
+
+
