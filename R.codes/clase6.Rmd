@@ -1,0 +1,284 @@
+---
+title: "Analisis de sentimiento Kalmanovitz"
+author: "ER"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### librerias para textmining
+
+
+#tm para text mining 
+
+
+#Wordcloud para la nube de palabras
+
+#RColorBrewerpara paletas de colores
+
+#syuzhet  para el analisis de sentimiento
+
+#ggplot2 para hacer las graficas
+
+
+
+## Librerias a instalar
+```{r}
+
+
+
+install.packages("tm")  
+install.packages("SnowballC") 
+install.packages("wordcloud") 
+install.packages("RColorBrewer") 
+install.packages("syuzhet") 
+install.packages("ggplot2") 
+
+```
+
+## Librerias a cargar
+
+```{r}
+
+
+
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+library("syuzhet")
+library("ggplot2")
+library(tidyverse)
+library(widyr)
+library(ggraph)
+library(tidygraph)
+
+```
+
+# leer pdf y cargarlo en un df sobre el libro de kalmanovitz
+
+```{r}
+library(pdftools)
+libroKalmanovitz <- pdftools::pdf_text(pdf = "https://www.researchgate.net/profile/Oscar_Hernan_Goyes2/publication/271767229_Salomon_Kalmanovitz_economista_su_aporte_al_pensamiento_economico_colombiano/links/54d120cb0cf28370d0e01823/Salomon-Kalmanovitz-economista-su-aporte-al-pensamiento-economico-colombiano.pdf")%>%
+     strsplit(split = "\r\n")%>%
+    unlist()%>%
+    tbl_df()
+
+libroKalmanovitz3 <- libroKalmanovitz[107:5855,]
+
+#recortar el libro
+libroKalmanovitz2 <- libroKalmanovitz[1:2000,]
+
+# Load the data as a corpus
+TextDoc <- Corpus(VectorSource(libroKalmanovitz3))
+## para ver nuestro corpus es decir una matrix de 1 x n con caracteristicas
+TextDoc%>%
+    inspect()
+head(libroKalmanovitz,100)
+```
+
+### Empezamos la limpieza de los datos 
+
+La parte inicial de toda limpieza de datos es quitar caracteres especiales como / , @ | etc y reemplazarlo con espacios, paso seguido quitamos todo el ruido blanco, es decir mas de un espacio junto, y finalmente convertimos todo a minuscula.
+
+
+
+```{r}
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+TextDoc <- tm_map(TextDoc, toSpace, "/")
+TextDoc <- tm_map(TextDoc, toSpace, "@")
+TextDoc <- tm_map(TextDoc, toSpace, "\\|")
+# converir a miniuscilas
+TextDoc <- tm_map(TextDoc, content_transformer(tolower))
+
+# remover las stopwords
+TextDoc <- tm_map(TextDoc, removeWords, stopwords("spanish"))
+
+# Remover las puntuaciones
+TextDoc <- tm_map(TextDoc, removePunctuation)
+# eliminar los espacios en blanco
+TextDoc <- tm_map(TextDoc, stripWhitespace)
+
+```
+# luego de limpiar los datos, el siguiente paso es contar la frecuencia con la que aparecen cada palabra, con el fin de identificar patrones y tendencias.
+
+```{r}
+# constroimos una matriz
+TextDoc_dtm <- TermDocumentMatrix(TextDoc)
+dtm_m <- as.matrix(TextDoc_dtm)
+# por frecuencia decendente
+dtm_v <- sort(rowSums(dtm_m),decreasing=TRUE)
+dtm_d <- data.frame(word = names(dtm_v),freq=dtm_v)
+# 
+#head(dtm_d, 5)
+top_30<-dtm_d%>%
+    filter(!word %in% c('kalmanovitz'))%>%
+    head(9000)%>%
+    mutate(line=row_number())
+
+```
+
+
+```{r}
+
+ 	
+# Plot tde las palabras mas frecuentes
+barplot(top_30[1:5,]$freq, names.arg = top_30[1:5,]$word,
+        col ="blue", main ="Top 5 most frequent words",
+        ylab = "Word frequencies")
+
+
+```
+
+
+## realizemos una nube de palabras
+
+
+```{r}
+
+ 	
+
+set.seed(1234)
+wordcloud(words = top_30$word, freq = top_30$freq, min.freq = 5,
+          max.words=100, random.order=FALSE, rot.per=0.40, 
+          colors=brewer.pal(9, "Dark2"))
+
+
+```
+
+
+#analisis de sentimiento 
+los sentimientos pueden ser clasificados como positivos, negativos o neutrales. sin embargo tambien los podemos expresar  en una escala numerica, para expresar de una mejor manera la intensidad de un sentimiento positvo o negativo en un bloque de texto.
+
+
+el ejercicio que vamos a realizar contiene el paquete de Syuzhet para generar lo mas cercano posible a unas puntuaciones de sentimimiento, usaremos este pakete porque contiene cuatro diccionarios de sentimientos junto a sus metodos de acceso para su extraccion desarrollados por el grupo de procesamiento de lenguaje natural de Stanford.
+
+
+
+```{r}
+
+
+
+textl<-as.vector(top_30$word)
+syuzhet_vector <- get_sentiment(textl, method="syuzhet")
+
+
+# bing
+bing_vector <- get_sentiment(textl, method="bing")
+head(bing_vector)
+summary(bing_vector)
+#affin
+afinn_vector <- get_sentiment(textl, method="afinn")
+head(afinn_vector)
+summary(afinn_vector)
+
+
+ 	
+#comparar medinte sign
+rbind(
+  sign(head(syuzhet_vector)),
+  sign(head(bing_vector)),
+  sign(head(afinn_vector))
+)
+
+
+ 	
+
+d<-get_nrc_sentiment(textl,language = "spanish")
+
+
+#transpose
+td<-data.frame(t(d))
+td_new <- data.frame(rowSums(td))
+#limpieza
+names(td_new)[1] <- "count"
+td_new <- cbind("sentiment" = rownames(td_new), td_new)
+rownames(td_new) <- NULL
+td_new2<-td_new
+#Plot 
+quickplot(sentiment, data=td_new2, weight=count, geom="bar", fill=sentiment, ylab="cantidad")+ggtitle("sentimientos")
+
+```
+
+
+```{r}
+#Plot 
+barplot(
+  sort(colSums(prop.table(d[, 1:8]))), 
+  horiz = TRUE, 
+  #cex.names = 0.7, 
+  las = 1, 
+  main = "Emotions en el libro", xlab="Prcentaje"
+)
+```
+
+
+
+barplot de las palabras mas usadas con pipe
+
+```{r}
+library(tidytext)
+stopwords('spanish')->stop_words  ##asignar el diccionario
+libroKalmanovitz%>%
+    unnest_tokens(word,value)%>%
+    count(word,sort = TRUE)%>%
+    filter(!word %in% stop_words,
+           !word %in% c('kalmanovitz','muñoz','parte'))%>%
+    top_n(10,n)%>%
+    mutate(word=fct_reorder(word,n))%>%
+    ggplot(aes(n,
+               word,
+               fill=n))+
+    geom_col(show.legend = FALSE)
+```
+
+# barplot de las palabras menos usadas 
+
+```{r}
+libroKalmanovitz%>%
+    unnest_tokens(word,value)%>%
+    count(word,sort = TRUE)%>%
+    filter(!word %in% stop_words,
+           !word %in% stop_words2,
+           !word %in% c('kalmanovitz','muñoz','parte'))%>%
+    tail(30)%>%
+    mutate(word=fct_reorder(word,n))%>%
+    ggplot(aes(n,
+               word,
+               fill=n))+
+    geom_col(show.legend = FALSE)
+```
+
+```{r}
+stopwords2 <- c("kalmanovitz","parte","muñoz","oscar","hernan","según","ver","bien","ser","sino", "ahora", "lugar", "etc","volverlo","entonces","cierta","dos","sino","salomon","asi","ohmg","aún","modo","general","vez","gran","caso","cada","vgr","graciarena","tal","mediante","debe","mismo","base","aqui","tres","así","dentro","salomón","")
+```
+
+
+
+#mapa de red de las ideas principales
+
+```{r}
+#library(tidygraph)
+
+top_30%>%
+    filter(!word %in% stop_words,
+           !word %in% stopwords2,
+           )%>%
+   pairwise_cor(word,freq, sort=TRUE)%>%
+   filter(correlation<1)%>%
+  top_n(10)
+    #filter(item1=='capitalismo')%>%
+    as_tbl_graph()%>%
+    ggraph(layout = 'fr')+
+    geom_edge_link(aes(edge_alpha=correlation))+
+    geom_node_point()+
+    geom_node_text(aes(label=name),check_overlap = TRUE,vjust=1,hjust=1,size=3)+
+    labs(title = 'Ideas principales de Kalmanovitz')
+    
+```
+
+
+
