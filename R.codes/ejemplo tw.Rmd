@@ -1,0 +1,184 @@
+---
+title: "Ejercicio Text mining"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,message = FALSE)
+```
+
+
+
+```{r}
+library(rtweet)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+
+
+
+```{r}
+API_key<-'cKnxoRUJ4YeS1FduEhIFaKvzD'
+API_secret_key<-'M31pqx77aHaxGD1RK8YxJygbYmqW7sZyCCPWRJthgVs6MxsUX6'
+token<-'303456920-YYlC3tlx1lqqHyoGxebKThfhPkdqb4Banf820mm3'
+secret_token<-'MFRjfnhfFvEGPh7DZ5CnacRQmGMuOoygYeUgqkBJ7yRhd'
+twitter_app <-'ChiperNLP'
+
+create_token(
+  app             = twitter_app,
+  consumer_key    = API_key,
+  consumer_secret = API_secret_key,
+  access_token    = token,
+  access_secret   = secret_token)
+
+```
+
+
+```{r}
+muertes <- search_tweets("muertes a lideres", n = 1000, include_rts = FALSE, lang="es", geocode =  "4.6097102,-74.081,749km")
+```
+
+```{r}
+muertes
+limpiar_texto<-function(texto){
+  texto <- gsub("(RT|via)((?:\\b\\W*@\\w+)+)", "", texto)
+  texto <- gsub("@\\w+", "", texto)
+  texto <-  gsub("\\bhttp[a-zA-Z0-9]*\\b", "", texto)
+  texto <- gsub("[^a-zA-Z ]", "", texto)
+  texto <- gsub("[[:punct:]]", "", texto)
+  texto <- gsub("amp ", "", texto)
+  texto <-  gsub("\\btco[a-zA-Z0-9]*\\b", "", texto)
+  texto <- texto[!is.na(texto)]
+  texto <- iconv(texto, 'UTF-8', 'ASCII')
+  texto <- gsub("^\\s+|\\s+$", "", texto)
+  texto <- tolower(texto)
+  return(texto)
+}
+
+textos_limpios<-limpiar_texto(muertes$text)
+textos_limpios%>%
+  head(15)
+```
+
+
+```{r}
+textos_limpios
+muertes$text<-textos_limpios
+muertes%>%
+  head()
+```
+
+¿De qué dispositivo tw sobre el tema buscado?
+
+```{r}
+muertes%>%
+  group_by(source)%>%
+  count(sort = TRUE)%>%
+  ungroup()%>%
+  mutate(perc=n/sum(n))
+```
+
+```{r}
+mt<-muertes%>%
+  group_by(screen_name)%>%
+  count(sort=TRUE)
+sum(mt$n)
+```
+
+
+```{r}
+muertes%>%
+  group_by(source)%>%
+  summarize(avg=mean(display_text_width),
+            median=median(display_text_width),
+            p25=quantile(display_text_width)[2],
+            p75=quantile(display_text_width)[5])%>%
+  mutate(source=fct_reorder(source,median))%>%
+  ggplot(aes(median,source))+
+  geom_errorbar(aes(xmin=p25,xmax=p75))+
+  geom_point(aes(size=median))
+```
+
+```{r}
+muertes%>%
+  ggplot(aes(source,display_text_width))+
+  geom_boxplot()
+```
+
+
+
+```{r}
+muertes%>%
+  group_by(source,reply_to_screen_name)%>%
+  count(sort=TRUE)%>%
+  filter(!is.na(reply_to_screen_name))%>%
+  mutate(reply_to_screen_name=fct_reorder(reply_to_screen_name,n))%>%
+  ggplot(aes(fct_reorder(reply_to_screen_name,n),n))+
+  geom_col(aes(fill=source))+
+  coord_flip()
+```
+
+
+
+
+```{r}
+muertes%>%
+  group_by(place_name)%>%
+  filter(!is.na(place_name))%>%
+  count(sort=TRUE)
+```
+
+
+## Análisis del texto
+
+
+```{r}
+
+bad_words<-stopwords::stopwords(language = 'spanish')
+
+muertes_words<-muertes%>%
+  unnest_tokens(word,text)%>%
+  select(screen_name,word)%>%
+  add_count(word, name = 'Total_words')%>%
+  filter(!word %in% bad_words)%>%
+  arrange(desc(Total_words))%>%
+  filter(Total_words>10)
+
+```
+
+
+
+```{r}
+muertes_words%>%
+  distinct(word,.keep_all = TRUE)%>%
+  mutate(word=fct_reorder(word,Total_words))%>%
+  ggplot(aes(Total_words,word,color=word))+
+  geom_vline(xintercept = mean(muertes_words$Total_words), linetype='dashed', size=2, col='grey')+
+  geom_errorbar(aes(xmin=mean(muertes_words$Total_words),xmax=Total_words, width=0))+
+  geom_point(aes(size=Total_words),show.legend = FALSE)+
+  theme_classic()
+```
+
+```{r}
+muertes_bigram<-muertes%>%
+  select(screen_name,text)%>%
+  unnest_tokens(ngram,text,token = 'ngrams',n=2)
+```
+
+
+
+```{r}
+muertes_bigram%>%
+  separate(ngram,sep = ' ',into = c('w1','w2'))%>%
+  filter(!w1 %in% bad_words)%>%
+  filter(!w2 %in% bad_words)%>%
+  count(w1,w2, sort = TRUE)%>%
+  unite("bigram",w1,w2,sep = ' ')%>%
+  top_n(10)%>%
+  mutate(bigram=fct_reorder(bigram,n))%>%
+  ggplot(aes(n,bigram))+
+  geom_col()
+```
+
+

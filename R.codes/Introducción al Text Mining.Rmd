@@ -15,12 +15,12 @@ library(tidytext) # Manipulación de textos
 library(tm) #  Procesamiento de mega-data y creación de corpus
 library(topicmodels) # Agrupación de textos por tema
 library(wordcloud) # Nube de palabras
-library(ggraph)
-library(ggrepel)
-library(widyr)
-library(stopwords)
-library(tidygraph)
-library(stm)
+library(ggraph) # Gráficos relacionales 
+library(ggrepel) # agregar palabras a gráficos
+library(widyr) # Datos trasnversaes 
+library(stopwords) # Remover palabras
+library(tidygraph) # Ordenar gráficso
+library(stm) # Crear los topics
 stop_words_es<-stopwords::stopwords(language = "spanish")
 ```
 
@@ -108,6 +108,69 @@ freq_words %>%
   geom_line(size = 1.1, alpha = 0.8, show.legend = FALSE) +
   labs(title = 'Relación en el uso de palabras con pendiente Negativa',
        subtitle = 'en la canción Hawai')
+```
+## Comentario aparte 
+
+¿Qué es una regresión lineal?
+
+```{r}
+iris%>%
+  ggplot(aes(Sepal.Length,Petal.Length))+
+  geom_point()+
+  geom_smooth()
+```
+El modelo lineal de toda la vida es 
+
+$$
+y=mx+b
+$$
+Para ver la correlación usamos el siguiente comando
+
+
+```{r}
+library(corrplot)
+cor(iris[,-5])%>%
+  corrplot(method = 'number')
+```
+
+modelo lineal
+
+```{r}
+modelo1<-lm(Petal.Length~Sepal.Length+Sepal.Width,data=iris)
+equatiomatic::extract_eq(modelo1,use_coefs = TRUE)
+```
+
+$$
+\operatorname{Petal.Length} = -2.52 + 1.78(\operatorname{Sepal.Length}) - 1.34(\operatorname{Sepal.Width}) + \epsilon
+$$
+
+
+
+```{r}
+Sepal.Length=6
+modelo1%>%
+  predict(Sepal.Length)
+```
+
+
+```{r}
+modelo1%>%
+  summary()
+```
+
+
+```{r}
+library(broom)
+tidy(modelo1)
+```
+```{r}
+boxplot(iris$Sepal.Length~iris$Species)
+```
+```{r}
+iris%>%
+  ggplot(aes(Sepal.Length))+
+  geom_histogram()+
+  geom_density()
 ```
 
 
@@ -219,6 +282,7 @@ hawai_ngram_filter
 ```{r}
 bigram_counts <- hawai_ngram_filter %>%
   count(word1, word2, sort = TRUE)
+
 bigram_counts
 ```
 
@@ -256,7 +320,8 @@ hawai_ngram%>%
   # filter(!word1 %in% stop_words_es)%>%
   # filter(!word2 %in% stop_words_es)%>%
   na.omit()%>%
-  count(word1, word2, sort = TRUE)
+  count(word1, word2, sort = TRUE)%>%
+  filter(word1=='no')
 ```
 
 
@@ -302,9 +367,34 @@ Ahora analicemos las correlaciones de las palabras
 
 
 ```{r}
+
 hawai_words%>%
   pairwise_cor(word,line,sort=TRUE, upper=FALSE)
 ```
+
+## Análisis de contexto
+
+```{r}
+word_counts<-hawai_words%>%
+  count(word,sort=TRUE)
+hawai_words%>%
+  pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
+  head(50)%>%
+  as_tbl_graph()%>%
+  inner_join(word_counts, by=c(name='word'))%>%
+  ggraph(layout  = 'fr')+
+  geom_edge_link(aes(edge_alpha=correlation, color=factor(correlation)))+
+  geom_node_point(aes(size=n))+
+  geom_node_text(aes(label=name), check_overlap = TRUE,
+                 hjust=1,
+                 vjust=1,
+                 size=3,
+                 color='black')+
+  theme(legend.position = 'none')
+```
+
+
+
 
 la palabra foto adquiere una nueva importancia 
 
@@ -312,7 +402,13 @@ la palabra foto adquiere una nueva importancia
 ```{r}
 hawai_words%>%
   pairwise_cor(word,line,sort=TRUE, upper=FALSE)%>%
-  filter(item1 == 'foto')
+  filter(item1 == 'mentirte')%>%
+  filter(!item2 %in% stop_words_es)%>%
+  mutate(correlation=abs(correlation))%>%
+  arrange(desc(correlation))%>%
+  mutate(item2=fct_reorder(item2,correlation))%>%
+  ggplot(aes(correlation,item2))+
+  geom_col()
 ```
 
 Ahora veamos como se contraponen con respecto a esta palabra
