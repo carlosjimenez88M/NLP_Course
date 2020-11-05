@@ -1,0 +1,707 @@
+---
+title: "Topic Modeling"
+author: "Daniel Jiménez M."
+date: "`r format(Sys.time(), '%d -%m -%Y')`"
+institute: "Universidad Nacional de Colombia"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "beaver"
+    #incremental: true
+    slide_level: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Bibliografía
+
+* Silge & Robinson, [Text Mining](https://www.tidytextmining.com/topicmodeling.html), 2020, CRAN
+
+* Fradejas, J.,[Estilometría y análisis de texto con R para filólogos](http://www.aic.uva.es/cuentapalabras/),2020,UVA.
+
+## Librerías 
+
+```{r}
+library(tidyverse)
+library(LaplacesDemon)
+library(tidytext)
+library(GGally)
+library(MASS)
+library(topicmodels)
+library(stopwords)
+theme_set(theme_classic())
+```
+
+
+## ¿Qué es topic modeling?
+
+Según Silge[^2]
+
+> 'Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for.'[^1]
+
+[^1]: https://www.tidytextmining.com/topicmodeling.html
+[^2]: Julia Silge es Científica de Datos y Software Engineer en Rstudio, los invito a visitar su Blog :https://juliasilge.com/
+
+## ¿Qué es topic modeling?
+
+Algunas definiciones útiles :
+
+* Modelado de temas ;
+* Es un identificador de documentos ;
+* Un clasificador de textos;
+* Modelos estadísticos que descubren los patrones en una colección de texto.
+
+## Latent Dirichlet Allocation (LDA)
+
+Para el `Topic Modeling` se suele usar el **Latent Dirichlet Allocation**, el cual consiste en un modelo que identifica patrones dentro de una colección de documentos y los agrupa con base a ellos. Estos modelos se basan en el entendimiento probabilístico de los datos, a través de parámetros jerárquicos Bayesianos . , donde modela el `input` a través de una mixtura subyacente de los topics.
+
+
+## Latent Dirichlet Allocation (LDA)
+
+
+![](../GIt_codes/maxresdefault.jpg)
+
+## Latent Dirichlet Allocation (LDA)
+
+Para lo anterior es necesario entender la siguiente formula:
+
+$$
+P(A|B)=\frac{P(B|A) P(A)}{P(B)}
+$$
+La anterior ecuación es la forma básica del calculo bayesiano de probabilidades. Para entenderlo mejor se desarrolla un ejemplo de Henrik Singmann.
+
+
+
+## Probabilidad Bayesiana
+
+¿Cuál es la probabilidad de ir al infiero, dado que se ha asociado con el demonio Laplace?
+
+Descompongamos esto
+
+* A $\Longrightarrow$ Infierno
+* B $\Longrightarrow$ Asociarse
+
+Entonces la ecuación Bayesiana queda así
+
+$$
+P(Infierno|Asociarse)=\frac{P(Asociarse|Infierno) P(Infierno)}{P(Asociarse)}
+$$
+
+
+
+## Probabilidad Bayesiana
+
+Pero Ojo!!!!!!!!!!!!!
+
+$$
+P(Infierno|Asociarse) \not = P(Asociarse|Infierno)
+$$
+
+Lo anterior se le conoce como la falacia de las probabilidades! Usted no lo haga, eso no es de DIOS!
+
+## Probabilidad Bayesiana
+
+Veamos lo anterior con datos:
+
+* 6 de 9 Personas fueron al infierno
+* 5 de 7 Personas fueron al cielo
+* 75% de las personas fueron al infierno
+* 25% de las personas fueron al cielo
+
+
+
+
+## Probabilidad Bayesiana
+
+
+* $P(Asociarse|Infierno) \Longrightarrow$ 6/9 = `r (6/9)` 
+* $P(Asociarse|Cielo) \Longrightarrow$ 5/7 = `r 5/7`
+* $P(Infierno)$ = 75%
+* $P(Cielo)$ = 25%
+
+## Probabilidad Bayesiana
+
+Finalmente la probabilidad de dicho evento es 
+
+$$
+P(Infierno|Asociarse)=\frac{(6/9)*(0.75)}{(6/9)*(0.75)+(5/7)*(0.25)} = 0.73
+$$
+
+
+## Probabilidad Bayesiana
+
+
+En código lo anterior es:
+
+```{r}
+PrA <- c(0.75,0.25)
+PrBA <- c(6/9, 5/7)
+BayesTheorem(PrA, PrBA)
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+
+Para poder generar es necesario trabajar con `tf-idf` que es la relación inversa y discriminada de los terminos que permite entender cuales son las palabras que más generan contexto dentro de un documento.
+
+## Latent Dirichlet Allocation (LDA)
+
+Entendiendo el LDA se puede decir que :
+
+* Seleccionar N palabra $\sim$ Poisson ($\mho$)
+
+* Seleccionar $\theta \sim \mbox{ } \alpha$ 
+
+* Siendo así N palabras dado $w_n$
+
+
+## Latent Dirichlet Allocation (LDA)
+
+
+Finalmente lo anterior se traduce en lo siguiente :
+
+$$
+p(\theta|\alpha) = \frac{\Gamma (\sum_i^k \alpha)}{\Pi_{i=1}^{k} \Gamma(\alpha_i)}\theta^{\sum_{i,n}^1\alpha_k}_{1}
+$$
+Con esto se desarrolla el modelo probabilistico de la siguiente manera
+
+$$
+p(D|\alpha,\beta)=\Pi_{d=1}^{m} \int p(\theta|\alpha) (\Pi_{n=1}^{N_d} \sum p(Z_{dn}|\theta_d)p(w_dn|z_nd \beta))d \theta_d
+$$
+
+
+## Latent Dirichlet Allocation (LDA)
+
+Un ejemplo del LDA con números seria el siguiente :
+
+Suponga el siguiente comportamiento de los datos 
+
+```{r, echo=FALSE}
+iris%>%
+  ggpairs(title = 'Iris Behavior', aes(fill=Species))
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Suponga que la probabilidad de previa es
+
+```{r}
+prior<-length(iris$Species[iris$Species=='versicolor'])/length(iris$Species)
+prior
+```
+
+
+## Latent Dirichlet Allocation (LDA)
+
+```{r, echo=FALSE, fig.height=8}
+par(mfcol = c(3, 4))
+for (k in 1:4) {
+  j0 <- names(iris)[k]
+  x0 <- seq(min(iris[, k]), max(iris[, k]), le = 50)
+  for (i in 1:3) {
+    i0 <- levels(iris$Species)[i]
+    x <- iris[iris$Species == i0, j0]
+    hist(x, proba = T, col = grey(0.8), main = paste("especie", i0),
+    xlab = j0)
+    lines(x0, dnorm(x0, mean(x), sd(x)), col = "red", lwd = 2)
+  }
+}
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Verificando con la prueba de normalidad
+
+```{r, echo=FALSE, fig.height=8}
+par(mfcol = c(3, 4))
+for (k in 1:4) {
+  j0 <- names(iris)[k]
+  x0 <- seq(min(iris[, k]), max(iris[, k]), le = 50)
+  for (i in 1:3) {
+    i0 <- levels(iris$Species)[i]
+    x <- iris[iris$Species == i0, j0]
+    qqnorm(x, main = paste(i0, j0), pch = 19, col = i + 1) 
+    qqline(x)
+  }
+}
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Aplicando el LDA
+
+```{r, fig.height=8}
+modelo_lda <- lda(Species ~ Sepal.Width + Sepal.Length + Petal.Length +
+                  Petal.Width, data = iris)
+modelo_lda
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+¿De donde sale el segundo grupo?
+
+```{r, echo=FALSE, fig.height=8}
+library(reshape2)
+library(knitr)
+datos_tidy <- melt(iris, value.name = "valor")
+kable(datos_tidy %>% group_by(Species, variable) %>% summarise(p_value_Shapiro.test = round(shapiro.test(valor)$p.value,5)))
+```
+## Latent Dirichlet Allocation (LDA)
+
+Notesé que la variable **petal.width** No se distribuye normal en la setosa ni en la versicolor.
+
+En la prueba shapiro, todos los p-values mayores a 0.05 indican que hay presencia de normalidad. En el caso contraario donde p-value es menor a 1-$\alpha$ (0.05) indica que la distribución no es normal.
+
+
+## Latent Dirichlet Allocation (LDA)
+
+Ahora un ejemplo con noticias[^3]
+
+
+```{r}
+data("AssociatedPress")
+AssociatedPress
+```
+
+
+[^3]:https://www.tidytextmining.com/topicmodeling.html
+
+
+
+
+## Latent Dirichlet Allocation (LDA)
+
+```{r}
+ap_lda <- LDA(AssociatedPress, k = 4, control = list(seed = 1234))
+ap_lda
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Ahora calculamos la probabilidad de pertenecer a un topic de cada palabra
+
+```{r}
+ap_topics <- tidy(ap_lda, matrix = "beta")
+ap_topics%>%
+  filter(!term %in% stopwords(language = 'en'))%>%
+  arrange(desc(beta))%>%
+  head()
+```
+## Latent Dirichlet Allocation (LDA)
+
+Ahora Evaluemos los topics 
+
+
+```{r, echo=FALSE}
+ap_top_terms <- ap_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+
+## Latent Dirichlet Allocation (LDA)
+
+Ahora trabajemos sobre la mixtura de los documentos.
+
+
+```{r}
+ap_documents <- tidy(ap_lda, matrix = "gamma")
+ap_documents%>%
+  arrange(desc(gamma))%>%
+  head()
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Lo anterior significa que gracias a la `Gamma` podemos decir que documentos tienen la inclusión de las palabras dentro de su tópico.
+
+
+
+## Latent Dirichlet Allocation (LDA)
+
+Veamos esto con un ejemplo sencillo: Comparemos dos canciones: 
+
+* Systema Solar : El botón del pantalón
+* J balvin : Rojo.
+
+
+## Latent Dirichlet Allocation (LDA)
+
+¿Quién usa más palabras en las canciones?
+
+```{r, echo=FALSE, fig.height=4}
+boton <-read.csv('../Bases_de_datos/ss.txt',header = F,sep = ';')
+rojo <- read.csv('../Bases_de_datos/jb.txt',header = F,sep = ';')
+
+boton<-boton%>%
+  tbl_df()%>%
+  rename(Letra=V1)%>%
+  mutate(line=row_number())%>%
+  mutate(cantante='Systema Solar')
+
+rojo<-rojo%>%
+  tbl_df()%>%
+  rename(Letra=V1)%>%
+  mutate(line=row_number())%>%
+  mutate(cantante='J Balvin')
+
+canciones<-bind_rows(boton,rojo)
+canciones_palabras<-canciones%>%
+  unnest_tokens(word,Letra)%>%
+  count(cantante,word,sort = TRUE)%>%
+  filter(!word %in% stopwords(language = 'spanish'),
+         !word %in% c('oh'))
+total_words <- canciones_palabras %>%
+  group_by(cantante) %>%
+  summarize(total = sum(n))
+
+canciones_words <- left_join(canciones_palabras, total_words)
+canciones_words%>%
+  ggplot(aes(n/total, fill=cantante))+
+  geom_histogram(show.legend = FALSE,bins = 8)+
+  facet_wrap(~cantante)
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Palabras que generan los contextos de las canciones 
+
+```{r, echo=FALSE, fig.height=4}
+songs_tf_idf <- canciones_words %>%
+  bind_tf_idf(word, cantante, n)
+
+songs_tf_idf %>%
+  arrange(desc(tf_idf)) %>%
+  mutate(word = factor(word, levels = rev(unique(word)))) %>%
+  group_by(cantante) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  ggplot(aes(word, tf_idf, fill = cantante)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~cantante, ncol = 2, scales = "free") +
+  coord_flip()+
+  labs(title = 'Análisis TF-IDF',
+       subtitle = 'Systema Solar - JBalvin')
+```
+
+## Latent Dirichlet Allocation (LDA)
+
+Ahora veamos esto desde un bigram
+
+```{r, echo=FALSE, fig.height=4}
+canciones_bigrams <- bind_rows(boton,rojo) %>%
+  unnest_tokens(bigram, Letra, token = "ngrams", n = 2)%>%
+  filter(!is.na(bigram))
+bigrams_separated <- canciones_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stopwords(language = 'spanish')) %>%
+  filter(!word2 %in% stopwords(language = 'spanish'))
+
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+bigram_tf_idf <- bigrams_united %>%
+  count(cantante, bigram) %>%
+  bind_tf_idf(bigram, cantante, n) %>%
+  arrange(desc(tf_idf))
+
+bigram_counts <- bigrams_filtered %>%
+  count(word1, word2, sort = TRUE)
+
+bigram_tf_idf%>%
+  mutate(cantante=as.factor(cantante),
+         bigram=reorder_within(bigram,tf_idf,cantante))%>%
+  ggplot(aes(tf_idf,bigram,fill=cantante))+
+  geom_col(show.legend = FALSE)+
+  facet_wrap(~cantante, scales = 'free')+
+  scale_y_reordered()
+```
+## Latent Dirichlet Allocation (LDA)
+
+Ahora omita que sabe quien canta que y hagamos un corpus con las dos canciones  e identifiquemos los grupos
+
+
+```{r, echo=FALSE, fig.height=4}
+library(stm)
+library(tm)
+canciones_dtm<-bind_rows(boton,rojo)%>%
+  unnest_tokens(word, Letra) %>%
+  count(cantante, word) %>%
+  cast_dtm(cantante, word, n)
+canciones_lda<-LDA(canciones_dtm,k = 2,control = list(seed=1234))
+canciones_topics <- tidy(canciones_lda, matrix = "beta")
+canciones_topics<-canciones_topics%>%
+  filter(!term %in% stopwords(kind = 'spanish'))
+
+ap_top_terms <- canciones_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+## Latent Dirichlet Allocation (LDA)
+
+Evaluemos a donde pertenecen más las palabras
+
+
+```{r, echo=FALSE, fig.height=4}
+beta_spread <- canciones_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .001 | topic2 > .001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+beta_spread%>%
+  mutate(term=fct_reorder(term,log_ratio))%>%
+  head(30)%>%
+  ggplot(aes(log_ratio,term,fill=log_ratio>0))+
+  geom_col(show.legend = FALSE)
+
+```
+
+
+## Latent Dirichlet Allocation (LDA)
+
+Ahora usemos una `gamma` para saber a que topic corresponde cada documento
+
+```{r}
+canciones_documents <- tidy(canciones_lda, matrix = "gamma")
+canciones_documents%>%
+  group_by(topic)%>%
+  top_n(1)
+```
+## Latent Dirichlet Allocation (LDA)
+
+```{r, fig.height=4, echo=FALSE}
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+## NER
+
+Named Entity Recognition : Una entidad o palabra que hace referencia a un nombre propio.
+
+## NER
+
+```{r}
+canciones_lda<-LDA(canciones_dtm,k = 2,method = 'Gibbs',control = list(seed=1234,iter=500, thin=1))
+```
+
+Notese que ahora :
+
+* Hacemos 500 iteracciones ;
+* Thin=1 devielve el resuldato de cada paso
+* Gibbs = Es un método de muestreo basado en Monte carlo!
+
+## NER
+
+```{r}
+tidy(canciones_lda,"gamma")%>%
+  spread(topic,gamma)
+```
+## NER
+
+El contexto de una entidad está representado por una ventana de palabras.
+
+* Estas palabras por lo general se encuentran en mayúsculas.
+
+* O tienen caracteres especiales 
+
+* Para encontrar las entidades usamos expresiones regulares.
+
+## NER
+
+
+```{r, fig.height=4}
+patron<-"[A-Z][a-z]+"
+boton_pull<-boton%>%
+  pull(Letra)%>%
+  paste(collapse = " ")
+
+boton_pull
+```
+
+
+
+## NER
+
+```{r}
+m <- gregexpr(patron, boton_pull)
+v <- unlist(regmatches(boton_pull, m))
+v
+```
+
+## NER
+
+Ahora veamos donde se usan las entidades
+
+```{r}
+text<-gsub(v, "", boton_pull)%>%
+  tbl_df()%>%
+  unnest_tokens("sentences",token = 'sentences',value)
+text
+```
+
+
+## NED
+
+Se generan las reglas y se extraen las entidades.
+
+```{r, echo=FALSE}
+p <- "\\1_L1 \\2_L2 \\3_R1 \\4_R2"
+context <- gsub("([a-z]+) ([a-z]+) ([a-z]+) ([a-z]+)", p, v)
+re_match <-  gregexpr(patron, v)
+doc_id <- unlist(regmatches(v, re_match))
+
+boton%>%
+  mutate(NER=gregexpr(patron, Letra))%>%
+  mutate(Entity=regmatches(Letra,NER))%>%
+  unnest(Entity)%>%
+  dplyr::select(-c(line:NER))
+```
+
+
+## NER
+
+Ahora generamos una clasificación 
+
+```{r, echo=FALSE}
+boton_ner<-boton%>%
+  mutate(NER=gregexpr(patron, Letra))%>%
+  mutate(Entity=regmatches(Letra,NER))%>%
+  unnest(Entity)%>%
+  dplyr::select(-c(line:NER))
+corpus2 <- boton_ner %>% 
+  group_by(Entity) %>% 
+	summarize(doc = paste(Letra, collapse = " "))
+dtm <- corpus2 %>% unnest_tokens(input = doc, output = word) %>% 
+	count(Entity, word) %>% 
+	cast_dtm(document = Entity, term = word, value = n)
+
+
+mod <- LDA(x = dtm, k = 3, method = "Gibbs", 
+          control=list(alpha = 1, seed = 12345, iter = 1000, thin = 1))
+
+topics <- tidy(mod, matrix="gamma") %>% 
+	spread(topic, gamma)
+
+topics%>%
+  head()
+```
+Esto nos indica que el topic 1 es de acciones personales, el segundo es proposición y el último es de acciones.
+
+
+
+## NER 
+
+Ahora se crea un modelo que intente generar los topics 
+
+```{r}
+r <- sample.int(n=nrow(corpus2), size=20, replace=FALSE) # Una muestra sin reemplazo
+train_dtm <- corpus2[-r, ] %>% unnest_tokens(input=doc, output=word) %>% 
+  count(Entity, word) %>% 
+  cast_dtm(document=Entity, term=word, value=n)
+
+```
+
+## NER
+Se genera el modelo
+```{r}
+train_mod <- LDA(x=train_dtm, k=3, method="Gibbs",
+                control=list(alpha=1, seed=10001,
+                             iter=1000, thin=1))
+```
+
+
+## NER
+
+Después con una parte del documento que no se ha visto se genera el output del modelo y se valida.
+
+```{r, echo=FALSE}
+set.seed(12345)
+r <- sample.int(n=nrow(corpus2), size=20, replace=FALSE)
+model_vocab <- tidy(train_mod, matrix="beta") %>% 
+  dplyr::select(term) %>% distinct()
+test_table <- corpus2[r, ] %>% unnest_tokens(input=doc, output=word) %>% 
+  count(Entity, word) %>%
+  right_join(model_vocab, by=c("word"="term"))
+test_dtm <- test_table %>% 
+  arrange(desc(Entity)) %>% 
+  mutate(doc_id = ifelse(is.na(Entity), first(Entity), Entity),
+         n = ifelse(is.na(n), 0, n)) %>% 
+  cast_dtm(document=Entity, term=word, value=n)
+results <- posterior(object=train_mod, newdata=test_dtm)
+results$topics
+```
+
+## Determinar el # Optimo de Topics
+
+Hay dos formas de hacerlo:
+
+* Ajustar un modelo e inspeccionar las palabras que se le asignaron a los topics,  y decidir si tienen sentido -> Lo más probable para la JEP
+
+* Medidas cuantitativas de ajuste:
+  + Probabilidad logarítmica
+  + Perplejidad
+  
+## Determinar el # Optimo de Topics
+
+Para el último caso es recomendable usar una probabilidad logarítmica
+
+```{r}
+perplexity(object=train_mod, newdata=test_dtm)
+```
+
+## Determinar el # Optimo de Topics
+
+Para hallar k usamos la siguiente iteracción, y seleccionamos donde se produce un punto de quiebre en la gráfica
+
+```{r}
+model_log<-numeric(20)
+model_perp<-numeric(20)
+for (i in 2:20){
+  modelo<-LDA(train_dtm,k=i,method = 'Gibbs',
+              control = list(alpha=0.5,iter=100,seed=1234,thin=1))
+  model_log[i]=logLik(modelo)
+  model_perp[i]<-perplexity(modelo,test_dtm)
+}
+```
+
+## Determinar el # Optimo de Topics
+
+
+```{r, fig.height=4}
+k<-1:20
+plot(x=k, y=model_perp, xlab="number of clusters, k", 
+     ylab="perplexity score", type="o",xlim = c(1,20))
+axis(side = 1, at=1:20)
+```
+

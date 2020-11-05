@@ -1,0 +1,375 @@
+---
+title: "Topic modeling"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(GGally)
+library(MASS)
+library(topicmodels)
+library(stopwords)
+library(widyr)
+library(stm)
+library(tm)
+theme_set(theme_classic())
+```
+
+## Cargar base de datos 
+
+```{r}
+boton <-read.csv('../Bases_de_datos/ss.txt',header = F,sep = ';')
+rojo <- read.csv('../Bases_de_datos/jb.txt',header = F,sep = ';')
+
+boton<-boton%>%
+  tbl_df()%>%
+  rename(Letra=V1)%>%
+  mutate(line=row_number())%>%
+  mutate(cantante='Systema Solar')
+
+rojo<-rojo%>%
+  tbl_df()%>%
+  rename(Letra=V1)%>%
+  mutate(line=row_number())%>%
+  mutate(cantante='J Balvin')
+```
+
+
+
+
+## Se crea una matriz 
+
+
+```{r}
+canciones<-bind_rows(boton,rojo)
+canciones_palabras<-canciones%>%
+  unnest_tokens(word,Letra)%>%
+  count(cantante,word,sort = TRUE)%>%
+  filter(!word %in% stopwords(language = 'spanish'),
+         !word %in% c('oh'))
+
+canciones_palabras
+```
+
+```{r}
+total_words <- canciones_palabras %>%
+  group_by(cantante) %>%
+  summarize(total = sum(n))
+```
+```{r}
+canciones_words <- left_join(canciones_palabras, total_words)
+```
+Evaluemos la distribución del uso de palabras por cantante
+
+```{r}
+canciones_words%>%
+  ggplot(aes(n/total, fill=cantante))+
+  geom_histogram(show.legend = FALSE,bins = 8)+
+  facet_wrap(~cantante)
+```
+
+Ahora el clásico tf_idf
+
+```{r}
+songs_tf_idf <- canciones_words %>%
+  bind_tf_idf(word, cantante, n)
+
+songs_tf_idf
+```
+
+```{r}
+library(tidyverse)
+songs_tf_idf%>%
+  arrange(desc(tf_idf))
+```
+
+
+
+```{r}
+songs_tf_idf %>%
+  arrange(desc(tf_idf)) %>%
+  mutate(word = factor(word, levels = rev(unique(word)))) %>%
+  group_by(cantante) %>%
+  top_n(15) %>%
+  ungroup() %>%
+  ggplot(aes(word, tf_idf, fill = cantante)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~cantante, ncol = 2, scales = "free") +
+  coord_flip()
+```
+
+
+
+Y un poco de bigram
+
+
+```{r}
+canciones_bigrams <- bind_rows(boton,rojo) %>%
+  unnest_tokens(bigram, Letra, token = "ngrams", n = 2)%>%
+  filter(!is.na(bigram))
+
+canciones_bigrams
+```
+
+```{r}
+canciones_bigrams %>%
+  count(bigram, sort = TRUE)
+```
+```{r}
+bigrams_separated <- canciones_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stopwords(language = 'spanish')) %>%
+  filter(!word2 %in% stopwords(language = 'spanish'))
+
+
+bigram_counts <- bigrams_filtered %>%
+  count(word1, word2, sort = TRUE)
+
+bigram_counts
+```
+
+```{r}
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+bigrams_united
+```
+
+Ahora el tf-idf del bigram
+
+```{r}
+bigram_tf_idf <- bigrams_united %>%
+  count(cantante, bigram) %>%
+  bind_tf_idf(bigram, cantante, n) %>%
+  arrange(desc(tf_idf))
+```
+
+
+```{r}
+bigram_tf_idf%>%
+  mutate(cantante=as.factor(cantante),
+         bigram=reorder_within(bigram,tf_idf,cantante))%>%
+  ggplot(aes(tf_idf,bigram,fill=cantante))+
+  geom_col(show.legend = FALSE)+
+  facet_wrap(~cantante, scales = 'free')+
+  scale_y_reordered()
+```
+
+
+```{r}
+canciones_dtm<-bind_rows(boton,rojo)%>%
+  unnest_tokens(word, Letra) %>%
+  count(cantante, word) %>%
+  cast_dtm(cantante, word, n)
+```
+
+
+Ahora si el LDA
+```{r}
+canciones_lda<-LDA(canciones_dtm,k = 2,control = list(seed=1234))
+canciones_lda
+```
+
+```{r}
+canciones_topics <- tidy(canciones_lda, matrix = "beta")
+canciones_topics<-canciones_topics%>%
+  filter(!term %in% stopwords(kind = 'spanish'))
+```
+
+
+```{r}
+ap_top_terms <- canciones_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+
+
+```{r}
+beta_spread <- canciones_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .001 | topic2 > .001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+beta_spread%>%
+  mutate(term=fct_reorder(term,log_ratio))%>%
+  head(30)%>%
+  ggplot(aes(log_ratio,term,fill=log_ratio>0))+
+  geom_col()
+```
+
+
+Para evitar la confusión de arriba 
+
+
+```{r}
+canciones_documents <- tidy(canciones_lda, matrix = "gamma")
+canciones_documents%>%
+  group_by(topic)%>%
+  top_n(1)
+  
+  
+```
+
+
+
+```{r}
+canciones_topics <- tidy(canciones_lda, matrix = "beta")
+terms(canciones_lda,threshold=.0000000009)
+```
+
+
+## NER
+```{r, fig.height=4}
+patron<-"[A-Z][a-z]+"
+boton_pull<-boton%>%
+  pull(Letra)%>%
+  paste(collapse = " ")
+
+boton_pull
+
+```
+
+```{r}
+m <- gregexpr(patron, boton_pull)
+v <- unlist(regmatches(boton_pull, m))
+v
+```
+
+
+
+```{r}
+
+p <- "\\1_L1 \\2_L2 \\3_R1 \\4_R2"
+context <- gsub("([a-z]+) ([a-z]+) ([a-z]+) ([a-z]+)", p, v)
+re_match <-  gregexpr(patron, v)
+doc_id <- unlist(regmatches(v, re_match))
+
+boton_ner<-boton%>%
+  mutate(NER=gregexpr(patron, Letra))%>%
+  mutate(Entity=regmatches(Letra,NER))%>%
+  unnest(Entity)%>%
+  dplyr::select(-c(line:NER))
+```
+
+
+
+```{r}
+corpus2 <- boton_ner %>% 
+  group_by(Entity) %>% 
+	summarize(doc = paste(Letra, collapse = " "))
+
+corpus2
+
+```
+```{r}
+
+dtm <- corpus2 %>% unnest_tokens(input = doc, output = word) %>% 
+	count(Entity, word) %>% 
+	cast_dtm(document = Entity, term = word, value = n)
+
+
+mod <- LDA(x = dtm, k = 3, method = "Gibbs", 
+          control=list(alpha = 1, seed = 12345, iter = 1000, thin = 1))
+
+```
+
+
+
+```{r}
+topics <- tidy(mod, matrix="gamma") %>% 
+	spread(topic, gamma)
+
+topics
+```
+
+
+
+
+```{r}
+r <- sample.int(n=nrow(corpus2), size=20, replace=FALSE) # Una muestra sin reemplazo
+train_dtm <- corpus2[-r, ] %>% unnest_tokens(input=doc, output=word) %>% 
+  count(Entity, word) %>% 
+  cast_dtm(document=Entity, term=word, value=n)
+```
+
+## Modelo
+
+```{r}
+train_mod <- LDA(x=train_dtm, k=3, method="Gibbs",
+                control=list(alpha=1, seed=10001,
+                             iter=1000, thin=1))
+```
+
+
+
+```{r}
+set.seed(12345)
+r <- sample.int(n=nrow(corpus2), size=20, replace=FALSE)
+
+## EL vocabulario del escenario de entrenamiento
+model_vocab <- tidy(train_mod, matrix="beta") %>% 
+  dplyr::select(term) %>% distinct()
+
+model_vocab
+```
+
+
+
+
+```{r}
+# Tabla idenfiticadoa
+test_table <- corpus2[r, ] %>% unnest_tokens(input=doc, output=word) %>% 
+  count(Entity, word) %>%
+  right_join(model_vocab, by=c("word"="term"))
+
+## Modelo en producción y validación
+test_dtm <- test_table %>% 
+  arrange(desc(Entity)) %>% 
+  mutate(doc_id = ifelse(is.na(Entity), first(Entity), Entity),
+         n = ifelse(is.na(n), 0, n)) %>% 
+  cast_dtm(document=Entity, term=word, value=n)
+
+test_dtm
+```
+
+
+Probabilidades posteriores -- recuerden a bayes
+```{r}
+results <- posterior(object=train_mod, newdata=test_dtm)
+results$topics
+```
+
+
+
+```{r}
+model_log<-numeric(20)
+model_perp<-numeric(20)
+for (i in 2:20){
+  modelo<-LDA(train_dtm,k=i,method = 'Gibbs',
+              control = list(alpha=0.5,iter=100,seed=1234,thin=1))
+  model_log[i]=logLik(modelo)
+  model_perp[i]<-perplexity(modelo,test_dtm)
+}
+```
+
