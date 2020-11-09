@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r}
+rm(list = ls())
 library(tidyverse)
 library(tidytext)
 library(GGally)
@@ -47,11 +48,12 @@ rojo<-rojo%>%
 
 
 ```{r}
+library(tidytext)
 canciones<-bind_rows(boton,rojo)
 canciones_palabras<-canciones%>%
   unnest_tokens(word,Letra)%>%
   count(cantante,word,sort = TRUE)%>%
-  filter(!word %in% stopwords(language = 'spanish'),
+  filter(!word %in% stopwords(kind = 'spanish'),
          !word %in% c('oh'))
 
 canciones_palabras
@@ -61,10 +63,18 @@ canciones_palabras
 total_words <- canciones_palabras %>%
   group_by(cantante) %>%
   summarize(total = sum(n))
+
+total_words
 ```
+
+
+
 ```{r}
 canciones_words <- left_join(canciones_palabras, total_words)
+canciones_words
 ```
+
+
 Evaluemos la distribución del uso de palabras por cantante
 
 ```{r}
@@ -107,39 +117,46 @@ songs_tf_idf %>%
 
 
 
+
 Y un poco de bigram
 
 
 ```{r}
 canciones_bigrams <- bind_rows(boton,rojo) %>%
-  unnest_tokens(bigram, Letra, token = "ngrams", n = 2)%>%
+  unnest_tokens(bigram, Letra, token = "ngrams", n = 3)%>%
   filter(!is.na(bigram))
 
 canciones_bigrams
 ```
 
+
+
+
 ```{r}
 canciones_bigrams %>%
   count(bigram, sort = TRUE)
 ```
+
+
 ```{r}
 bigrams_separated <- canciones_bigrams %>%
-  separate(bigram, c("word1", "word2"), sep = " ")
+  separate(bigram, c("word1", "word2","word3"), sep = " ")
 
 bigrams_filtered <- bigrams_separated %>%
-  filter(!word1 %in% stopwords(language = 'spanish')) %>%
-  filter(!word2 %in% stopwords(language = 'spanish'))
+  filter(!word1 %in% stopwords(kind  = 'spanish')) %>%
+  filter(!word2 %in% stopwords(kind = 'spanish')) %>%
+  filter(!word3 %in% stopwords(kind = 'spanish'))
 
 
 bigram_counts <- bigrams_filtered %>%
-  count(word1, word2, sort = TRUE)
+  count(word1, word2,word3, sort = TRUE)
 
 bigram_counts
 ```
 
 ```{r}
 bigrams_united <- bigrams_filtered %>%
-  unite(bigram, word1, word2, sep = " ")
+  unite(bigram, word1, word2,word3, sep = " ")
 bigrams_united
 ```
 
@@ -150,6 +167,8 @@ bigram_tf_idf <- bigrams_united %>%
   count(cantante, bigram) %>%
   bind_tf_idf(bigram, cantante, n) %>%
   arrange(desc(tf_idf))
+
+bigram_tf_idf
 ```
 
 
@@ -240,6 +259,17 @@ terms(canciones_lda,threshold=.0000000009)
 
 
 ## NER
+
+```{r}
+canciones_lda<-LDA(canciones_dtm,k = 2,method = 'Gibbs',control = list(seed=1234,iter=700, thin=1))
+```
+
+```{r}
+tidy(canciones_lda,"gamma")%>%
+  spread(topic,gamma)
+```
+
+
 ```{r, fig.height=4}
 patron<-"[A-Z][a-z]+"
 boton_pull<-boton%>%
@@ -252,10 +282,20 @@ boton_pull
 
 ```{r}
 m <- gregexpr(patron, boton_pull)
+m%>%unlist()
 v <- unlist(regmatches(boton_pull, m))
 v
 ```
 
+```{r}
+Rojo_pull<-rojo%>%
+  pull(Letra)%>%
+  paste(collapse = " ")
+
+m <- gregexpr(patron, Rojo_pull)
+v <- unlist(regmatches(Rojo_pull, m))
+v
+```
 
 
 ```{r}
@@ -282,6 +322,8 @@ corpus2 <- boton_ner %>%
 corpus2
 
 ```
+
+
 ```{r}
 
 dtm <- corpus2 %>% unnest_tokens(input = doc, output = word) %>% 
@@ -300,7 +342,10 @@ mod <- LDA(x = dtm, k = 3, method = "Gibbs",
 topics <- tidy(mod, matrix="gamma") %>% 
 	spread(topic, gamma)
 
-topics
+topics%>%
+  rename("Acciones"='3',
+         "Conectores"="2",
+         "Eventos"="1")
 ```
 
 
@@ -357,6 +402,11 @@ test_dtm
 Probabilidades posteriores -- recuerden a bayes
 ```{r}
 results <- posterior(object=train_mod, newdata=test_dtm)
+
+
+  # rename("Acciones"='3',
+  #        "Conectores"="2",
+  #        "Eventos"="1")
 results$topics
 ```
 
@@ -371,5 +421,143 @@ for (i in 2:20){
   model_log[i]=logLik(modelo)
   model_perp[i]<-perplexity(modelo,test_dtm)
 }
+```
+
+
+```{r}
+k<-1:20
+plot(x=k, y=model_perp, xlab="number of clusters, k", 
+     ylab="perplexity score", type="o",xlim = c(1,20))
+axis(side = 1, at=1:20)
+```
+
+```{r}
+mod <- LDA(x = dtm, k = 2, method = "Gibbs", 
+          control=list(alpha = 1, seed = 12345, iter = 1000, thin = 1))
+
+
+topics <- tidy(mod, matrix="gamma") %>% 
+	spread(topic, gamma)
+
+topics
+```
+
+
+
+### LDA 
+
+```{r}
+iris%>%
+  ggpairs(aes(fill=Species))
+```
+
+```{r}
+previa<-length(iris$Species[iris$Species=='setosa'])/length(iris$Species)
+previa
+```
+
+
+```{r}
+par(mfcol = c(3, 4))
+for (k in 1:4) {
+  j0 <- names(iris)[k]
+  x0 <- seq(min(iris[, k]), max(iris[, k]), le = 50)
+  for (i in 1:3) {
+    i0 <- levels(iris$Species)[i]
+    x <- iris[iris$Species == i0, j0]
+    hist(x, proba = T, col = grey(0.8), main = paste("especie", i0),
+    xlab = j0)
+    lines(x0, dnorm(x0, mean(x), sd(x)), col = "red", lwd = 2)
+  }
+}
+```
+
+Prueba de normalidad
+
+```{r}
+par(mfcol = c(3, 4))
+for (k in 1:4) {
+  j0 <- names(iris)[k]
+  x0 <- seq(min(iris[, k]), max(iris[, k]), le = 50)
+  for (i in 1:3) {
+    i0 <- levels(iris$Species)[i]
+    x <- iris[iris$Species == i0, j0]
+    qqnorm(x, main = paste(i0, j0), pch = 19, col = i + 1) 
+    qqline(x)
+  }
+}
+```
+
+
+
+```{r}
+lda(Species~.,data=iris)
+```
+
+
+
+```{r}
+iris%>%
+  ggplot(aes(Sepal.Length,Petal.Width))+
+  geom_point(alpha=0.4)
+```
+
+
+
+```{r}
+library(broom)
+library(reshape2)
+iris_pivoteado<-melt(iris, value.name = "valor")
+p_values_iris<-iris_pivoteado%>%
+  group_by(Species, variable) %>%
+  summarise(p_value_Shapiro.test = round(shapiro.test(valor)$p.value,5))%>%
+  mutate(comportamiento=if_else(p_value_Shapiro.test>=0.05,"Normal","Anormal"
+))
+p_values_iris
+```
+
+
+```{r}
+p_values_iris%>%
+  mutate(variable=fct_reorder(variable,p_value_Shapiro.test))%>%
+  ggplot(aes(p_value_Shapiro.test,variable, color=p_value_Shapiro.test>=0.05))+
+  geom_vline(xintercept = 0.05)+
+  geom_point()
+```
+
+
+```{r}
+data("AssociatedPress")
+LDA(AssociatedPress,k = 6,control = list(seed=1224))->lda_noticias
+```
+
+
+```{r}
+notcina_topicos_betas<-tidy(lda_noticias,matrix='beta')%>%
+  filter(!term %in% stopwords(kind = 'en'))
+```
+
+
+
+```{r}
+notcina_topicos_betas%>%
+  group_by(topic)%>%
+  top_n(15,beta)%>%
+  ungroup()%>%
+  arrange(topic,-beta)%>%
+  mutate(term=reorder_within(term,beta,topic))%>%
+  ggplot(aes(beta,term,fill=factor(topic)))+
+  geom_col(show.legend = FALSE)+
+  facet_wrap(~topic,scales='free')+
+  scale_y_reordered()
+  
+```
+
+
+
+```{r}
+tidy(lda_noticias,matrix='gamma')%>%
+  arrange(desc(gamma))%>%
+  filter(document=='47')
 ```
 

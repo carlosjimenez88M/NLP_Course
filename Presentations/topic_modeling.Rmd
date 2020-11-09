@@ -246,7 +246,8 @@ modelo_lda
 library(reshape2)
 library(knitr)
 datos_tidy <- melt(iris, value.name = "valor")
-kable(datos_tidy %>% group_by(Species, variable) %>% summarise(p_value_Shapiro.test = round(shapiro.test(valor)$p.value,5)))
+kable(datos_tidy %>% group_by(Species, variable) %>%
+        summarise(p_value_Shapiro.test = round(shapiro.test(valor)$p.value,5)))
 ```
 ## Latent Dirichlet Allocation (LDA)
 
@@ -518,7 +519,7 @@ canciones_lda<-LDA(canciones_dtm,k = 2,method = 'Gibbs',control = list(seed=1234
 Notese que ahora :
 
 * Hacemos 500 iteracciones ;
-* Thin=1 devielve el resuldato de cada paso
+* Thin=1 devuelve el resuldato de cada paso
 * Gibbs = Es un método de muestreo basado en Monte carlo!
 
 ## NER
