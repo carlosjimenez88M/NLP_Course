@@ -219,10 +219,10 @@ rf_rs %>%
 Dibujamos la ROC
 
 ```{r}
-glm_rs %>%
+rf_rs %>%
   collect_predictions() %>%
   group_by(id) %>%
-  roc_curve(died, .pred_died) %>%
+  roc_curve(died, .pred_muere) %>%
   ggplot(aes(1 - specificity, sensitivity, color = id)) +
   geom_abline(lty = 2, color = "gray80", size = 1.5) +
   geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
@@ -233,7 +233,7 @@ Se evalua al modelo
 
 ```{r}
 members_final <- members_wf %>%
-  add_model(glm_spec) %>%
+  add_model(rf_spec) %>%
   last_fit(members_split)
 ```
 
@@ -251,23 +251,5 @@ collect_predictions(members_final) %>%
 
 
 
-Evaluamos las variables que hicieron que el modelo tuviese sentido
 
-```{r}
-members_final %>%
-  pull(.workflow) %>%
-  pluck(1) %>%
-  tidy() %>%
-  filter(term != "(Intercept)") %>%
-  ggplot(aes(estimate, fct_reorder(term, estimate))) +
-  geom_vline(xintercept = 0, color = "gray50", lty = 2, size = 1.2) +
-  geom_errorbar(aes(
-    xmin = estimate - std.error,
-    xmax = estimate + std.error
-  ),
-  width = .2, color = "gray50", alpha = 0.7
-  ) +
-  geom_point(size = 2, color = "#85144B") +
-  labs(y = NULL, x = "Coeficientes de la regresión logística")
-```
 
