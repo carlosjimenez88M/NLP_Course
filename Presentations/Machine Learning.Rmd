@@ -1,0 +1,205 @@
+---
+title: "Machine Learning para el análisis de texto"
+author: "Daniel Jiménez M."
+date: "`r format(Sys.time(), '%d -%m -%Y')`"
+institute: "Universidad Nacional de Colombia"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "beaver"
+    #incremental: true
+    slide_level: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning=FALSE, message=FALSE)
+```
+
+## Bibliografía
+
+* Brett Lantz, [Machine Learning with R](https://edu.kpfu.ru/pluginfile.php/278552/mod_resource/content/1/MachineLearningR__Brett_Lantz.pdf), 2016, PACKT
+
+* Bradley B & Brandon G, [Hands-On Machine Learning with R](https://bradleyboehmke.github.io/HOML/),2020, The R Series.
+
+* Silge G, Kuhn M,[Tidy Modeling with R](https://www.tmwr.org/),2020,The R Series.
+
+* Silge G,Hvitfeldt E, [Supervised Machine Learning for Text Analysis in R](https://smltar.com/), 2020, The R Series.
+
+## Librerías 
+
+Las librerías para esta clase son :
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(skimr)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(skimr)
+```
+
+
+## Algunas definiciones importantes
+
+La ciencia de datos, el Machine Learning y la AI son areas diferentes de estudio y trabajo, a pesar que se ha popularizado el termino **Data Scientist** como una sumatoria de los anteriores y por fines técnicos esto se mantendrá así. Más a continuación se presentarán algunas definiciones importantes y el contexto en el cual se desenvuelven.
+
+
+## Algunas definiciones importantes
+
+La siguiente imagen es una tesis de Robinson (2017) sobre las diferencias en acciones de los data scientist:
+
+![](../GIt_codes/differences.png)
+
+## Data Science
+
+El foco principal de la ciencia de datos es la producción de insigths, esto se logra de la siguiente manera :
+
+* Los insigths son entendibles ;
+* Se basan en el entendimiento descriptivo y prescriptivo de un problema;
+* Se intenta entender las causalidades entre las variables exploratorias;
+
+Una definición clásica dice que el data science combina : Estadística, ingeniería de sistemas y conocimiento de negocios.
+
+## Data Science
+
+Pero a diferencia de la definición clásica que es la que proveé al nombre de Data Scientist a la persona que hace un poco de todo, es la siguiente:
+
+### Data Science
+
+El data science es la disciplina que envuelve las siguientes corrientes:
+
+* Inferencia estadística;
+
+* Visualización de datos;
+
+* Diseño de experimentos;
+
+* Dominio del negocio y lo más importante;
+
+* Comunicación.
+
+
+
+## Machine Learning 
+
+El machine learning produce predicciones (llamese forecast o clasificación, detección de anomalías entre otros).
+
+Se divide en :
+
+* Análisis supervisado: los datos tienen la forma de $\{(x_1,y_1),...,(x_n,y_n)\}$
+  
+  + El objetivo es estudiar el comportamiento de la variable **y**, condicional a las variables respuestas.
+  
+  + Puntualmente se debe entender el comportamiento (distribución) de la variable **y** dada las explicativas.
+
+
+## Machine Learning 
+
+
+* Análisis no supervisado: Los datos tiene la siguiente forma $\{x_1,...x_n\}$
+
+  + El objetivo es estudiar la variable **x** y los posibles conglomerados que se encuentren en ello.
+  
+  + Matemáticamente hay que estudiar la variable **x**
+  
+
+## Inteligencia Artificial 
+
+Son acciones, desarrolladas por algoritmos que entienden la lógica del funcionamiento de un entorno.
+
+Una inteligencia artificial que todos usamos (o eso espero) es google maps, cuando selecciona la mejor ruta!
+
+
+
+## Machine Learning para la clasificación de textos 
+
+En esta sección veremos dos ejemplos, uno será a nivel de clasificación, donde hablaremos de las principales métricas para evaluar estos modelos.
+
+Algunos de los algoritmos de clasificación son:
+
+* Decision tree;
+* Naive Bayes;
+* Knn;
+* Logistic Regression;
+* SVM;
+* Linear Discrimination Analysis;
+* Random Forest
+
+
+En esta oportunidad nos concentraremos en la regresión logística y el random forest
+
+## Regresión Logística
+
+* Es un modelo basado en variables categóricas;
+* Sus variables explicativas se dan en valores continuos
+* No solo clasifica sino que genera probabilidad sobre los eventos 
+
+## Regresión Logística
+
+### Condiciones para un problema logístico
+
+* Un problema binario;
+
+* Cuando se necesite la probabilidad de una predicción;
+
+* Cuando éxita un perímeto de decisión;
+
+* Cuando se necesite saber el impacto de las features.
+
+## Regresión Logística
+
+La función logística funciona a través de la sigmoide
+
+Esta es la sigmoide 
+
+$$
+\sigma(\theta^tX) = \frac{1}{1+e^{-\theta^tX}}
+$$
+Notese que si $\theta^tX$ es muy grande entonces la función tiende a uno, en caso contrario a cero
+
+
+
+## Regresión Logística
+
+###Proceso de la logística
+
+* Se inicia en $\sigma$
+
+* Se calcula $\hat{y}=\sigma(\theta^tX)$
+
+* Se calculan los errores $y-\hat{y}$
+
+* Se minimiza la función de costo 
+
+
+## Regresión Logística
+
+Función de costo : Mejora los parámetros de la regresión a través de interacciones del siguiente tipo 
+
+$$
+\sigma( w^T\!x + b) = \frac{1}{1 + e^{-(w^T\!x + b)}}
+$$
+
+Donde 
+
+$$
+J = -\frac{1}{m} \sum_{i=1}^{m}\bigl[y^{(i)}\log(a^{(i)})+(1-y^{(i)})\log(1-a^{(i)})\bigr]
+$$
+cambiando así los pesos de los parámetros
+
+## Regresión Logística
+
+Para mejorar la función de costo es necesario el gradiente descendiente
+
+### Gradiente descendiente
+
+Función que interactivamente busca encontrar la aproxiumación de $\sigma$ que minimice la función de costo.
+
+## Regresión Logística
+
+
+
+

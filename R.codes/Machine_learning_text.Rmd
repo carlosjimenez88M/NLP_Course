@@ -1,0 +1,18 @@
+---
+title: "Machine Learning Aplicado"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Machine Learning aplicado a la clasificación
+
+En esta parte desarrollaremos un poco de Data Science con Machine Learning
+
+
+```{r}
+
+```
+
