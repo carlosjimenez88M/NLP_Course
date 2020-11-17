@@ -33,6 +33,7 @@ Las librerías para esta clase son :
 library(tidyverse)
 library(tidymodels)
 library(skimr)
+library(themis)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -198,8 +199,40 @@ Para mejorar la función de costo es necesario el gradiente descendiente
 
 Función que interactivamente busca encontrar la aproxiumación de $\sigma$ que minimice la función de costo.
 
-## Regresión Logística
+## Métricas de clasificación
+
+* Precisión : Calidad del modelo
+
+$$
+\frac{TP}{TP+FP}
+$$
+Esto se puede leer como la precisión del modelo
+
+* Recall: Porcentaje de positivos que tiene el modelo
+
+$$
+\frac{TP}{TP+FN}
+$$
+
+## Métricas de clasificación
+
+* F1-Score: Mide el rendimiento del modelo, basado en la siguiente relación
+
+$$
+\frac{2*(precision*recall)}{precision+recall}
+$$
 
 
+Entre esta medida este más cercana a uno es mejor 
+
+* Accuracy : Mide el porcentaje de aciertos que tiene el modelo
+
+$$
+\frac{(Tp+Tn)}{(Tp+Tn)+(Fp+Fn)}
+$$
+
+## Ejemplo
+
+![](../GIt_codes/clasificador.png)
 
 
