@@ -17,6 +17,7 @@ En esta parte desarrollaremos un poco de Data Science con Machine Learning
 library(tidyverse)
 library(tidymodels)
 library(themis)
+library(knitr)
 ```
 
 ## Base de datos 
@@ -49,5 +50,224 @@ members %>%
   geom_line(alpha = 0.7, size = 1.5) +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(x = NULL, y = "% miembros de la expedición", color = NULL)
+```
+
+
+* ¿Cómo es el efecto de la edad de los miembros del equipo y la tasa de muertes?
+
+```{r}
+members %>%
+  group_by(age = 10 * (age %/% 10)) %>%
+  summarise(
+    died = mean(died),
+    success = mean(success)
+  ) %>%
+  pivot_longer(died:success, names_to = "outcome", values_to = "percent") %>%
+  ggplot(aes(age, percent, color = outcome)) +
+  geom_line(alpha = 0.7, size = 1.5) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = NULL, y = "% de miembros de la expedición", color = NULL)
+```
+
+* ¿Cuál es el porcentaje de que las personas mueran cuando la misión es fallida?
+
+```{r}
+members %>%
+  count(success, died) %>%
+  group_by(success) %>%
+  mutate(percent = scales::percent(n / sum(n))) %>%
+  kable(
+    col.names = c("Exito de la expedición", "Murio", "Número de personas", "% del equipo"),
+    align = "llrr"
+  )
+```
+
+
+```{r}
+members %>%
+  filter(season != "Unknown") %>%
+  count(season, died) %>%
+  group_by(season) %>%
+  mutate(
+    percent = n / sum(n),
+    died = case_when(
+      died ~ "Mueren",
+      TRUE ~ "NO Mueren"
+    )
+  ) %>%
+  ggplot(aes(season, percent, fill = season)) +
+  geom_col(alpha = 0.8, position = "dodge", show.legend = FALSE) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~died, scales = "free") +
+  labs(x = NULL, y = "% de los miembros de la expedición")
+```
+
+Se crea una base de datos
+
+
+
+```{r}
+members_df <- members %>%
+  filter(season != "Unknown", !is.na(sex), !is.na(citizenship)) %>%
+  select(peak_id, year, season, sex, age, citizenship, hired, success, died) %>%
+  mutate(died = case_when(
+    died ~ "muere",
+    TRUE ~ "vive"
+  )) %>%
+  mutate_if(is.character, factor) %>%
+  mutate_if(is.logical, as.integer)
+
+
+```
+
+## Se crea un modelo
+
+
+```{r}
+library(tidymodels)
+
+set.seed(123)
+members_split <- initial_split(members_df, strata = died)
+members_train <- training(members_split)
+members_test <- testing(members_split)
+members_folds <- vfold_cv(members_train, strata = died)
+
+```
+
+
+
+```{r}
+members_rec <- recipe(died ~ ., data = members_train) %>%
+  step_medianimpute(age) %>%
+  step_other(peak_id, citizenship) %>%
+  step_dummy(all_nominal(), -died) %>%
+  step_smote(died)
+```
+
+
+Se crean dos modelos 
+
+```{r}
+glm_spec <- logistic_reg() %>%
+  set_engine("glm")
+
+rf_spec <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+```
+
+Se agrega un workflow
+
+```{r}
+members_wf <- workflow() %>%
+  add_recipe(members_rec)
+```
+
+
+```{r}
+members_metrics <- metric_set(roc_auc, accuracy, sensitivity, specificity,precision,recall)
+doParallel::registerDoParallel()
+glm_rs <- members_wf %>%
+  add_model(glm_spec) %>%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+glm_rs%>%
+  unnest(.metrics)%>%
+  filter(.metric=='accuracy')%>%
+  arrange(desc(.estimate))
+```
+Agregamos al segundo modelo
+
+
+```{r}
+rf_rs <- members_wf %>%
+  add_model(rf_spec) %>%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )
+```
+
+
+Se recolectan todas las métricas
+
+```{r}
+collect_metrics(glm_rs)
+collect_metrics(rf_rs)
+```
+
+
+Se evalua el nivel de predicción del modelo
+
+```{r}
+glm_rs %>%
+  conf_mat_resampled()
+```
+
+
+```{r}
+rf_rs %>%
+  conf_mat_resampled()
+```
+
+
+Dibujamos la ROC
+
+```{r}
+glm_rs %>%
+  collect_predictions() %>%
+  group_by(id) %>%
+  roc_curve(died, .pred_died) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  coord_equal()
+```
+
+Se evalua al modelo
+
+```{r}
+members_final <- members_wf %>%
+  add_model(glm_spec) %>%
+  last_fit(members_split)
+```
+
+
+
+```{r}
+collect_metrics(members_final)
+```
+
+
+```{r}
+collect_predictions(members_final) %>%
+  conf_mat(died, .pred_class)
+```
+
+
+
+Evaluamos las variables que hicieron que el modelo tuviese sentido
+
+```{r}
+members_final %>%
+  pull(.workflow) %>%
+  pluck(1) %>%
+  tidy() %>%
+  filter(term != "(Intercept)") %>%
+  ggplot(aes(estimate, fct_reorder(term, estimate))) +
+  geom_vline(xintercept = 0, color = "gray50", lty = 2, size = 1.2) +
+  geom_errorbar(aes(
+    xmin = estimate - std.error,
+    xmax = estimate + std.error
+  ),
+  width = .2, color = "gray50", alpha = 0.7
+  ) +
+  geom_point(size = 2, color = "#85144B") +
+  labs(y = NULL, x = "Coeficientes de la regresión logística")
 ```
 
