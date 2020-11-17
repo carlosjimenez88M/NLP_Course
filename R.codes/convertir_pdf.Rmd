@@ -1,0 +1,53 @@
+---
+title: "Caso APlicado Jep"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+¿Cómo leer sus documentos?
+
+Toca por OCR
+
+OCR: optical character recognition, es un modelo de Machine Learning de reconocimiento de caracteres basado en fuerza bruta ( es un proceso sumamente demorado)
+
+```{r}
+library(tesseract)
+library(pdftools)
+library(tidytext)
+library(tidyverse)
+library(magick)
+eng <- tesseract("spa") # Se define el idioma
+```
+
+Se genera la lectura del documento 
+
+```{r}
+input <- image_read("~/Desktop/Bases_JEP/2015-00153_CAJA_2-9_CUADERNILLO--14.pdf")
+```
+
+
+
+```{r}
+text <- input %>%
+  image_resize("2000x") %>%
+  image_convert(type = 'Grayscale') %>%
+  image_trim(fuzz = 40) %>%
+  image_write(format = 'png', density = '300x300') %>%
+  tesseract::ocr() 
+
+cat(text)
+```
+
+
+Otra forma de hacerlo es :
+
+```{r}
+pngfile <- pdftools::pdf_convert('~/Desktop/Bases_JEP/2015-00153_CAJA_2-9_CUADERNILLO--14.pdf', dpi = 600)
+
+text <- tesseract::ocr(pngfile)
+cat(text)
+```
+
