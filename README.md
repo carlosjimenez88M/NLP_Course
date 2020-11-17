@@ -94,7 +94,7 @@ Para la fase de Text Mining y NLP desarrolle el siguiente cuestionario
 |15 de Octubre|Introducción al análisis de texto|[Clase 4](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/text%20mining.pdf)|[cod4](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Clase4Majors.Rmd)|
 |3 de Noviembre |Introducción al análisis de texto 2|[Clase 5](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/clase5.pdf)|[cod5](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Introducci%C3%B3n-al-Text-Mining.md)|
 |5 de Noviembre |Introducción al Topic Modeling|[Clase 6](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/topic_modeling.pdf)|[cod6](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/topic_modeling.Rmd)|
-|10 de Noviembre |Machine Learning para la clasificación de textos II|[Clase 7](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/Machine-Learning.pdf)|[cod7](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Machine_learning_text.Rmd)|
+|10 de Noviembre |Machine Learning para la clasificación de textos II|[Clase 7](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/Machine-Learning.pdf)|[cod7](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Machine_learning_text.md)|
 |12 de Noviembre |Introducción al Natural Lenguaje Processing|[Clase 8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/Presentations/tensorflow.pdf)|[cod8](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Clasificaci%C3%B3n-de-textos.Rmd)|
 |17 de Noviembre|Estudio de Caso|[Clase 9]()|[cod9]()|
 
