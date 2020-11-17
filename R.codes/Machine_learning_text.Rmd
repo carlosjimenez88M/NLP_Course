@@ -4,15 +4,50 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE,warning = FALSE)
 ```
 
 ## Machine Learning aplicado a la clasificación
 
 En esta parte desarrollaremos un poco de Data Science con Machine Learning
 
+## librerías 
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(themis)
+```
+
+## Base de datos 
+
 
 ```{r}
 
+members <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-22/members.csv")
+
+```
+
+
+
+```{r}
+members
+```
+Un poco de diseño de experimento
+
+* ¿Cómo cambia la tasa de éxito de la expedición y la muerte de los miembros?
+
+```{r}
+members %>%
+  group_by(year = 10 * (year %/% 10)) %>% # Se crean decadas
+  summarise(
+    died = mean(died),
+    success = mean(success)
+  ) %>%
+  pivot_longer(died:success, names_to = "outcome", values_to = "percent") %>%
+  ggplot(aes(year, percent, color = outcome)) +
+  geom_line(alpha = 0.7, size = 1.5) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = NULL, y = "% miembros de la expedición", color = NULL)
 ```
 

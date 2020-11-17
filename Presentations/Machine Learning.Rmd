@@ -236,3 +236,23 @@ $$
 ![](../GIt_codes/clasificador.png)
 
 
+## Random Forest
+
+Es una adaptación de los árboles de decisión, en donde lo valores de cada uno de sus árboles es independiente a nivel de interacción y dependiente de output del anterior.
+
+
+## Random Forest
+
+* Es difícil de interpretar a nivel de sálidas
+* Es útil cuando los modelos primarios no tienen suficiente accuracy
+* Su ventaja se basa en la aleatoriedad.
+
+
+## Random Forest
+
+* Su ventaja primordial es que si se tiene un training set grande, el valor de sus prediciones será buenismas
+* Computacionalmente no es pesado
+* Es super útil si se trabaja para estimar datos perdidos 
+* Posee buenos métodos experimentales 
+
+Observación : Tiende a sobre-ajustarse en tareas repetitivas de clasificación!!!!.
