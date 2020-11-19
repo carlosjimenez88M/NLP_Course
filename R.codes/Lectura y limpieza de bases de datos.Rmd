@@ -1,0 +1,112 @@
+---
+title: "Creación de base de datos y limpieza de datos"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## librerías
+
+```{r,warning=FALSE,message=FALSE}
+library(tidyverse);
+library(tidytext);
+library(pdftools)
+library(tidyverse);
+library(rvest);
+library(knitr);
+library(lubridate);
+library(stringr);
+require("knitr");
+library(tibble);
+library(pdftools);
+require(reshape2);
+library(tabulizer);
+library(quanteda)
+library(cloudml);
+library(tfdatasets);
+library(tesseract)
+```
+
+
+
+Se debe asignar el root donde se encuentra la información
+
+
+```{r}
+file_vector <- list.files(path = '~/Desktop/Bases_JEP/')
+# Se debe seleccionar el formato que vamos a leer
+pdf_list <- file_vector[grepl(".pdf",file_vector)]
+pdf_list
+```
+
+
+A continuación se crea un frame que lea el documento
+
+```{r}
+corpus_raw <- data.frame("Documento" = c(),"text" = c())
+```
+
+Ahora se lee la base de datos
+
+```{r, message=FALSE,warning=FALSE}
+for (i in pdf_list){
+  setwd("~/Desktop/Bases_JEP/")
+  pdf_text(i)%>% 
+    strsplit("\n")-> document_text
+  data.frame("Documento" = gsub(x =i,pattern = ".pdf", replacement = ""), 
+             "text" = document_text%>%unlist(), stringsAsFactors = FALSE) -> document
+  colnames(document) <- c("Documento", "text")
+  corpus_raw <- rbind(corpus_raw,document) 
+}
+```
+
+Se lee la base de datos creada 
+
+```{r}
+corpus_raw
+```
+
+Desde esta fase se hace la limpieza de los datos
+
+```{r}
+Base_limpia<-corpus_raw%>%
+   mutate(text = str_replace_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.:|/](\\S*)", ""))%>%
+  mutate(text=str_remove_all(string = text,pattern ='•'))%>%
+  mutate(text=str_replace_all(text, "[^[:alnum:]]", " "))%>%
+  mutate(text=gsub('\\b[[:alpha:]]{1,3}\\b','',text))
+  
+```
+
+
+Ahora convertimos todo en un solo documento 
+
+```{r}
+convertir_texto<-function(documento){
+  texto<-Base_limpia%>%
+    filter(Documento==documento)%>%
+    pull(text)%>%
+    trimws(.)
+  ids <- cumsum(texto=="")
+  select <- texto!=""
+  splitted <- split(texto[select], ids[select])
+  res <- sapply(splitted,paste, collapse=" ")
+  res <- unname(res)
+}
+
+```
+
+
+```{r}
+documento<-convertir_texto('2015-00153_CAJA_2-9_CUADERNILLO--14')%>%unlist()
+
+```
+
+Ahora se crea la bbdd
+```{r}
+documentos_collapse<-lapply(documentos$Comunicado,convertir_texto)%>%unlist()
+base_completa<-data.frame('Comunicado'=documentos$Comunicado,'Texto'=documentos_collapse)%>%
+  mutate(Texto=as.character(Texto))
+```
+
