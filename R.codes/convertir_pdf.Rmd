@@ -42,6 +42,8 @@ cat(text)
 ```
 
 
+Por lo visto, esta no es la mejor opción!
+
 Otra forma de hacerlo es :
 
 ```{r}
@@ -51,3 +53,29 @@ text <- tesseract::ocr(pngfile)
 cat(text)
 ```
 
+```{r}
+file_list<- list.files(path = "~/Desktop/Bases_JEP/2015-00153_CAJA_2-9_CUADERNILLO--14.pdf")
+pdf_list="~/Desktop/Bases_JEP/2015-00153_CAJA_2-9_CUADERNILLO--14.pdf"
+
+corpus_raw <- data.frame("documento" = c(),"text" = c())
+
+for (i in pdf_list){
+  setwd("~/Desktop/Bases_JEP/")
+  print(i)
+  tesseract::ocr(i, engine = eng)%>%
+  strsplit("\n")-> document_text 
+  data.frame("documento" = gsub(x =i,pattern = ".pdf", replacement = ""), 
+             "text" = document_text%>%unlist(), stringsAsFactors = FALSE) -> document
+  colnames(document) <- c("Peru", "text")
+  corpus_raw <- rbind(corpus_raw,document) 
+}
+corpus_raw
+```
+
+Trabajo poir OCR persona
+Javier : primer documento
+jorge : el segundo documento 
+Juan David tercer documento
+Klendia: Cuarto documento
+Luis Ernesto : Quinto Documento
+Mary - Sandra -Zulma : Sexto Documento

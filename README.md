@@ -118,3 +118,7 @@ Los correos tienen un tiempo de respuesta entre 24 a 48 horas.
 |Tema|Código|
 |---:|------|
 |Tensorflow|[code](https://github.com/carlosjimenez88M/NLP_Course/blob/master/R.codes/Tensorflow%201.Rmd)|
+|OCR|[code]()
+
+
+

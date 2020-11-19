@@ -13,7 +13,7 @@ En esta parte desarrollaremos un poco de Data Science con Machine Learning
 
 ## librerías 
 
-```{r}
+```{r, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
 library(themis)
@@ -40,7 +40,7 @@ Un poco de diseño de experimento
 
 ```{r}
 members %>%
-  group_by(year = 10 * (year %/% 10)) %>% # Se crean decadas
+  group_by(year= 10 * (year %/% 10)) %>% # Se crean decadas
   summarise(
     died = mean(died),
     success = mean(success)
@@ -66,12 +66,42 @@ members %>%
   ggplot(aes(age, percent, color = outcome)) +
   geom_line(alpha = 0.7, size = 1.5) +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(x = NULL, y = "% de miembros de la expedición", color = NULL)
+  labs(x = NULL, y = "% de miembros de la expedición", color = NULL)+
+  theme_light()
 ```
+
+```{r}
+members %>%
+  group_by(expedition_role) %>%
+  summarise(
+    died = mean(died),
+    success = mean(success)
+  ) %>%
+  pivot_longer(died:success, names_to = "outcome", values_to = "percent")%>%
+  mutate(expedition_role=case_when(
+    str_detect(expedition_role,"Manager")~"Manager",
+    str_detect(expedition_role,"Leader")~"Leader",
+    str_detect(expedition_role,"Doctor")~"Doctor",
+    str_detect(expedition_role,"Sirdar")~"Sirdar",
+    str_detect(expedition_role,"Cook")~"Cook",
+    str_detect(expedition_role,"Mgr")~"Mgr",
+    str_detect(expedition_role,"Staff")~"Staff",
+    str_detect(expedition_role,"support")~"support",
+    TRUE~'Other'
+  ))%>%
+  ggplot(aes(percent,outcome,fill=expedition_role))+
+  geom_col()
+  
+  
+  
+```
+
+
 
 * ¿Cuál es el porcentaje de que las personas mueran cuando la misión es fallida?
 
 ```{r}
+library(knitr)
 members %>%
   count(success, died) %>%
   group_by(success) %>%
@@ -117,7 +147,7 @@ members_df <- members %>%
   mutate_if(is.character, factor) %>%
   mutate_if(is.logical, as.integer)
 
-
+members_df
 ```
 
 ## Se crea un modelo
@@ -135,6 +165,7 @@ members_folds <- vfold_cv(members_train, strata = died)
 ```
 
 
+##  Ingenieria de los datos 
 
 ```{r}
 members_rec <- recipe(died ~ ., data = members_train) %>%
@@ -142,8 +173,11 @@ members_rec <- recipe(died ~ ., data = members_train) %>%
   step_other(peak_id, citizenship) %>%
   step_dummy(all_nominal(), -died) %>%
   step_smote(died)
+
+members_rec
 ```
 
+## Ingenieria del modelo
 
 Se crean dos modelos 
 
