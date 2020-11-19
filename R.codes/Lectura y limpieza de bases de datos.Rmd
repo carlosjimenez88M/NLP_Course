@@ -55,7 +55,7 @@ for (i in pdf_list){
   setwd("~/Desktop/Bases_JEP/")
   pdf_text(i)%>% 
     strsplit("\n")-> document_text
-  data.frame("Documento" = gsub(x =i,pattern = ".pdf", replacement = ""), 
+  data.frame("Documento" = gsub(x =i,pattern = ".png", replacement = ""), 
              "text" = document_text%>%unlist(), stringsAsFactors = FALSE) -> document
   colnames(document) <- c("Documento", "text")
   corpus_raw <- rbind(corpus_raw,document) 
